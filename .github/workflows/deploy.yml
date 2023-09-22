@@ -1,114 +1,75 @@
-name: CI/CD production
-on:
-    push:
-        branches: [ "main" ]
-
+# GitHub Action for Symfony with MySQL
+name: Testing Symfony with MySQL
+on: [push, pull_request]
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            # Mandatory : fetch the current repository
-            -   name: Checkout repository
-                uses: actions/checkout@v2
+  symfony:
+    name: Symfony (PHP ${{ matrix.php-versions }})
+    runs-on: ubuntu-latest
 
-            # To be faster, use cache system for the NPM
-            -   name: Cache NPM (node_modules)
-                uses: actions/cache@v2
-                env:
-                    cache-name: cache-node-modules
-                with:
-                    path: ~/.npm
-                    key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-                    restore-keys: |
-                        ${{ runner.os }}-build-${{ env.cache-name }}-
-                        ${{ runner.os }}-build-
-                        ${{ runner.os }}-
-            # Define the right Node.js's environment
-            -   name: Environment for NPM
-                uses: actions/setup-node@v2
-                with:
-                    node-version: '14'
+    # Docs: https://docs.github.com/en/actions/using-containerized-services
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['8.1']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            # NPM run build
-            -   name: NPM build
-                run: |
-                    node -v
-                    npm ci --cache .npm --unsafe-perm --prefer-offline
-                    npm run build
-            # Upload artifacts (= builded files) to download them in the next job
-            -   name: NPM artifacts
-                uses: actions/upload-artifact@v2
-                with:
-                    name: npm-build
-                    retention-days: 1
-                    path: public/build/
+      # Docs: https://github.com/shivammathur/setup-php
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: phpunit-bridge
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, mysql
+          coverage: xdebug
 
-    deploy:
-        # Need the "build" job to be complete before started it
-        needs: build
-        runs-on: ubuntu-latest
-        steps:
-            # Mandatory : fetch the current repository
-            -   name: Checkout repository
-                uses: actions/checkout@v2
+      # Local MySQL service in GitHub hosted environments is disabled by default.
+      # If you are using it instead of service containers, make sure you start it.
+      # - name: Start mysql service
+      #   run: sudo systemctl start mysql.service
 
-            # To be faster, use cache system for the Composer
-            -   name: Get Composer Cache Directory
-                id: composer-cache
-                run: |
-                    echo "::set-output name=dir::$(composer config cache-files-dir)"
-            -   name: Cache composer (vendor)
-                uses: actions/cache@v2
-                with:
-                    path: ${{ steps.composer-cache.outputs.dir }}
-                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-composer-
-            # Define the right PHP environment
-            # https://github.com/shivammathur/setup-php (community)
-            -   name: Environment for PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: '8.0'
-                    #extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring, pdo
-                    tools: composer:v2
-                    coverage: none
-                env:
-                    update: true
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-            # Ensure that composer.json is valid
-            -   name: Validate composer.json and composer.lock
-                run: composer validate
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          # Use composer.json for key, if composer.lock is not committed.
+          # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
 
-            # Log the PHP version in use, and copy the "prod" env file to the "local" env file
-            -   name: PHP utils
-                run: |
-                    php -v
-                    cp .env.prod .env.local
-            # Install composer dependencies, and dump env
-            -   name: Composer install & dump-env
-                run: |
-                    composer install --no-dev --no-progress --no-scripts --prefer-dist -a
-                    composer dump-env prod
-            # Download artifacts created in the previous job
-            -   name: Download NPM artifacts
-                uses: actions/download-artifact@v2
-                with:
-                    name: npm-build
-                    path: public/build
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
 
-            # Define the right Node.js environment
-            -   name: Environment for deploy
-                uses: actions/setup-node@v2
-                with:
-                    node-version: '14'
+      - name: Run Migration
+        run: |
+          composer require --dev symfony/orm-pack
+          php bin/console doctrine:schema:update --force || echo "No migrations found or schema update failed"
+          php bin/console doctrine:migrations:migrate || echo "No migrations found or migration failed"
+        env:
+          DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
 
-            # Deploy repository onto the host provided in Github Secrets, including downloaded artifacts and files created (like vendor folder)
-            # Deploy is running thanks to "Deployator" NPM dependency (https://github.com/la-haute-societe/deployator)
-            # See "deployment-config.js" to get the config in use
-            - name: Deploy App to CapRover
-              uses: caprover/deploy-from-github@v1.0.1
-              with:
-                server: '${{ secrets.CAPROVER_SERVER }}'
-                app: '${{ secrets.APP_NAME }}'
-                token: '${{ secrets.APP_TOKEN }}'
+      - name: Install PHPUnit
+        run: simple-phpunit install
+
+      - name: Run tests
+        run: simple-phpunit --coverage-text
+
+      - uses: a7ul/tar-action@v1.1.0
+        with:
+          command: c
+          cwd: "./"
+          files: |
+            ./*
+          outPath: deploy.tar
+
+      - name: Deploy App to CapRover
+        uses: caprover/deploy-from-github@v1.0.1
+        with:
+          server: '${{ secrets.CAPROVER_SERVER }}'
+          app: '${{ secrets.APP_NAME }}'
+          token: '${{ secrets.APP_TOKEN }}'
