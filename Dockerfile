@@ -31,7 +31,8 @@ RUN set -eux; \
 		intl \
 		opcache \
 		zip \
-		php-pdo \
+		pdo \
+  		pdo_mysql \
     ;
 
 ###> recipes ###
