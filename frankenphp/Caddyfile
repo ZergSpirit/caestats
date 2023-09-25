@@ -24,8 +24,6 @@ log {
 
 route {
 	root * /app/public
-	
-	vulcain
 
 	# Add trailing slash for directory requests
 	@canonicalPath {
