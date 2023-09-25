@@ -1,5 +1,4 @@
 # caestats
 Stats for Caeris game
-To be deployed on Caprover
-Vraiment.2
-:)
+
+https://www.twilio.com/blog/get-started-docker-symfony
