@@ -24,14 +24,7 @@ log {
 
 route {
 	root * /app/public
-	mercure {
-		# Transport to use (default to Bolt)
-		transport_url {$MERCURE_TRANSPORT_URL:bolt:///data/mercure.db}
-		# Allow anonymous subscribers (double-check that it's what you want)
-		anonymous
-		# Enable the subscription API (double-check that it's what you want)
-		subscriptions
-	}
+	
 	vulcain
 
 	# Add trailing slash for directory requests
