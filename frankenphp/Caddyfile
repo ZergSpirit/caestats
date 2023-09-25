@@ -25,6 +25,12 @@ log {
 route {
 	root * /app/public
 
+	mercure {
+		# Transport to use (default to Bolt)
+		transport_url {$MERCURE_TRANSPORT_URL:bolt:///data/mercure.db}
+	}
+	vulcain
+
 	# Add trailing slash for directory requests
 	@canonicalPath {
 		file {path}/index.php
