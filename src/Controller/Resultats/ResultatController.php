@@ -36,11 +36,11 @@ class ResultatController extends AbstractController
     #[Route('/resultat/{id}', name: 'resultat_new', methods: ['GET'])]
     public function edit(EntityManagerInterface $entityManager, ?int $id = null)
     {
-        $game = null;
+       /* $game = null;
         if ($id = null) {
             $game = $entityManager->getRepository(Game::class)->find($id);
-        }
-        $form = $this->initForm($game);
+	}*/
+        $form = $this->initForm();
         return $this->render('resultat/edit.html.twig', ['form' => $form]);
     }
 
@@ -96,7 +96,7 @@ class ResultatController extends AbstractController
         $em->save($game);
     }
 
-    private function initForm(?Game $game)
+    private function initForm(?Game $game=null)
     {
         $resultat = new ResultatDTO($game);
         return $this->createFormBuilder($resultat)
