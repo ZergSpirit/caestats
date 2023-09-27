@@ -25,6 +25,9 @@ class Compo
     #[ORM\OneToMany(mappedBy: 'compo', targetEntity: Belligerant::class)]
     private Collection $belligerants;
 
+    #[ORM\Column(length: 255)]
+    private ?string $Code = null;
+
     public function __construct()
     {
         $this->personnages = new ArrayCollection();
@@ -98,6 +101,18 @@ class Compo
                 $belligerant->setCompo(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->Code;
+    }
+
+    public function setCode(string $Code): static
+    {
+        $this->Code = $Code;
 
         return $this;
     }
