@@ -28,12 +28,12 @@ class ResultatDTO
     private Personnage $_personnage2Joueur1;
     private Personnage $_personnage3Joueur1;
     private Personnage $_personnage4Joueur1;
-    private Personnage $_personnage5Joueur1;
+    private ?Personnage $_personnage5Joueur1 = null;
     private Personnage $_personnage1Joueur2;
     private Personnage $_personnage2Joueur2;
     private Personnage $_personnage3Joueur2;
     private Personnage $_personnage4Joueur2;
-    private Personnage $_personnage5Joueur2;
+    private ?Personnage $_personnage5Joueur2 = null;
 
 
     public function __construct(?Game $game){
@@ -230,7 +230,7 @@ class ResultatDTO
     /**
      * Get the value of _personnage5Joueur1
      */
-    public function getPersonnage5Joueur1(): Personnage
+    public function getPersonnage5Joueur1(): ?Personnage
     {
         return $this->_personnage5Joueur1;
     }
@@ -238,7 +238,7 @@ class ResultatDTO
     /**
      * Set the value of _personnage5Joueur1
      */
-    public function setPersonnage5Joueur1(Personnage $_personnage5Joueur1): self
+    public function setPersonnage5Joueur1(?Personnage $_personnage5Joueur1): self
     {
         $this->_personnage5Joueur1 = $_personnage5Joueur1;
 
@@ -320,7 +320,7 @@ class ResultatDTO
     /**
      * Get the value of _personnage5Joueur2
      */
-    public function getPersonnage5Joueur2(): Personnage
+    public function getPersonnage5Joueur2(): ?Personnage
     {
         return $this->_personnage5Joueur2;
     }
@@ -328,7 +328,7 @@ class ResultatDTO
     /**
      * Set the value of _personnage5Joueur2
      */
-    public function setPersonnage5Joueur2(Personnage $_personnage5Joueur2): self
+    public function setPersonnage5Joueur2(?Personnage $_personnage5Joueur2): self
     {
         $this->_personnage5Joueur2 = $_personnage5Joueur2;
 

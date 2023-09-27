@@ -55,8 +55,8 @@ class ResultatController extends AbstractController
         return $this->render('resultat/edit.html.twig', ['form' => $form]);
     }
 
-    #[Route('/resultat', name: 'resultat_post', methods: ['POST'])]
-    public function save(Request $request)
+    #[Route('/resultat/{id}', name: 'resultat_post', methods: ['POST'])]
+    public function save(Request $request, ?int $id = null)
     {   
         $form = $this->initForm(null);
         $form->handleRequest($request);
