@@ -49,7 +49,7 @@ class GameManager
         $compo1->getPersonnages()->add($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage5Joueur1()));
         $arrayCompo1 = $compo1->getPersonnages()->toArray();
         usort($arrayCompo1, fn($a,$b) => strcmp($a, $b));
-        $compo1->setCode(strtoupper(implode('-', $arrayCompo1)));
+        $compo1->setCode(strtoupper($compo1->getGuilde()->getCode().'_'.implode('-', $arrayCompo1)));
         $belligerant1->setCompo($compo1);
 
         $belligerant2 = new Belligerant();
@@ -67,7 +67,7 @@ class GameManager
         $compo2->getPersonnages()->add($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage1Joueur2()));
         $arrayCompo2 = $compo2->getPersonnages()->toArray();
         usort($arrayCompo2, fn($a, $b) => strcmp($a, $b));
-        $compo2->setCode(strtoupper(implode('-', $arrayCompo1)));
+        $compo2->setCode(strtoupper($compo2->getGuilde()->getCode().'_'.implode('-', $arrayCompo1)));
         $belligerant2->setCompo($compo2);
 
         $game->setBelligerant1($belligerant1);
