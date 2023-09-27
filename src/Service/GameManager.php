@@ -61,10 +61,10 @@ class GameManager
         $compo2 = new Compo();
         $compo2->setGuilde($this->entityManager->getRepository(Guilde::class)->find($data->getGuilde2()));
         $compo2->getPersonnages()->add($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage1Joueur2()));
-        $compo2->getPersonnages()->add($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage1Joueur2()));
-        $compo2->getPersonnages()->add($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage1Joueur2()));
-        $compo2->getPersonnages()->add($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage1Joueur2()));
-        $compo2->getPersonnages()->add($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage1Joueur2()));
+        $compo2->getPersonnages()->add($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage2Joueur2()));
+        $compo2->getPersonnages()->add($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage3Joueur2()));
+        $compo2->getPersonnages()->add($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage4Joueur2()));
+        $compo2->getPersonnages()->add($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage5Joueur2()));
         $arrayCompo2 = $compo2->getPersonnages()->toArray();
         usort($arrayCompo2, fn($a, $b) => strcmp($a, $b));
         $compo2->setCode(strtoupper($compo2->getGuilde()->getCode().'_'.implode('-', $arrayCompo1)));

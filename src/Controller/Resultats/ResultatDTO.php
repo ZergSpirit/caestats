@@ -37,7 +37,31 @@ class ResultatDTO
 
 
     public function __construct(?Game $game){
+        
+        if($game == null){
+            return;
+        }
 
+        $this->setDate($game->getDate());
+        $this->setJoueur1($game->getBelligerant1()->getJoueur());
+        $this->setJoueur1($game->getBelligerant2()->getJoueur());
+        $this->setVainqueur1($game->getBelligerant1()->isVainqueur());
+        $this->setVainqueur2($game->getBelligerant2()->isVainqueur());
+        $this->setScoreJoueur1($game->getBelligerant1()->getScore());
+        $this->setScoreJoueur2($game->getBelligerant2()->getScore());
+        $this->setRixe($game->isRixe());
+        $this->setMissionControle($game->getMissionControle());
+        $this->setMissionCombat($game->getMissionCombat());
+        $this->setPersonnage1Joueur1($game->getBelligerant1()->getCompo()->getPersonnages()->get(0));
+        $this->setPersonnage2Joueur1($game->getBelligerant1()->getCompo()->getPersonnages()->get(1));
+        $this->setPersonnage3Joueur1($game->getBelligerant1()->getCompo()->getPersonnages()->get(2));
+        $this->setPersonnage4Joueur1($game->getBelligerant1()->getCompo()->getPersonnages()->get(3));
+        $this->setPersonnage5Joueur1($game->getBelligerant1()->getCompo()->getPersonnages()->get(4));
+        $this->setPersonnage1Joueur2($game->getBelligerant2()->getCompo()->getPersonnages()->get(0));
+        $this->setPersonnage2Joueur2($game->getBelligerant2()->getCompo()->getPersonnages()->get(1));
+        $this->setPersonnage3Joueur2($game->getBelligerant2()->getCompo()->getPersonnages()->get(2));
+        $this->setPersonnage4Joueur2($game->getBelligerant2()->getCompo()->getPersonnages()->get(3));
+        $this->setPersonnage5Joueur2($game->getBelligerant2()->getCompo()->getPersonnages()->get(4));
     }
 
     /**

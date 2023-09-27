@@ -44,11 +44,14 @@ class ResultatController extends AbstractController
     #[Route('/resultat/{id}', name: 'resultat_new', methods: ['GET'])]
     public function edit(?int $id = null)
     {
-       /* $game = null;
-        if ($id = null) {
-            $game = $entityManager->getRepository(Game::class)->find($id);
-	}*/
-        $form = $this->initForm();
+        $game = null;
+        if ($id != null) {
+            $game = $this->entityManager->getRepository(Game::class)->find($id);
+            if($game == null) {
+                throw new \Exception('Game '.$id.' not found');
+            }
+        }
+        $form = $this->initForm($game);
         return $this->render('resultat/edit.html.twig', ['form' => $form]);
     }
 
@@ -67,26 +70,26 @@ class ResultatController extends AbstractController
         $resultat = new ResultatDTO($game);
         return $this->createFormBuilder($resultat)
             ->add('date', DateType::class)
-            ->add('joueur1', EntityType::class, ['class' => Joueur::class, 'choice_label' => 'Nom'])
-            ->add('joueur2', EntityType::class, ['class' => Joueur::class, 'choice_label' => 'Nom'])
+            ->add('joueur1', EntityType::class, ['class' => Joueur::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('joueur2', EntityType::class, ['class' => Joueur::class, 'choice_label' => 'Nom', 'empty_data' => ''])
             ->add('vainqueur1', CheckboxType::class, ['label' => 'Joueur 1 Vainqueur', 'required' => false])
             ->add('vainqueur2', CheckboxType::class, ['label' => 'Joueur 2 Vainqueur', 'required' => false])
             ->add('scoreJoueur1', IntegerType::class, ['label' => 'Score joueur 1', 'required' => false])
             ->add('scoreJoueur2', IntegerType::class, ['label' => 'Score joueur 2', 'required' => false])
-            ->add('guilde1', EntityType::class, ['class' => Guilde::class, 'choice_label' => 'Nom'])
-            ->add('guilde2', EntityType::class, ['class' => Guilde::class, 'choice_label' => 'Nom'])
-            ->add('missionControle', EntityType::class, ['class' => MissionControle::class, 'choice_label' => 'Nom'])
-            ->add('missionCombat', EntityType::class, ['class' => MissionCombat::class, 'choice_label' => 'Nom'])
-            ->add('personnage1Joueur1', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom'])
-            ->add('personnage2Joueur1', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom'])
-            ->add('personnage3Joueur1', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom'])
-            ->add('personnage4Joueur1', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom'])
-            ->add('personnage5Joueur1', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom'])
-            ->add('personnage1Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom'])
-            ->add('personnage2Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom'])
-            ->add('personnage3Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom'])
-            ->add('personnage4Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom'])
-            ->add('personnage5Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom'])
+            ->add('guilde1', EntityType::class, ['class' => Guilde::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('guilde2', EntityType::class, ['class' => Guilde::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('missionControle', EntityType::class, ['class' => MissionControle::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('missionCombat', EntityType::class, ['class' => MissionCombat::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('personnage1Joueur1', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('personnage2Joueur1', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('personnage3Joueur1', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('personnage4Joueur1', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('personnage5Joueur1', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => '', 'required'=>false])
+            ->add('personnage1Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('personnage2Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('personnage3Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('personnage4Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('personnage5Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => '', 'required'=>false])
             ->add('rixe', CheckboxType::class, ['label' => 'Rixe', 'required' => false])
             ->add('save', SubmitType::class, ['label'=>'Enregistrer'])
             ->getForm();

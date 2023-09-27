@@ -30,7 +30,7 @@ class Guilde
     }
 
     public function __toString() {
-        return$this->Code;
+        return $this->Nom;
     }
 
     public function getId(): ?int
