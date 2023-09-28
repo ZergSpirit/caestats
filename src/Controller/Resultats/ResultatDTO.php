@@ -12,6 +12,7 @@ use App\Entity\Personnage;
 class ResultatDTO
 {
 
+    private ?int $__gameId = null;
     private ?\DateTimeInterface $_date = null;
     private Joueur $_joueur1;
     private Joueur $_joueur2;
@@ -42,9 +43,12 @@ class ResultatDTO
             return;
         }
 
+        $this->setGameId($game->getId());
         $this->setDate($game->getDate());
         $this->setJoueur1($game->getBelligerant1()->getJoueur());
-        $this->setJoueur1($game->getBelligerant2()->getJoueur());
+        $this->setJoueur2($game->getBelligerant2()->getJoueur());
+        $this->setGuilde1($game->getBelligerant1()->getCompo()->getGuilde());
+        $this->setGuilde1($game->getBelligerant2()->getCompo()->getGuilde());
         $this->setVainqueur1($game->getBelligerant1()->isVainqueur());
         $this->setVainqueur2($game->getBelligerant2()->isVainqueur());
         $this->setScoreJoueur1($game->getBelligerant1()->getScore());
@@ -457,6 +461,24 @@ class ResultatDTO
     public function setScoreJoueur2(?int $_scoreJoueur2): self
     {
         $this->_scoreJoueur2 = $_scoreJoueur2;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of __gameId
+     */
+    public function getGameId(): ?int
+    {
+        return $this->__gameId;
+    }
+
+    /**
+     * Set the value of __gameId
+     */
+    public function setGameId(?int $__gameId): self
+    {
+        $this->__gameId = $__gameId;
 
         return $this;
     }

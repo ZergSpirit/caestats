@@ -17,6 +17,7 @@ use App\Entity\MissionControle;
 use App\Entity\Personnage;
 use App\Service\GameManager;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,21 +34,20 @@ class ResultatController extends AbstractController
         
     }
 
-    #[Route('/resultats')]
+    #[Route('/resultats', name: 'resultat_list')]
     public function index(): Response
     {
         $games = $this->entityManager->getRepository(Game::class)->findAll();
-
-        return $this->render('resultat/index.html.twig');
+        return $this->render('resultat/index.html.twig', ['games' => $games]);
     }
 
-    #[Route('/resultat/{id}', name: 'resultat_new', methods: ['GET'])]
+    #[Route('/resultat/{id}', name: 'resultat_edit', methods: ['GET'])]
     public function edit(?int $id = null)
     {
         $game = null;
         if ($id != null) {
             $game = $this->entityManager->getRepository(Game::class)->find($id);
-            if($game == null) {
+            if ($game == null) {
                 throw new \Exception('Game '.$id.' not found');
             }
         }
@@ -58,10 +58,19 @@ class ResultatController extends AbstractController
     #[Route('/resultat/{id}', name: 'resultat_post', methods: ['POST'])]
     public function save(Request $request, ?int $id = null)
     {   
-        $form = $this->initForm(null);
+        $game = null;
+        if ($id != null) {
+            $game = $this->entityManager->getRepository(Game::class)->find($id);
+            if ($game == null) {
+                throw new \Exception('Game '.$id.' not found');
+            }
+        }
+        $form = $this->initForm($game);
         $form->handleRequest($request);
         
         $this->gameManager->saveOrUpdate($form->getData());
+
+        return $this->redirect('/resultats');
         
     }
 
@@ -69,6 +78,7 @@ class ResultatController extends AbstractController
     {
         $resultat = new ResultatDTO($game);
         return $this->createFormBuilder($resultat)
+            ->add('gameId', HiddenType::class)
             ->add('date', DateType::class)
             ->add('joueur1', EntityType::class, ['class' => Joueur::class, 'choice_label' => 'Nom', 'empty_data' => ''])
             ->add('joueur2', EntityType::class, ['class' => Joueur::class, 'choice_label' => 'Nom', 'empty_data' => ''])
