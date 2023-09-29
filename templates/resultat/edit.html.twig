@@ -30,6 +30,25 @@
             }
         });
 
+        $("#form_vainqueur1").change(function(){
+            var _this = $(this);
+            if(_this.is(':checked')){
+                 if(_this.is(':checked')){
+                    $('#form_vainqueur2').prop("checked",false);
+                }
+            }
+        });
+
+          $("#form_vainqueur2").change(function(){
+            var _this = $(this);
+            if(_this.is(':checked')){
+                 if(_this.is(':checked')){
+                    $('#form_vainqueur1').prop("checked",false);
+                }
+            }
+        });
+
+
     });
 
     var changeGuilde = function(guilde,numeroJoueur){
