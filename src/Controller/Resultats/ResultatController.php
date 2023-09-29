@@ -15,6 +15,7 @@ use App\Entity\Guilde;
 use App\Entity\MissionCombat;
 use App\Entity\MissionControle;
 use App\Entity\Personnage;
+use App\Entity\Tournoi;
 use App\Service\GameManager;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -79,7 +80,7 @@ class ResultatController extends AbstractController
         $resultat = new ResultatDTO($game);
         return $this->createFormBuilder($resultat)
             ->add('gameId', HiddenType::class)
-            ->add('date', DateType::class)
+            ->add('date', DateType::class,['widget' => 'single_text'])
             ->add('joueur1', EntityType::class, ['class' => Joueur::class, 'choice_label' => 'Nom', 'empty_data' => ''])
             ->add('joueur2', EntityType::class, ['class' => Joueur::class, 'choice_label' => 'Nom', 'empty_data' => ''])
             ->add('vainqueur1', CheckboxType::class, ['label' => 'Joueur 1 Vainqueur', 'required' => false])
@@ -101,6 +102,7 @@ class ResultatController extends AbstractController
             ->add('personnage4Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => ''])
             ->add('personnage5Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => '', 'required'=>false])
             ->add('rixe', CheckboxType::class, ['label' => 'Rixe', 'required' => false])
+            ->add('tournoi',EntityType::class,['class'=>Tournoi::class,'choice_label'=>'Nom','empty_data' => ''])
             ->add('save', SubmitType::class, ['label'=>'Enregistrer'])
             ->getForm();
         

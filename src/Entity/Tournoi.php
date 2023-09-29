@@ -17,13 +17,13 @@ class Tournoi
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Nom = null;
+    private ?string $nom = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $Date = null;
+    private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $Ville = null;
+    private ?string $ville = null;
 
     #[ORM\OneToMany(mappedBy: 'tournoi', targetEntity: Game::class)]
     private Collection $games;
@@ -33,73 +33,94 @@ class Tournoi
         $this->games = new ArrayCollection();
     }
 
+  
+
+    /**
+     * Get the value of id
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNom(): ?string
+    /**
+     * Set the value of id
+     */
+    public function setId(?int $id): self
     {
-        return $this->Nom;
-    }
-
-    public function setNom(string $Nom): static
-    {
-        $this->Nom = $Nom;
-
-        return $this;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->Date;
-    }
-
-    public function setDate(\DateTimeInterface $Date): static
-    {
-        $this->Date = $Date;
-
-        return $this;
-    }
-
-    public function getVille(): ?string
-    {
-        return $this->Ville;
-    }
-
-    public function setVille(?string $Ville): static
-    {
-        $this->Ville = $Ville;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Game>
+     * Get the value of nom
+     */
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set the value of nom
+     */
+    public function setNom(?string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of date
+     */
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set the value of date
+     */
+    public function setDate(?\DateTimeInterface $date): self
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of ville
+     */
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    /**
+     * Set the value of ville
+     */
+    public function setVille(?string $ville): self
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of games
      */
     public function getGames(): Collection
     {
         return $this->games;
     }
 
-    public function addGame(Game $game): static
+    /**
+     * Set the value of games
+     */
+    public function setGames(Collection $games): self
     {
-        if (!$this->games->contains($game)) {
-            $this->games->add($game);
-            $game->setTournoi($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGame(Game $game): static
-    {
-        if ($this->games->removeElement($game)) {
-            // set the owning side to null (unless already changed)
-            if ($game->getTournoi() === $this) {
-                $game->setTournoi(null);
-            }
-        }
+        $this->games = $games;
 
         return $this;
     }

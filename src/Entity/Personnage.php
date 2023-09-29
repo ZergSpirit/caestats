@@ -6,6 +6,7 @@ use App\Repository\PersonnageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: PersonnageRepository::class)]
 class Personnage
@@ -16,15 +17,16 @@ class Personnage
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Nom = null;
+    private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Code = null;
+    private ?string $code = null;
 
     #[ORM\Column]
     private ?bool $ethere = null;
 
     #[ORM\ManyToMany(targetEntity: Guilde::class, inversedBy: 'personnages')]
+    #[Ignore]
     private Collection $guildes;
 
     public function __construct()
@@ -33,7 +35,7 @@ class Personnage
     }
     
     public function __toString() {
-        return$this->Code;
+        return$this->code;
     }
 
     public function getId(): ?int
@@ -41,29 +43,6 @@ class Personnage
         return $this->id;
     }
 
-    public function getNom(): ?string
-    {
-        return $this->Nom;
-    }
-
-    public function setNom(string $Nom): static
-    {
-        $this->Nom = $Nom;
-
-        return $this;
-    }
-
-    public function getCode(): ?string
-    {
-        return $this->Code;
-    }
-
-    public function setCode(string $Code): static
-    {
-        $this->Code = $Code;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Guilde>
@@ -97,6 +76,42 @@ class Personnage
     public function setEthere(bool $ethere): static
     {
         $this->ethere = $ethere;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of code
+     */
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set the value of code
+     */
+    public function setCode(?string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of nom
+     */
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set the value of nom
+     */
+    public function setNom(?string $nom): self
+    {
+        $this->nom = $nom;
 
         return $this;
     }

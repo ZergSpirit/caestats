@@ -16,12 +16,12 @@ class Guilde
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Nom = null;
+    private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Code = null;
+    private ?string $code = null;
 
-    #[ORM\ManyToMany(targetEntity: Personnage::class, mappedBy: 'relation')]
+    #[ORM\ManyToMany(targetEntity: Personnage::class, mappedBy: 'guildes')]
     private Collection $personnages;
 
     public function __construct()
@@ -30,36 +30,12 @@ class Guilde
     }
 
     public function __toString() {
-        return $this->Nom;
+        return $this->nom;
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getNom(): ?string
-    {
-        return $this->Nom;
-    }
-
-    public function setNom(string $Nom): static
-    {
-        $this->Nom = $Nom;
-
-        return $this;
-    }
-
-    public function getCode(): ?string
-    {
-        return $this->Code;
-    }
-
-    public function setCode(string $Code): static
-    {
-        $this->Code = $Code;
-
-        return $this;
     }
 
     /**
@@ -74,7 +50,7 @@ class Guilde
     {
         if (!$this->personnages->contains($personnage)) {
             $this->personnages->add($personnage);
-            $personnage->addRelation($this);
+            $personnage->addGuilde($this);
         }
 
         return $this;
@@ -83,8 +59,44 @@ class Guilde
     public function removePersonnage(Personnage $personnage): static
     {
         if ($this->personnages->removeElement($personnage)) {
-            $personnage->removeRelation($this);
+            $personnage->removeGuilde($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of nom
+     */
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set the value of nom
+     */
+    public function setNom(?string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of code
+     */
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set the value of code
+     */
+    public function setCode(?string $code): self
+    {
+        $this->code = $code;
 
         return $this;
     }

@@ -8,6 +8,7 @@ use App\Entity\Joueur;
 use App\Entity\MissionControle;
 use App\Entity\MissionCombat;
 use App\Entity\Personnage;
+use App\Entity\Tournoi;
 
 class ResultatDTO
 {
@@ -21,19 +22,20 @@ class ResultatDTO
     private ?int $_scoreJoueur1;
     private ?int $_scoreJoueur2;
     private ?bool $rixe;
+    private ?Tournoi $__tournoi;
     private MissionControle $_missionControle;
     private MissionCombat $_missionCombat;
     private Guilde $_guilde1;
     private Guilde $_guilde2;
-    private Personnage $_personnage1Joueur1;
-    private Personnage $_personnage2Joueur1;
-    private Personnage $_personnage3Joueur1;
-    private Personnage $_personnage4Joueur1;
+    private ?Personnage $_personnage1Joueur1 = null;
+    private ?Personnage $_personnage2Joueur1 = null;
+    private ?Personnage $_personnage3Joueur1 = null;
+    private ?Personnage $_personnage4Joueur1 = null;
     private ?Personnage $_personnage5Joueur1 = null;
-    private Personnage $_personnage1Joueur2;
-    private Personnage $_personnage2Joueur2;
-    private Personnage $_personnage3Joueur2;
-    private Personnage $_personnage4Joueur2;
+    private ?Personnage $_personnage1Joueur2 = null;
+    private ?Personnage $_personnage2Joueur2 = null;
+    private ?Personnage $_personnage3Joueur2 = null;
+    private ?Personnage $_personnage4Joueur2 = null;
     private ?Personnage $_personnage5Joueur2 = null;
 
 
@@ -48,12 +50,13 @@ class ResultatDTO
         $this->setJoueur1($game->getBelligerant1()->getJoueur());
         $this->setJoueur2($game->getBelligerant2()->getJoueur());
         $this->setGuilde1($game->getBelligerant1()->getCompo()->getGuilde());
-        $this->setGuilde1($game->getBelligerant2()->getCompo()->getGuilde());
+        $this->setGuilde2($game->getBelligerant2()->getCompo()->getGuilde());
         $this->setVainqueur1($game->getBelligerant1()->isVainqueur());
         $this->setVainqueur2($game->getBelligerant2()->isVainqueur());
         $this->setScoreJoueur1($game->getBelligerant1()->getScore());
         $this->setScoreJoueur2($game->getBelligerant2()->getScore());
         $this->setRixe($game->isRixe());
+        $this->setTournoi($game->getTournoi());
         $this->setMissionControle($game->getMissionControle());
         $this->setMissionCombat($game->getMissionCombat());
         $this->setPersonnage1Joueur1($game->getBelligerant1()->getCompo()->getPersonnages()->get(0));
@@ -66,6 +69,25 @@ class ResultatDTO
         $this->setPersonnage3Joueur2($game->getBelligerant2()->getCompo()->getPersonnages()->get(2));
         $this->setPersonnage4Joueur2($game->getBelligerant2()->getCompo()->getPersonnages()->get(3));
         $this->setPersonnage5Joueur2($game->getBelligerant2()->getCompo()->getPersonnages()->get(4));
+    }
+
+
+    /**
+     * Get the value of __gameId
+     */
+    public function getGameId(): ?int
+    {
+        return $this->__gameId;
+    }
+
+    /**
+     * Set the value of __gameId
+     */
+    public function setGameId(?int $__gameId): self
+    {
+        $this->__gameId = $__gameId;
+
+        return $this;
     }
 
     /**
@@ -122,223 +144,6 @@ class ResultatDTO
         return $this;
     }
 
-
-    /**
-     * Get the value of _missionControle
-     */
-    public function getMissionControle(): MissionControle
-    {
-        return $this->_missionControle;
-    }
-
-    /**
-     * Set the value of _missionControle
-     */
-    public function setMissionControle(MissionControle $_missionControle): self
-    {
-        $this->_missionControle = $_missionControle;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _missionCombat
-     */
-    public function getMissionCombat(): MissionCombat
-    {
-        return $this->_missionCombat;
-    }
-
-    /**
-     * Set the value of _missionCombat
-     */
-    public function setMissionCombat(MissionCombat $_missionCombat): self
-    {
-        $this->_missionCombat = $_missionCombat;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _personnage1Joueur1
-     */
-    public function getPersonnage1Joueur1(): Personnage
-    {
-        return $this->_personnage1Joueur1;
-    }
-
-    /**
-     * Set the value of _personnage1Joueur1
-     */
-    public function setPersonnage1Joueur1(Personnage $_personnage1Joueur1): self
-    {
-        $this->_personnage1Joueur1 = $_personnage1Joueur1;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _personnage2Joueur1
-     */
-    public function getPersonnage2Joueur1(): Personnage
-    {
-        return $this->_personnage2Joueur1;
-    }
-
-    /**
-     * Set the value of _personnage2Joueur1
-     */
-    public function setPersonnage2Joueur1(Personnage $_personnage2Joueur1): self
-    {
-        $this->_personnage2Joueur1 = $_personnage2Joueur1;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _personnage3Joueur1
-     */
-    public function getPersonnage3Joueur1(): Personnage
-    {
-        return $this->_personnage3Joueur1;
-    }
-
-    /**
-     * Set the value of _personnage3Joueur1
-     */
-    public function setPersonnage3Joueur1(Personnage $_personnage3Joueur1): self
-    {
-        $this->_personnage3Joueur1 = $_personnage3Joueur1;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _personnage4Joueur1
-     */
-    public function getPersonnage4Joueur1(): Personnage
-    {
-        return $this->_personnage4Joueur1;
-    }
-
-    /**
-     * Set the value of _personnage4Joueur1
-     */
-    public function setPersonnage4Joueur1(Personnage $_personnage4Joueur1): self
-    {
-        $this->_personnage4Joueur1 = $_personnage4Joueur1;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _personnage5Joueur1
-     */
-    public function getPersonnage5Joueur1(): ?Personnage
-    {
-        return $this->_personnage5Joueur1;
-    }
-
-    /**
-     * Set the value of _personnage5Joueur1
-     */
-    public function setPersonnage5Joueur1(?Personnage $_personnage5Joueur1): self
-    {
-        $this->_personnage5Joueur1 = $_personnage5Joueur1;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _personnage1Joueur2
-     */
-    public function getPersonnage1Joueur2(): Personnage
-    {
-        return $this->_personnage1Joueur2;
-    }
-
-    /**
-     * Set the value of _personnage1Joueur2
-     */
-    public function setPersonnage1Joueur2(Personnage $_personnage1Joueur2): self
-    {
-        $this->_personnage1Joueur2 = $_personnage1Joueur2;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _personnage2Joueur2
-     */
-    public function getPersonnage2Joueur2(): Personnage
-    {
-        return $this->_personnage2Joueur2;
-    }
-
-    /**
-     * Set the value of _personnage2Joueur2
-     */
-    public function setPersonnage2Joueur2(Personnage $_personnage2Joueur2): self
-    {
-        $this->_personnage2Joueur2 = $_personnage2Joueur2;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _personnage3Joueur2
-     */
-    public function getPersonnage3Joueur2(): Personnage
-    {
-        return $this->_personnage3Joueur2;
-    }
-
-    /**
-     * Set the value of _personnage3Joueur2
-     */
-    public function setPersonnage3Joueur2(Personnage $_personnage3Joueur2): self
-    {
-        $this->_personnage3Joueur2 = $_personnage3Joueur2;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _personnage4Joueur2
-     */
-    public function getPersonnage4Joueur2(): Personnage
-    {
-        return $this->_personnage4Joueur2;
-    }
-
-    /**
-     * Set the value of _personnage4Joueur2
-     */
-    public function setPersonnage4Joueur2(Personnage $_personnage4Joueur2): self
-    {
-        $this->_personnage4Joueur2 = $_personnage4Joueur2;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _personnage5Joueur2
-     */
-    public function getPersonnage5Joueur2(): ?Personnage
-    {
-        return $this->_personnage5Joueur2;
-    }
-
-    /**
-     * Set the value of _personnage5Joueur2
-     */
-    public function setPersonnage5Joueur2(?Personnage $_personnage5Joueur2): self
-    {
-        $this->_personnage5Joueur2 = $_personnage5Joueur2;
-
-        return $this;
-    }
-
     /**
      * Get the value of _vainqueur1
      */
@@ -371,60 +176,6 @@ class ResultatDTO
     public function setVainqueur2(?bool $_vainqueur2): self
     {
         $this->_vainqueur2 = $_vainqueur2;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of rixe
-     */
-    public function isRixe(): ?bool
-    {
-        return $this->rixe;
-    }
-
-    /**
-     * Set the value of rixe
-     */
-    public function setRixe(?bool $rixe): self
-    {
-        $this->rixe = $rixe;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _guilde1
-     */
-    public function getGuilde1(): Guilde
-    {
-        return $this->_guilde1;
-    }
-
-    /**
-     * Set the value of _guilde1
-     */
-    public function setGuilde1(Guilde $_guilde1): self
-    {
-        $this->_guilde1 = $_guilde1;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _guilde2
-     */
-    public function getGuilde2(): Guilde
-    {
-        return $this->_guilde2;
-    }
-
-    /**
-     * Set the value of _guilde2
-     */
-    public function setGuilde2(Guilde $_guilde2): self
-    {
-        $this->_guilde2 = $_guilde2;
 
         return $this;
     }
@@ -466,19 +217,289 @@ class ResultatDTO
     }
 
     /**
-     * Get the value of __gameId
+     * Get the value of rixe
      */
-    public function getGameId(): ?int
+    public function isRixe(): ?bool
     {
-        return $this->__gameId;
+        return $this->rixe;
     }
 
     /**
-     * Set the value of __gameId
+     * Set the value of rixe
      */
-    public function setGameId(?int $__gameId): self
+    public function setRixe(?bool $rixe): self
     {
-        $this->__gameId = $__gameId;
+        $this->rixe = $rixe;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _missionControle
+     */
+    public function getMissionControle(): MissionControle
+    {
+        return $this->_missionControle;
+    }
+
+    /**
+     * Set the value of _missionControle
+     */
+    public function setMissionControle(MissionControle $_missionControle): self
+    {
+        $this->_missionControle = $_missionControle;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _missionCombat
+     */
+    public function getMissionCombat(): MissionCombat
+    {
+        return $this->_missionCombat;
+    }
+
+    /**
+     * Set the value of _missionCombat
+     */
+    public function setMissionCombat(MissionCombat $_missionCombat): self
+    {
+        $this->_missionCombat = $_missionCombat;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _guilde1
+     */
+    public function getGuilde1(): Guilde
+    {
+        return $this->_guilde1;
+    }
+
+    /**
+     * Set the value of _guilde1
+     */
+    public function setGuilde1(Guilde $_guilde1): self
+    {
+        $this->_guilde1 = $_guilde1;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _guilde2
+     */
+    public function getGuilde2(): Guilde
+    {
+        return $this->_guilde2;
+    }
+
+    /**
+     * Set the value of _guilde2
+     */
+    public function setGuilde2(Guilde $_guilde2): self
+    {
+        $this->_guilde2 = $_guilde2;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _personnage1Joueur1
+     */
+    public function getPersonnage1Joueur1(): ?Personnage
+    {
+        return $this->_personnage1Joueur1;
+    }
+
+    /**
+     * Set the value of _personnage1Joueur1
+     */
+    public function setPersonnage1Joueur1(?Personnage $_personnage1Joueur1): self
+    {
+        $this->_personnage1Joueur1 = $_personnage1Joueur1;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _personnage2Joueur1
+     */
+    public function getPersonnage2Joueur1(): ?Personnage
+    {
+        return $this->_personnage2Joueur1;
+    }
+
+    /**
+     * Set the value of _personnage2Joueur1
+     */
+    public function setPersonnage2Joueur1(?Personnage $_personnage2Joueur1): self
+    {
+        $this->_personnage2Joueur1 = $_personnage2Joueur1;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _personnage3Joueur1
+     */
+    public function getPersonnage3Joueur1(): ?Personnage
+    {
+        return $this->_personnage3Joueur1;
+    }
+
+    /**
+     * Set the value of _personnage3Joueur1
+     */
+    public function setPersonnage3Joueur1(?Personnage $_personnage3Joueur1): self
+    {
+        $this->_personnage3Joueur1 = $_personnage3Joueur1;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _personnage4Joueur1
+     */
+    public function getPersonnage4Joueur1(): ?Personnage
+    {
+        return $this->_personnage4Joueur1;
+    }
+
+    /**
+     * Set the value of _personnage4Joueur1
+     */
+    public function setPersonnage4Joueur1(?Personnage $_personnage4Joueur1): self
+    {
+        $this->_personnage4Joueur1 = $_personnage4Joueur1;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _personnage5Joueur1
+     */
+    public function getPersonnage5Joueur1(): ?Personnage
+    {
+        return $this->_personnage5Joueur1;
+    }
+
+    /**
+     * Set the value of _personnage5Joueur1
+     */
+    public function setPersonnage5Joueur1(?Personnage $_personnage5Joueur1): self
+    {
+        $this->_personnage5Joueur1 = $_personnage5Joueur1;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _personnage1Joueur2
+     */
+    public function getPersonnage1Joueur2(): ?Personnage
+    {
+        return $this->_personnage1Joueur2;
+    }
+
+    /**
+     * Set the value of _personnage1Joueur2
+     */
+    public function setPersonnage1Joueur2(?Personnage $_personnage1Joueur2): self
+    {
+        $this->_personnage1Joueur2 = $_personnage1Joueur2;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _personnage2Joueur2
+     */
+    public function getPersonnage2Joueur2(): ?Personnage
+    {
+        return $this->_personnage2Joueur2;
+    }
+
+    /**
+     * Set the value of _personnage2Joueur2
+     */
+    public function setPersonnage2Joueur2(?Personnage $_personnage2Joueur2): self
+    {
+        $this->_personnage2Joueur2 = $_personnage2Joueur2;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _personnage3Joueur2
+     */
+    public function getPersonnage3Joueur2(): ?Personnage
+    {
+        return $this->_personnage3Joueur2;
+    }
+
+    /**
+     * Set the value of _personnage3Joueur2
+     */
+    public function setPersonnage3Joueur2(?Personnage $_personnage3Joueur2): self
+    {
+        $this->_personnage3Joueur2 = $_personnage3Joueur2;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _personnage4Joueur2
+     */
+    public function getPersonnage4Joueur2(): ?Personnage
+    {
+        return $this->_personnage4Joueur2;
+    }
+
+    /**
+     * Set the value of _personnage4Joueur2
+     */
+    public function setPersonnage4Joueur2(?Personnage $_personnage4Joueur2): self
+    {
+        $this->_personnage4Joueur2 = $_personnage4Joueur2;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _personnage5Joueur2
+     */
+    public function getPersonnage5Joueur2(): ?Personnage
+    {
+        return $this->_personnage5Joueur2;
+    }
+
+    /**
+     * Set the value of _personnage5Joueur2
+     */
+    public function setPersonnage5Joueur2(?Personnage $_personnage5Joueur2): self
+    {
+        $this->_personnage5Joueur2 = $_personnage5Joueur2;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of __tournoi
+     */
+    public function getTournoi(): ?Tournoi
+    {
+        return $this->__tournoi;
+    }
+
+    /**
+     * Set the value of __tournoi
+     */
+    public function setTournoi(?Tournoi $__tournoi): self
+    {
+        $this->__tournoi = $__tournoi;
 
         return $this;
     }
