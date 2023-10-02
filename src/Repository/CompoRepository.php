@@ -21,6 +21,17 @@ class CompoRepository extends ServiceEntityRepository
         parent::__construct($registry, Compo::class);
     }
 
+    public function countWinnerHaving($guilde){
+        $query =  $this->createQueryBuilder('c')
+                   ->select('count(c.id)')
+                   ->innerJoin('App\Entity\Belligerant', 'belligerant')
+                   ->andWhere('c.guilde = :guilde')
+                   ->andWhere('belligerant.vainqueur = 1')
+                   ->setParameter('guilde', $guilde)
+                   ->getQuery()->getArrayResult();
+               ;
+    }
+
 //    /**
 //     * @return Compo[] Returns an array of Compo objects
 //     */
