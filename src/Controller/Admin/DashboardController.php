@@ -62,6 +62,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Missions de controles', 'fa fa-tags', MissionControle::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkToCrud('Missions de combat', 'fa fa-tags', MissionCombat::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::section('Résultats');
+        yield MenuItem::linkToCrud('Tournois', 'fa fa-tags', Tournoi::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkToCrud('Joueurs', 'fa fa-tags', Joueur::class)->setAction(Crud::PAGE_INDEX);
     }
 }
