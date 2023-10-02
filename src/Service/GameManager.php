@@ -11,6 +11,7 @@ use App\Entity\Joueur;
 use App\Entity\MissionCombat;
 use App\Entity\MissionControle;
 use App\Entity\Personnage;
+use App\Entity\Tournoi;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -83,6 +84,7 @@ class GameManager
         $game->setMissionCombat($this->entityManager->getRepository(MissionCombat::class)->find($data->getMissionCombat()));
         $game->setMissionControle($this->entityManager->getRepository(MissionControle::class)->find($data->getMissionControle()));
         $game->setDate($data->getDate());
+        $game->setTournoi($this->entityManager->getRepository(Tournoi::class)->find($data->getTournoi()));
 
         $this->entityManager->persist($game);
         
