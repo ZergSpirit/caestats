@@ -23,6 +23,7 @@ class ResultatDTO
     private ?int $_scoreJoueur2;
     private ?bool $rixe;
     private ?Tournoi $__tournoi;
+    private ?int $__ronde;
     private MissionControle $_missionControle;
     private MissionCombat $_missionCombat;
     private Guilde $_guilde1;
@@ -57,6 +58,7 @@ class ResultatDTO
         $this->setScoreJoueur2($game->getBelligerant2()->getScore());
         $this->setRixe($game->isRixe());
         $this->setTournoi($game->getTournoi());
+        $this->setRonde($game->getRonde());
         $this->setMissionControle($game->getMissionControle());
         $this->setMissionCombat($game->getMissionCombat());
         $this->setPersonnage1Joueur1($game->getBelligerant1()->getCompo()->getPersonnages()->get(0));
@@ -500,6 +502,24 @@ class ResultatDTO
     public function setTournoi(?Tournoi $__tournoi): self
     {
         $this->__tournoi = $__tournoi;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of __ronde
+     */
+    public function getRonde(): ?int
+    {
+        return $this->__ronde;
+    }
+
+    /**
+     * Set the value of __ronde
+     */
+    public function setRonde(?int $__ronde): self
+    {
+        $this->__ronde = $__ronde;
 
         return $this;
     }

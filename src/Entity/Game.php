@@ -14,7 +14,7 @@ class Game
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'games')]
@@ -36,6 +36,9 @@ class Game
 
     #[ORM\ManyToOne(inversedBy: 'games')]
     private ?MissionCombat $missionCombat = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $ronde = null;
 
     public function getId(): ?int
     {
@@ -122,6 +125,18 @@ class Game
     public function setMissionCombat(?MissionCombat $missionCombat): static
     {
         $this->missionCombat = $missionCombat;
+
+        return $this;
+    }
+
+    public function getRonde(): ?int
+    {
+        return $this->ronde;
+    }
+
+    public function setRonde(?int $ronde): static
+    {
+        $this->ronde = $ronde;
 
         return $this;
     }

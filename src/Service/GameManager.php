@@ -12,6 +12,7 @@ use App\Entity\MissionCombat;
 use App\Entity\MissionControle;
 use App\Entity\Personnage;
 use App\Entity\Tournoi;
+use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -83,8 +84,20 @@ class GameManager
 
         $game->setMissionCombat($this->entityManager->getRepository(MissionCombat::class)->find($data->getMissionCombat()));
         $game->setMissionControle($this->entityManager->getRepository(MissionControle::class)->find($data->getMissionControle()));
-        $game->setDate($data->getDate());
-        $game->setTournoi($this->entityManager->getRepository(Tournoi::class)->find($data->getTournoi()));
+        if ($data->getTournoi() != null) {
+            $game->setTournoi($this->entityManager->getRepository(Tournoi::class)->find($data->getTournoi()));
+        }
+        $game->setRonde($data->getRonde());
+        //Ajout d'heure pour gérer plus tard un éventuel classement elo et avoir l'ordre des games dans un tournoi directement bon
+        
+        if ($game->getRonde() != null) {
+            $date = $data->getDate();
+            $date->add(new DateInterval('PT'.$game->getRonde().'H'));
+            $game->setDate($date);
+        }   
+        else{
+            $game->setDate($data->getDate());
+        }
 
         $this->entityManager->persist($game);
         

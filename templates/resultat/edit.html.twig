@@ -48,6 +48,17 @@
             }
         });
 
+        $('#form_tournoi').change(function(){
+            var _this = $(this);
+            if(_this.val() != ''){
+                $('#form_ronde').removeAttr('disabled');
+            }
+            else {
+                $('#form_ronde').attr('disabled','disabled');
+            }
+        });
+        $("#form_tournoi").change();
+
 
     });
 
@@ -137,7 +148,8 @@
 
 {{ form_start(form) }}
     {{ form_row(form.date) }}
-     {{ form_row(form.tournoi) }} 
+    {{ form_row(form.tournoi) }} 
+    {{ form_row(form.ronde) }} 
     {{ form_row(form.rixe) }}
     {{ form_row(form.missionControle) }}   
     {{ form_row(form.missionCombat) }} 
