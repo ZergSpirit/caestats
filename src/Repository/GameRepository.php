@@ -26,7 +26,7 @@ class GameRepository extends ServiceEntityRepository
         $query =  $this->createQueryBuilder('g')
                    ->where('g.tournoi IS NOT NULL')
                    ->orderBy('g.date')
-                   ->getQuery()->getArrayResult();
+                   ->getQuery()->getResult();
     }
 
     public function save(Game $game)
