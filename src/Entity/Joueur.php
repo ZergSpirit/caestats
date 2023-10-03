@@ -16,10 +16,13 @@ class Joueur
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Nom = null;
+    private ?string $nom = null;
 
     #[ORM\OneToMany(mappedBy: 'joueur', targetEntity: Belligerant::class)]
     private Collection $belligerants;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $elo = null;
 
     public function __construct()
     {
@@ -29,18 +32,6 @@ class Joueur
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getNom(): ?string
-    {
-        return $this->Nom;
-    }
-
-    public function setNom(string $Nom): static
-    {
-        $this->Nom = $Nom;
-
-        return $this;
     }
 
     /**
@@ -69,6 +60,36 @@ class Joueur
                 $belligerant->setJoueur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getElo(): ?int
+    {
+        return $this->elo;
+    }
+
+    public function setElo(?int $elo): static
+    {
+        $this->elo = $elo;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of nom
+     */
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set the value of nom
+     */
+    public function setNom(?string $nom): self
+    {
+        $this->nom = $nom;
 
         return $this;
     }

@@ -21,6 +21,14 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
+    public function findAllWhereTournoiIsNotNull()
+    {
+        $query =  $this->createQueryBuilder('g')
+                   ->where('g.tournoi IS NOT NULL')
+                   ->orderBy('g.date')
+                   ->getQuery()->getArrayResult();
+    }
+
     public function save(Game $game)
     {
         $this->getEntityManager()->persist($game);

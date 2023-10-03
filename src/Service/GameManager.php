@@ -22,7 +22,7 @@ class GameManager
     /**
      * Construct avec injection
      */
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager, private EloManager $eloManager)
     {
         
     }
@@ -100,8 +100,14 @@ class GameManager
         }
 
         $this->entityManager->persist($game);
-        
         $this->entityManager->flush();
+
+        //C'est un tournoi et il y a un vainqueur
+        if ($data->getTournoi() != null && $data->getScoreJoueur1() != $data->getScoreJoueur2()) {
+            $this->eloManager->processMatch($game);
+        }   
+
+        
         
         return $game;
     }

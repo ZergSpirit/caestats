@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "196329e93ecbe51aae83f3e8ae6222a2",
+    "content-hash": "f81fa45307b12be17d306e8e6dae47f5",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -6373,6 +6373,55 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "zelenin/elo",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zelenin/elo.git",
+                "reference": "88aac22d7d4c83a337250d73089342f903543529"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zelenin/elo/zipball/88aac22d7d4c83a337250d73089342f903543529",
+                "reference": "88aac22d7d4c83a337250d73089342f903543529",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zelenin\\Elo\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aleksandr Zelenin",
+                    "email": "aleksandr@zelenin.me",
+                    "homepage": "http://zelenin.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP implementation of Elo rating system",
+            "homepage": "https://github.com/zelenin/elo",
+            "keywords": [
+                "Rating",
+                "elo",
+                "ranking"
+            ],
+            "support": {
+                "issues": "https://github.com/zelenin/elo/issues",
+                "source": "https://github.com/zelenin/elo"
+            },
+            "time": "2014-06-17T00:00:00+00:00"
         }
     ],
     "packages-dev": [
@@ -6669,7 +6718,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "zelenin/elo": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -21,6 +21,23 @@ class JoueurRepository extends ServiceEntityRepository
         parent::__construct($registry, Joueur::class);
     }
 
+    public function resetAllElo(){
+        $this->getEntityManager()->createQuery("update App\Entity\Joueur j set j.elo=null")->execute();
+    }
+
+    public function save(Joueur $joueur)
+    {
+        $this->getEntityManager()->persist($joueur);
+        $this->getEntityManager()->flush($joueur);
+    }
+
+    public function findAllSortedByEloRanking(){
+        $query =  $this->createQueryBuilder('j')
+                   ->where('j.elo IS NOT NULL')
+                   ->orderBy('j.elo','desc')
+                   ->getQuery()->getArrayResult();
+    }
+
 //    /**
 //     * @return Joueur[] Returns an array of Joueur objects
 //     */
