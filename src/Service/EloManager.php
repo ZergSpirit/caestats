@@ -24,7 +24,7 @@ class EloManager
     public function processMatch(Game $game)
     {   
         if ($game->getTournoi() != null) {
-            if($game->getBelligerant1()->getScore() != $game->getBelligerant2()->getScore()){
+            if($game->getBelligerant1()->getScore() == $game->getBelligerant2()->getScore()){
                 $joueurWinner = null;
             }
             else {
