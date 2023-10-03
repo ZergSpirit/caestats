@@ -23,8 +23,13 @@ class EloManager
 
     public function processMatch(Game $game)
     {   
-        if ($game->getTournoi() != null && $game->getBelligerant1()->getScore() != $game->getBelligerant2()->getScore()) {
-            $joueurWinner = $game->getBelligerant1()->getScore() > $game->getBelligerant2()->getScore() ? $game->getBelligerant1()->getJoueur() : $game->getBelligerant2()->getJoueur();
+        if ($game->getTournoi() != null) {
+            if($game->getBelligerant1()->getScore() != $game->getBelligerant2()->getScore()){
+                $joueurWinner = null;
+            }
+            else {
+                $joueurWinner = $game->getBelligerant1()->getScore() > $game->getBelligerant2()->getScore() ? $game->getBelligerant1()->getJoueur() : $game->getBelligerant2()->getJoueur();
+            }
             $joueur1 = $game->getBelligerant1()->getJoueur();
             $joueur2 = $game->getBelligerant2()->getJoueur();
         } 
@@ -42,10 +47,13 @@ class EloManager
         $player1 = new Player($joueur1->getElo());
         $player2 = new Player($joueur2->getElo());
         $match = new EloMatch($player1, $player2);
-        if ($joueurWinner->getId() == $joueur1->getId()) {
+        if ($joueurWinner == null) {
+            $match->setScore(0.5, 0.5);
+        }
+        else if ($joueurWinner->getId() == $joueur1->getId()) {
             $match->setScore(1, 0);
         } 
-        if ($joueurWinner->getId() == $joueur2->getId()) {
+        else {
             $match->setScore(0, 1);
         }  
         $match->setK($this->K_FACTOR);
