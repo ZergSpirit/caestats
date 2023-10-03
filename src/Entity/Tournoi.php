@@ -28,6 +28,9 @@ class Tournoi
     #[ORM\OneToMany(mappedBy: 'tournoi', targetEntity: Game::class)]
     private Collection $games;
 
+    #[ORM\Column(nullable: false)]
+    private ?bool $online = null;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -121,6 +124,18 @@ class Tournoi
     public function setGames(Collection $games): self
     {
         $this->games = $games;
+
+        return $this;
+    }
+
+    public function isOnline(): ?bool
+    {
+        return $this->online;
+    }
+
+    public function setOnline(?bool $online): static
+    {
+        $this->online = $online;
 
         return $this;
     }
