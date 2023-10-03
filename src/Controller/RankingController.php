@@ -22,9 +22,7 @@ class RankingController extends AbstractController
 
         $this->eloMananger->updateAllJoueurs();
 
-        return $this->render('ranking/index.html.twig', [
-            'controller_name' => 'RankingController',
-        ]);
+        return $this->redirect('/ranking');
     }
 
     #[Route('/ranking', name: 'app_ranking')]

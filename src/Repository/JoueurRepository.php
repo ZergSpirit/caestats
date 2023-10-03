@@ -32,10 +32,10 @@ class JoueurRepository extends ServiceEntityRepository
     }
 
     public function findAllSortedByEloRanking(){
-        $query =  $this->createQueryBuilder('j')
+        return $this->createQueryBuilder('j')
                    ->where('j.elo IS NOT NULL')
                    ->orderBy('j.elo','desc')
-                   ->getQuery()->getArrayResult();
+                   ->getQuery()->getResult();
     }
 
 //    /**
