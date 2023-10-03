@@ -40,6 +40,12 @@ class Game
     #[ORM\Column(nullable: true)]
     private ?int $ronde = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $eloChangeJoueur1 = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $eloChangeJoueur2 = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +143,30 @@ class Game
     public function setRonde(?int $ronde): static
     {
         $this->ronde = $ronde;
+
+        return $this;
+    }
+
+    public function getEloChangeJoueur1(): ?int
+    {
+        return $this->eloChangeJoueur1;
+    }
+
+    public function setEloChangeJoueur1(?int $eloChangeJoueur1): static
+    {
+        $this->eloChangeJoueur1 = $eloChangeJoueur1;
+
+        return $this;
+    }
+
+    public function getEloChangeJoueur2(): ?int
+    {
+        return $this->eloChangeJoueur2;
+    }
+
+    public function setEloChangeJoueur2(?int $eloChangeJoueur2): static
+    {
+        $this->eloChangeJoueur2 = $eloChangeJoueur2;
 
         return $this;
     }

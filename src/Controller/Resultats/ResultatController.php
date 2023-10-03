@@ -102,7 +102,7 @@ class ResultatController extends AbstractController
             ->add('personnage4Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => ''])
             ->add('personnage5Joueur2', EntityType::class, ['class' => Personnage::class, 'choice_label' => 'Nom', 'empty_data' => '', 'required'=>false])
             ->add('rixe', CheckboxType::class, ['label' => 'Rixe', 'required' => false])
-            ->add('tournoi', EntityType::class, ['class'=>Tournoi::class,'choice_label'=>'Nom','empty_data' => '', 'required'=>false])
+            ->add('tournoi', EntityType::class, ['class'=>Tournoi::class,'choice_label'=>'Nom'])
             ->add('ronde', IntegerType::class, ['label' => 'Ronde', 'required' => false])
             ->add('save', SubmitType::class, ['label'=>'Enregistrer'])
             ->getForm();

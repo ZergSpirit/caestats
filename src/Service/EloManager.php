@@ -59,11 +59,17 @@ class EloManager
         $match->setK($this->K_FACTOR);
         $match->count();
 
+        $joueur1PreviousElo = $joueur1->getElo();
+        $joueur2PreviousElo = $joueur2->getElo();
+
         $joueur1->setElo($player1->getRating());
         $joueur2->setElo($player2->getRating());
-
         $this->entityManager->getRepository(Joueur::class)->save($joueur1);
         $this->entityManager->getRepository(Joueur::class)->save($joueur2);
+
+        $game->setEloChangeJoueur1($joueur1->getElo()-$joueur1PreviousElo);
+        $game->setEloChangeJoueur2($joueur2->getElo()-$joueur2PreviousElo);
+        $this->entityManager->getRepository(Game::class)->save($game);
     }
 
     public function updateAllJoueurs()
