@@ -23,7 +23,7 @@ class GameRepository extends ServiceEntityRepository
 
     public function findAllWhereTournoiIsNotNull()
     {
-        $query =  $this->createQueryBuilder('g')
+        return  $this->createQueryBuilder('g')
                    ->where('g.tournoi IS NOT NULL')
                    ->orderBy('g.date')
                    ->getQuery()->getResult();
