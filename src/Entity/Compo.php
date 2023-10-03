@@ -26,7 +26,7 @@ class Compo
     private Collection $belligerants;
 
     #[ORM\Column(length: 255)]
-    private ?string $Code = null;
+    private ?string $code = null;
 
     public function __construct()
     {
@@ -105,14 +105,21 @@ class Compo
         return $this;
     }
 
+
+    /**
+     * Get the value of code
+     */
     public function getCode(): ?string
     {
-        return $this->Code;
+        return $this->code;
     }
 
-    public function setCode(string $Code): static
+    /**
+     * Set the value of code
+     */
+    public function setCode(?string $code): self
     {
-        $this->Code = $Code;
+        $this->code = $code;
 
         return $this;
     }

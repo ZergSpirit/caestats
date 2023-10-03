@@ -9,12 +9,21 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Statistques</h1>
+    <h1>Statistiques</h1>
 
     Guildes Winrate
     <ul>
         {% for key,value in resultWinners %}
             <li>{{key}} : {% if results[key]>0 %} ({{(value/results[key])*100}}% {{value}}/{{results[key]}}) {% else %} No data {% endif %}</li>
+        {% endfor %}
+    </ul>
+    <br/>
+    Compo les plus jouées
+    <ul>
+        {% for key,value in compoCount %}
+            {% if key > 1 %}
+                <li>{{key}} : {{value}}</li>
+            {% endif %}
         {% endfor %}
     </ul>
 </div>

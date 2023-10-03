@@ -21,7 +21,7 @@ class BelligerantRepository extends ServiceEntityRepository
         parent::__construct($registry, Belligerant::class);
     }
 
-    public function countWinnerHaving($guilde){
+    public function countWinnerHavingGuilde($guilde){
 
         return $this->createQueryBuilder('b')
                 ->select('count(b.id)')
@@ -33,7 +33,7 @@ class BelligerantRepository extends ServiceEntityRepository
     }
 
 
-    public function countHaving($guilde){
+    public function countHavingGuilde($guilde){
 
         return $this->createQueryBuilder('b')
                 ->select('count(b.id)')
