@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\EloLog;
 use App\Entity\Game;
 use App\Entity\Joueur;
 use Doctrine\ORM\EntityManagerInterface;
@@ -67,14 +68,20 @@ class EloManager
         $this->entityManager->getRepository(Joueur::class)->save($joueur1);
         $this->entityManager->getRepository(Joueur::class)->save($joueur2);
 
-        $game->setEloChangeJoueur1($joueur1->getElo()-$joueur1PreviousElo);
-        $game->setEloChangeJoueur2($joueur2->getElo()-$joueur2PreviousElo);
-        $this->entityManager->getRepository(Game::class)->save($game);
+        $eloLog = new EloLog();
+        $eloLog->setGame($game);
+        $eloLog->setPreviousEloJoueur1($joueur1PreviousElo);
+        $eloLog->setPreviousEloJoueur2($joueur2PreviousElo);
+        $eloLog->setVariationEloJoueur1($joueur1PreviousElo - $joueur1->getElo());
+        $eloLog->setVariationEloJoueur2($joueur2PreviousElo - $joueur2->getElo());
+
+        $this->entityManager->getRepository(EloLog::class)->save($eloLog);
     }
 
     public function updateAllJoueurs()
     {   
         $this->entityManager->getRepository(Joueur::class)->resetAllElo();
+        $this->entityManager->getRepository(EloLog::class)->reset();
         $games = $this->entityManager->getRepository(Game::class)->findAllWhereTournoiIsNotNull();
         foreach ($games as $game) {
             $this->processMatch($game);

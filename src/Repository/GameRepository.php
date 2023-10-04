@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Game;
+use App\Entity\Joueur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,25 @@ class GameRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Game::class);
+    }
+
+    public function findAllByJoueurOrderBydate(?Joueur $joueur){
+        if ($joueur == null) {
+            return  $this->createQueryBuilder('g')
+                ->where('g.tournoi IS NOT NULL')
+                ->orderBy('g.date','desc')
+                ->getQuery()->getResult();
+        }
+        return  $this->createQueryBuilder('g')
+            ->join("g.belligerant1", "b1") 
+            ->join("g.belligerant2", "b2")
+            ->join("b1.joueur", "j1")
+            ->join("b2.joueur", "j2")
+            ->where('g.tournoi IS NOT NULL')
+            ->andWhere('j1.id =:joueur or j2.id =:joueur')
+            ->setParameter('joueur', $joueur->getId())
+            ->orderBy('g.date','desc')
+            ->getQuery()->getResult();
     }
 
     public function findAllWhereTournoiIsNotNull()

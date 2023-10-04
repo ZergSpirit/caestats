@@ -20,13 +20,13 @@ class Game
     #[ORM\ManyToOne(inversedBy: 'games')]
     private ?Tournoi $tournoi = null;
 
-    #[ORM\OneToOne(inversedBy: 'game', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Belligerant $Belligerant1 = null;
+    private ?Belligerant $belligerant1 = null;
 
-    #[ORM\OneToOne(inversedBy: 'game', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Belligerant $Belligerant2 = null;
+    private ?Belligerant $belligerant2 = null;
 
     #[ORM\Column]
     private ?bool $rixe = null;
@@ -45,6 +45,9 @@ class Game
 
     #[ORM\Column(nullable: true)]
     private ?int $eloChangeJoueur2 = null;
+
+    #[ORM\OneToOne(mappedBy: 'game', cascade: ['persist', 'remove'])]
+    private ?EloLog $eloLog = null;
 
     public function getId(): ?int
     {
@@ -71,30 +74,6 @@ class Game
     public function setTournoi(?Tournoi $tournoi): static
     {
         $this->tournoi = $tournoi;
-
-        return $this;
-    }
-
-    public function getBelligerant1(): ?Belligerant
-    {
-        return $this->Belligerant1;
-    }
-
-    public function setBelligerant1(Belligerant $Belligerant1): static
-    {
-        $this->Belligerant1 = $Belligerant1;
-
-        return $this;
-    }
-
-    public function getBelligerant2(): ?Belligerant
-    {
-        return $this->Belligerant2;
-    }
-
-    public function setBelligerant2(Belligerant $Belligerant2): static
-    {
-        $this->Belligerant2 = $Belligerant2;
 
         return $this;
     }
@@ -167,6 +146,59 @@ class Game
     public function setEloChangeJoueur2(?int $eloChangeJoueur2): static
     {
         $this->eloChangeJoueur2 = $eloChangeJoueur2;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of belligerant1
+     */
+    public function getBelligerant1(): ?Belligerant
+    {
+        return $this->belligerant1;
+    }
+
+    /**
+     * Set the value of belligerant1
+     */
+    public function setBelligerant1(?Belligerant $belligerant1): self
+    {
+        $this->belligerant1 = $belligerant1;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of belligerant2
+     */
+    public function getBelligerant2(): ?Belligerant
+    {
+        return $this->belligerant2;
+    }
+
+    /**
+     * Set the value of belligerant2
+     */
+    public function setBelligerant2(?Belligerant $belligerant2): self
+    {
+        $this->belligerant2 = $belligerant2;
+
+        return $this;
+    }
+
+    public function getEloLog(): ?EloLog
+    {
+        return $this->eloLog;
+    }
+
+    public function setEloLog(EloLog $eloLog): static
+    {
+        // set the owning side of the relation if necessary
+        if ($eloLog->getGame() !== $this) {
+            $eloLog->setGame($this);
+        }
+
+        $this->eloLog = $eloLog;
 
         return $this;
     }

@@ -13,7 +13,7 @@
 
     <ul>
         {% for joueur in joueursRanked %}
-            <li>{{loop.index}} : {{joueur.elo}} - {{joueur.nom}}</li>
+            <li>{{loop.index}} : {{joueur.elo}} - <a href="{{ path('app_game', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></li>
         {% endfor %}
     </ul>
 </div>

@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Historique de parties {% if joueur != null %} de {{joueur.nom}} {% endif %}</h1>
+    <table>
+        <tr>
+            <th style="width:200px;">
+                Joueur 1
+            </th>
+            <th style="width:100px;">
+                Elo
+            </th>
+            <th style="width:175px;">
+                Joueur 2
+            </th>
+            <th style="width:100px;">
+                Elo
+            </th>
+             <th style="width:250px;">
+                Guilde 1
+            </th>
+            <th style="width:250px;">
+                Guilde 2
+            </th>
+            <th style="width:400px;">
+                Compo1
+            </th>
+            <th style="width:400px;">
+                Compo2
+            </th>
+            <th>
+                Date
+            </th>
+        </tr>
+
+        {% for game in games %}
+            <tr>
+                <td>
+                    <div style="width:60%;display:inline-block;">
+                        {{game.belligerant1.joueur.nom}}
+                    </div>
+                </td>  
+                <td>
+                    <div style="width:40%;display:inline-block;">
+                        <div style="font-size:0.7em;">
+                             {{game.eloLog.previousEloJoueur1}}
+                        </div>
+                        <div style="font-size:0.6em;">
+                             {% if game.eloLog.variationEloJoueur1 > 0 %}+{% endif %}{{game.eloLog.variationEloJoueur1}}
+                        </div>
+                    </div>
+                </td>
+                <td>
+                   <div style="width:60%;display:inline-block;">
+                        {{game.belligerant2.joueur.nom}}
+                    </div>
+                </td>
+                <td>
+                    <div style="width:40%;display:inline-block;">
+                        <div style="font-size:0.7em;">
+                                {{game.eloLog.previousEloJoueur2}}
+                        </div>
+                        <div style="font-size:0.6em;">
+                                {% if game.eloLog.variationEloJoueur2 > 0 %}+{% endif %}{{game.eloLog.variationEloJoueur2}}
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    {{game.belligerant1.compo.guilde.nom}}
+                </td>
+                <td>
+                    {{game.belligerant2.compo.guilde.nom}}
+                </td>
+                <td>
+                    {{game.belligerant1.compo.code}}
+                </td>
+                <td>
+                    {{game.belligerant2.compo.code}}
+                </td>
+                <td>
+                    {{game.date|date("d/m/Y")}}
+                </td>
+            </tr>
+        {% endfor %}
+
+
+    </table>
+
+</div>
+{% endblock %}

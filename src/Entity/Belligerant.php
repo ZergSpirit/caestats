@@ -21,9 +21,6 @@ class Belligerant
     #[ORM\JoinColumn(nullable: false)]
     private ?Compo $compo = null;
 
-    #[ORM\OneToOne(mappedBy: 'Belligerant1', cascade: ['persist', 'remove'])]
-    private ?Game $game = null;
-
     #[ORM\Column(nullable: true)]
     private ?bool $vainqueur = null;
 
@@ -55,23 +52,6 @@ class Belligerant
     public function setCompo(?Compo $compo): static
     {
         $this->compo = $compo;
-
-        return $this;
-    }
-
-    public function getGame(): ?Game
-    {
-        return $this->game;
-    }
-
-    public function setGame(Game $game): static
-    {
-        // set the owning side of the relation if necessary
-        if ($game->getBelligerant1() !== $this) {
-            $game->setBelligerant1($this);
-        }
-
-        $this->game = $game;
 
         return $this;
     }
