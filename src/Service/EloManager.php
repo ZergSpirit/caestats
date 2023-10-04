@@ -72,8 +72,8 @@ class EloManager
         $eloLog->setGame($game);
         $eloLog->setPreviousEloJoueur1($joueur1PreviousElo);
         $eloLog->setPreviousEloJoueur2($joueur2PreviousElo);
-        $eloLog->setVariationEloJoueur1($joueur1PreviousElo - $joueur1->getElo());
-        $eloLog->setVariationEloJoueur2($joueur2PreviousElo - $joueur2->getElo());
+        $eloLog->setVariationEloJoueur1($joueur1->getElo() - $joueur1PreviousElo);
+        $eloLog->setVariationEloJoueur2($joueur2->getElo() - $joueur2PreviousElo);
 
         $this->entityManager->getRepository(EloLog::class)->save($eloLog);
     }
