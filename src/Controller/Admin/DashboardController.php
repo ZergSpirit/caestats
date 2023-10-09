@@ -16,6 +16,7 @@ use App\Entity\Compo;
 use App\Entity\Tournoi;
 use App\Entity\MissionControle;
 use App\Entity\MissionCombat;
+use App\Entity\User;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -55,6 +56,8 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
+        yield MenuItem::section('Général');
+        yield MenuItem::linkToCrud('Users', 'fa fa-tags', User::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::section('Caeris');
         yield MenuItem::linkToCrud('Personnages', 'fa fa-tags', Personnage::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkToCrud('Guildes', 'fa fa fa-tags', Guilde::class)->setAction(Crud::PAGE_INDEX);
