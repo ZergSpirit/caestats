@@ -24,9 +24,13 @@ class Joueur
     #[ORM\Column(nullable: true)]
     private ?int $elo = null;
 
+    #[ORM\OneToMany(mappedBy: 'vainqueur', targetEntity: Game::class)]
+    private Collection $games;
+
     public function __construct()
     {
         $this->belligerants = new ArrayCollection();
+        $this->games = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,6 +94,36 @@ class Joueur
     public function setNom(?string $nom): self
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Game>
+     */
+    public function getGames(): Collection
+    {
+        return $this->games;
+    }
+
+    public function addGame(Game $game): static
+    {
+        if (!$this->games->contains($game)) {
+            $this->games->add($game);
+            $game->setVainqueur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGame(Game $game): static
+    {
+        if ($this->games->removeElement($game)) {
+            // set the owning side to null (unless already changed)
+            if ($game->getVainqueur() === $this) {
+                $game->setVainqueur(null);
+            }
+        }
 
         return $this;
     }

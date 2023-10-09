@@ -28,6 +28,9 @@ class Compo
     #[ORM\Column(length: 255)]
     private ?string $code = null;
 
+    #[ORM\Column]
+    private bool $noStats = false;
+
     public function __construct()
     {
         $this->personnages = new ArrayCollection();
@@ -120,6 +123,18 @@ class Compo
     public function setCode(?string $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function isNoStats(): ?bool
+    {
+        return $this->noStats;
+    }
+
+    public function setNoStats(bool $noStats): static
+    {
+        $this->noStats = $noStats;
 
         return $this;
     }

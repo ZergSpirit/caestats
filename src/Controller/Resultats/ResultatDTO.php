@@ -17,11 +17,11 @@ class ResultatDTO
     private ?\DateTimeInterface $_date = null;
     private Joueur $_joueur1;
     private Joueur $_joueur2;
-    private ?bool $_vainqueur1;
-    private ?bool $_vainqueur2;
     private ?int $_scoreJoueur1;
     private ?int $_scoreJoueur2;
     private ?bool $rixe;
+    private ?bool $noRanking;
+    private ?bool $noStats;
     private ?Tournoi $__tournoi;
     private ?int $__ronde;
     private MissionControle $_missionControle;
@@ -52,11 +52,11 @@ class ResultatDTO
         $this->setJoueur2($game->getBelligerant2()->getJoueur());
         $this->setGuilde1($game->getBelligerant1()->getCompo()->getGuilde());
         $this->setGuilde2($game->getBelligerant2()->getCompo()->getGuilde());
-        $this->setVainqueur1($game->getBelligerant1()->isVainqueur());
-        $this->setVainqueur2($game->getBelligerant2()->isVainqueur());
         $this->setScoreJoueur1($game->getBelligerant1()->getScore());
         $this->setScoreJoueur2($game->getBelligerant2()->getScore());
         $this->setRixe($game->isRixe());
+        $this->setNoRanking($game->isNoRanking());
+        $this->setNoStats($game->isNoStats());
         $this->setTournoi($game->getTournoi());
         $this->setRonde($game->getRonde());
         $this->setMissionControle($game->getMissionControle());
@@ -146,41 +146,6 @@ class ResultatDTO
         return $this;
     }
 
-    /**
-     * Get the value of _vainqueur1
-     */
-    public function isVainqueur1(): ?bool
-    {
-        return $this->_vainqueur1;
-    }
-
-    /**
-     * Set the value of _vainqueur1
-     */
-    public function setVainqueur1(?bool $_vainqueur1): self
-    {
-        $this->_vainqueur1 = $_vainqueur1;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of _vainqueur2
-     */
-    public function isVainqueur2(): ?bool
-    {
-        return $this->_vainqueur2;
-    }
-
-    /**
-     * Set the value of _vainqueur2
-     */
-    public function setVainqueur2(?bool $_vainqueur2): self
-    {
-        $this->_vainqueur2 = $_vainqueur2;
-
-        return $this;
-    }
 
     /**
      * Get the value of _scoreJoueur1
@@ -520,6 +485,42 @@ class ResultatDTO
     public function setRonde(?int $__ronde): self
     {
         $this->__ronde = $__ronde;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of noRanking
+     */
+    public function isNoRanking(): ?bool
+    {
+        return $this->noRanking;
+    }
+
+    /**
+     * Set the value of noRanking
+     */
+    public function setNoRanking(?bool $noRanking): self
+    {
+        $this->noRanking = $noRanking;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of noStats
+     */
+    public function isNoStats(): ?bool
+    {
+        return $this->noStats;
+    }
+
+    /**
+     * Set the value of noStats
+     */
+    public function setNoStats(?bool $noStats): self
+    {
+        $this->noStats = $noStats;
 
         return $this;
     }

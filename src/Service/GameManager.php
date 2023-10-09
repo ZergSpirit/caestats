@@ -44,15 +44,37 @@ class GameManager
             $game->getBelligerant2()->setCompo(new Compo());
         }
         
+        if ($data->getScoreJoueur1() > $data->getScoreJoueur2()) {
+            $vainqueur = $this->entityManager->getRepository(Joueur::class)->find($data->getJoueur1());
+        } else if ($data->getScoreJoueur2() > $data->getScoreJoueur1()) {
+            $vainqueur = $this->entityManager->getRepository(Joueur::class)->find($data->getJoueur2());
+        } else {
+            $vainqueur = null;
+        }
+        $game->setVainqueur($vainqueur);
+
         /**
          * @var $game Game
          */
         $game->setRixe($data->isRixe());
         $game->getBelligerant1()->setJoueur($this->entityManager->getRepository(Joueur::class)->find($data->getJoueur1()));
         $game->getBelligerant1()->setScore($data->getScoreJoueur1());
-        if ($data->isVainqueur1()) {
+        if ($vainqueur->getId() == $game->getBelligerant1()->getJoueur()->getId()) {
             $game->getBelligerant1()->setVainqueur(true);
         }
+
+        if ($data->isNoStats()) {
+            $game->setNoStats(true);
+            $game->getBelligerant1()->getCompo()->setNostats(true);
+            $game->getBelligerant2()->getCompo()->setNostats(true);
+        } else {
+            $game->setNoStats(false);
+            $game->getBelligerant1()->getCompo()->setNostats(false);
+            $game->getBelligerant2()->getCompo()->setNostats(false);
+        }
+
+        $game->setNoRanking($data->isNoRanking() == null ? false : $data->isNoRanking());
+
         $game->getBelligerant1()->getCompo()->setGuilde($this->entityManager->getRepository(Guilde::class)->find($data->getGuilde1()));
         $game->getBelligerant1()->getCompo()->addPersonnage($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage1Joueur1()));
         $game->getBelligerant1()->getCompo()->addPersonnage($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage2Joueur1()));
@@ -67,8 +89,8 @@ class GameManager
 
         $game->getBelligerant2()->setJoueur($this->entityManager->getRepository(Joueur::class)->find($data->getJoueur2()));
         $game->getBelligerant2()->setScore($data->getScoreJoueur2());
-        if ($data->isVainqueur2()) {
-            $game->getBelligerant2()->setVainqueur(true);
+        if ($vainqueur->getId() == $game->getBelligerant2()->getJoueur()->getId()) {
+            $game->getBelligerant1()->setVainqueur(true);
         }
         $game->getBelligerant2()->getCompo()->setGuilde($this->entityManager->getRepository(Guilde::class)->find($data->getGuilde2()));
         $game->getBelligerant2()->getCompo()->addPersonnage($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage1Joueur2()));
@@ -103,7 +125,7 @@ class GameManager
         $this->entityManager->flush();
 
         //C'est un tournoi et il y a un vainqueur
-        if ($data->getTournoi() != null && $data->getScoreJoueur1() != $data->getScoreJoueur2()) {
+        if (!$data->isNoRanking() && $data->getGameId() == null && $data->getTournoi() != null && $data->getScoreJoueur1() != $data->getScoreJoueur2()) {
             $this->eloManager->processMatch($game);
         }   
 

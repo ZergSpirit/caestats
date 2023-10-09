@@ -49,6 +49,15 @@ class Game
     #[ORM\OneToOne(mappedBy: 'game', cascade: ['persist', 'remove'])]
     private ?EloLog $eloLog = null;
 
+    #[ORM\Column]
+    private bool $noRanking = false;
+
+    #[ORM\Column]
+    private bool $noStats = false;
+
+    #[ORM\ManyToOne(inversedBy: 'games')]
+    private ?Joueur $vainqueur = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -199,6 +208,42 @@ class Game
         }
 
         $this->eloLog = $eloLog;
+
+        return $this;
+    }
+
+    public function isNoRanking(): ?bool
+    {
+        return $this->noRanking;
+    }
+
+    public function setNoRanking(bool $noRanking): static
+    {
+        $this->noRanking = $noRanking;
+
+        return $this;
+    }
+
+    public function isNoStats(): ?bool
+    {
+        return $this->noStats;
+    }
+
+    public function setNoStats(bool $noStats): static
+    {
+        $this->noStats = $noStats;
+
+        return $this;
+    }
+
+    public function getVainqueur(): ?Joueur
+    {
+        return $this->vainqueur;
+    }
+
+    public function setVainqueur(?Joueur $vainqueur): static
+    {
+        $this->vainqueur = $vainqueur;
 
         return $this;
     }
