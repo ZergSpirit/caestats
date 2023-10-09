@@ -35,7 +35,7 @@
                     <div>
                         {{game.belligerant1.joueur.nom}}
                         {% if game.vainqueur != null and game.belligerant1.joueur.id == game.vainqueur.id %}
-                            <img src="{{asset('images/award-symbol.png')}}" alt="Winner" style="max-width:20px;"/>
+                            <img src="{{asset('images/award-symbol.png')}}" title="Winner" style="max-width:20px;"/>
                         {% endif %}
                     </div>
                 </td>  
@@ -53,11 +53,11 @@
                 </td>
                 <td>
                     <div>
-                        <img src="{{asset('images/guilde/'~game.belligerant1.compo.guilde.code~'.png')}}" alt="{{game.belligerant1.compo.guilde.nom}}" style="max-width:50px;" />
+                        <img src="{{asset('images/guilde/'~game.belligerant1.compo.guilde.code~'.png')}}" title="{{game.belligerant1.compo.guilde.nom}}" style="max-width:50px;" />
                          {% for stringToParse in game.belligerant1.compo.code|split('_') %}
                             {% if loop.index > 1 %}
                                 {% for perso in stringToParse|split('-') %}
-                                    <img src="{{asset('images/personnages/'~perso~'.png')}}" alt="{{perso}}" style="max-width:50px;"/>
+                                    <img src="{{asset('images/personnages/'~perso~'.png')}}" title="{{perso}}" style="max-width:50px;"/>
                                 {% endfor %}
                             {% endif %}
                         {% endfor %}
@@ -69,7 +69,7 @@
                    <div>
                         {{game.belligerant2.joueur.nom}}
                         {% if game.vainqueur != null and game.belligerant2.joueur.id == game.vainqueur.id %}
-                            <img src="{{asset('images/award-symbol.png')}}" alt="Winner" style="max-width:20px;"/>
+                            <img src="{{asset('images/award-symbol.png')}}" title="Winner" style="max-width:20px;"/>
                         {% endif %}
                     </div>
                 </td>
@@ -87,11 +87,11 @@
                 </td>
                 <td>
                     <div>
-                        <img src="{{asset('images/guilde/'~game.belligerant2.compo.guilde.code~'.png')}}" alt="{{game.belligerant2.compo.guilde.nom}}" style="max-width:50px;" />
+                        <img src="{{asset('images/guilde/'~game.belligerant2.compo.guilde.code~'.png')}}" title="{{game.belligerant2.compo.guilde.nom}}" style="max-width:50px;" />
                          {% for stringToParse in game.belligerant2.compo.code|split('_') %}
                             {% if loop.index > 1 %}
                                 {% for perso in stringToParse|split('-') %}
-                                    <img src="{{asset('images/personnages/'~perso~'.png')}}" alt="{{perso}}" style="max-width:50px;" />
+                                    <img src="{{asset('images/personnages/'~perso~'.png')}}" title="{{perso}}" style="max-width:50px;" />
                                 {% endfor %}
                             {% endif %}
                         {% endfor %}
