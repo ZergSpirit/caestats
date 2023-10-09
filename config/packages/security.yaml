@@ -37,10 +37,11 @@ security:
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/*, roles: ROLE_USER }
+        - { path: ^/resultats, roles: ROLE_ADMIN }
+        - { path: ^/resultat, roles: ROLE_ADMIN }
+        - { path: ^/ranking/regenerate, roles: ROLE_ADMIN }
          
          
-
 when@test:
     security:
         password_hashers:
