@@ -12,81 +12,90 @@
     <h1>Historique de parties {% if joueur != null %} de {{joueur.nom}} {% endif %}</h1>
     <table>
         <tr>
-            <th style="width:200px;">
-                Joueur 1
-            </th>
-            <th style="width:100px;">
-                Elo
-            </th>
-            <th style="width:175px;">
-                Joueur 2
-            </th>
-            <th style="width:100px;">
-                Elo
-            </th>
-             <th style="width:250px;">
-                Guilde 1
-            </th>
-            <th style="width:250px;">
-                Guilde 2
-            </th>
-            <th style="width:400px;">
-                Compo1
-            </th>
-            <th style="width:400px;">
-                Compo2
-            </th>
             <th>
                 Date
+            </th>
+            <th style="width:200px;">
+                Joueur
+            </th>
+            <th style="width:100px;">
+                Elo
+            </th>
+            <th style="width:750px;">
+                Compo
             </th>
         </tr>
 
         {% for game in games %}
-            <tr>
+            <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                <td rowspan="2">
+                    {{game.date|date("d/m/Y")}}
+                </td>
                 <td>
-                    <div style="width:60%;display:inline-block;">
+                    <div>
                         {{game.belligerant1.joueur.nom}}
+                        {% if game.vainqueur != null and game.belligerant1.joueur.id == game.vainqueur.id %}
+                            <img src="{{asset('images/award-symbol.png')}}" alt="Winner" style="max-width:20px;"/>
+                        {% endif %}
                     </div>
                 </td>  
                 <td>
-                    <div style="width:40%;display:inline-block;">
-                        <div style="font-size:0.7em;">
-                             {{game.eloLog.previousEloJoueur1}}
-                        </div>
-                        <div style="font-size:0.6em;">
-                             {% if game.eloLog.variationEloJoueur1 > 0 %}+{% endif %}{{game.eloLog.variationEloJoueur1}}
-                        </div>
+                    <div>
+                         {% if game.eloLog is not null %}
+                            <div style="font-size:0.7em;">
+                                {{game.eloLog.previousEloJoueur1}}
+                            </div>
+                            <div style="font-size:0.6em;">
+                                {% if game.eloLog.variationEloJoueur1 > 0 %}+{% endif %}{{game.eloLog.variationEloJoueur1}}
+                            </div>
+                        {% endif %}
                     </div>
                 </td>
                 <td>
-                   <div style="width:60%;display:inline-block;">
+                    <div>
+                        <img src="{{asset('images/guilde/'~game.belligerant1.compo.guilde.code~'.png')}}" alt="{{game.belligerant1.compo.guilde.nom}}" style="max-width:50px;" />
+                         {% for stringToParse in game.belligerant1.compo.code|split('_') %}
+                            {% if loop.index > 1 %}
+                                {% for perso in stringToParse|split('-') %}
+                                    <img src="{{asset('images/personnages/'~perso~'.png')}}" alt="{{perso}}" style="max-width:50px;"/>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </td>
+            </tr>
+            <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                <td>
+                   <div>
                         {{game.belligerant2.joueur.nom}}
+                        {% if game.vainqueur != null and game.belligerant2.joueur.id == game.vainqueur.id %}
+                            <img src="{{asset('images/award-symbol.png')}}" alt="Winner" style="max-width:50px;"/>
+                        {% endif %}
                     </div>
                 </td>
                 <td>
-                    <div style="width:40%;display:inline-block;">
-                        <div style="font-size:0.7em;">
-                                {{game.eloLog.previousEloJoueur2}}
-                        </div>
-                        <div style="font-size:0.6em;">
-                                {% if game.eloLog.variationEloJoueur2 > 0 %}+{% endif %}{{game.eloLog.variationEloJoueur2}}
-                        </div>
+                    <div>
+                        {% if game.eloLog is not null %}
+                            <div style="font-size:0.7em;">
+                                    {{game.eloLog.previousEloJoueur2}}
+                            </div>
+                            <div style="font-size:0.6em;">
+                                    {% if game.eloLog.variationEloJoueur2 > 0 %}+{% endif %}{{game.eloLog.variationEloJoueur2}}
+                            </div>
+                        {% endif %}
                     </div>
                 </td>
                 <td>
-                    {{game.belligerant1.compo.guilde.nom}}
-                </td>
-                <td>
-                    {{game.belligerant2.compo.guilde.nom}}
-                </td>
-                <td>
-                    {{game.belligerant1.compo.code}}
-                </td>
-                <td>
-                    {{game.belligerant2.compo.code}}
-                </td>
-                <td>
-                    {{game.date|date("d/m/Y")}}
+                    <div>
+                        <img src="{{asset('images/guilde/'~game.belligerant2.compo.guilde.code~'.png')}}" alt="{{game.belligerant2.compo.guilde.nom}}" style="max-width:50px;" />
+                         {% for stringToParse in game.belligerant2.compo.code|split('_') %}
+                            {% if loop.index > 1 %}
+                                {% for perso in stringToParse|split('-') %}
+                                    <img src="{{asset('images/personnages/'~perso~'.png')}}" alt="{{perso}}" style="max-width:50px;" />
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </td>
             </tr>
         {% endfor %}
