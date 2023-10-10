@@ -40,13 +40,19 @@ class StatsController extends AbstractController
         }
 
 
+        $countbyGuildes = [];
+        foreach ($this->entityManager->getRepository(Compo::class)->countByGuildes() as $value) {
+            $countbyGuildes[$value['nom']] = $value['count'];
+        }
+
         return $this->render('stats/index.html.twig', [
             'controller_name' => 'StatsController',
             'compoCount' => $compoCount,
             'totalCompo' => $totalCompo,
             'countGuilde' => $countGuilde,
             'totalBelligerants' => $totalBelligerants,
-            'personnagesCountByGuilde' => $personnagesCountByGuilde
+            'personnagesCountByGuilde' => $personnagesCountByGuilde,
+            'countbyGuildes' => $countbyGuildes
         ]);
     }
 }

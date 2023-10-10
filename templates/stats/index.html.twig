@@ -25,7 +25,7 @@
     <ol>
         {% for key,value in compoCount %}
             {% if value['count'] > 1 %}
-                <li style="margin-bottom:25px;">{{(value['count']/totalCompo)*100|round(1)}}% ({{value['count']}}/{{totalCompo}}) : 
+                <li style="margin-bottom:25px;">{{((value['count']/totalCompo)*100)|round(1)}}% ({{value['count']}}/{{totalCompo}}) : 
                     <div style="display:inline-block;vertical-align:middle;">
                         {% for stringToParse in value['code']|split('_') %}
                             {% if loop.index == 1 %}
@@ -55,7 +55,7 @@
                     <div style="display:inline-block;vertical-align:middle;">
                         <img src="{{asset('images/personnages/'~value[0]['code']~'.png')}}" title="{{value[0]['code']}}" style="max-width:50px;"/> 
                     </div>
-                    ({{((value[0]['count']/totalCompo)*100)|round(1)}}%) 
+                    ({{((value[0]['count']/countbyGuildes[key])*100)|round(1)}}%) 
                 {% else %}
                     Pas de donnée
                 {% endif %}

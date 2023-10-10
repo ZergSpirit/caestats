@@ -54,6 +54,16 @@ class CompoRepository extends ServiceEntityRepository
                ;
     }
 
+    public function countByGuildes()
+    {
+        return  $this->createQueryBuilder('c')
+            ->select('count(g.code) as count, g.nom')
+            ->innerJoin('c.guilde', 'g')
+            ->groupBy('g.code')
+            ->getQuery()->getArrayResult();
+        ;
+    }
+
 
 //    /**
 //     * @return Compo[] Returns an array of Compo objects
