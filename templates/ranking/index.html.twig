@@ -8,7 +8,7 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
+<div>
     <h1>Classements des joueurs</h1>
 
     <ul>
@@ -16,5 +16,10 @@
             <li>{{loop.index}} : {{joueur.elo}} - <a href="{{ path('app_game', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></li>
         {% endfor %}
     </ul>
+
+    <br/>
+
+    <a href="{{ path('app_stats') }}">Statistiques</a>
+
 </div>
 {% endblock %}

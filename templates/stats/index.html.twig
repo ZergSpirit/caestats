@@ -12,14 +12,17 @@
     <h1>Statistiques</h1>
 
     Guildes favorites
-    <ul>
-        {% for key,value in results %}
-            <li>{{key}} : {% if results[key]>0 %} ({{(value/totalBelligerants)*100|round(1)}}% {{value}}/{{totalBelligerants}}) {% else %} No data {% endif %}</li>
+    <ol>
+        {% for key,value in countGuilde %}
+            <li>{{value['nom']}} : ({{((value['count']/totalBelligerants)*100)|round(1)}}% {{value['count']}}/{{totalBelligerants}})</li>
+            {% if loop.index > 3 %}
+                {% set break = true %}
+            {% endif %}
         {% endfor %}
-    </ul>
+    </ol>
     <br/>
     Compo les plus jouées
-    <ul>
+    <ol>
         {% for key,value in compoCount %}
             {% if value['count'] > 1 %}
                 <li style="margin-bottom:25px;">{{(value['count']/totalCompo)*100|round(1)}}% ({{value['count']}}/{{totalCompo}}) : 
@@ -40,6 +43,23 @@
             {% if loop.index > 5 %}
                 {% set break = true %}
             {% endif %}
+        {% endfor %}
+    </ol>
+    <br/>
+    Personnages  les plus jouées
+    <ul>
+        {% for key,value in personnagesCountByGuilde %}
+            <li>
+                {{key}} : 
+                {% if value %}
+                    <div style="display:inline-block;vertical-align:middle;">
+                        <img src="{{asset('images/personnages/'~value[0]['code']~'.png')}}" title="{{value[0]['code']}}" style="max-width:50px;"/> 
+                    </div>
+                    ({{((value[0]['count']/totalCompo)*100)|round(1)}}%) 
+                {% else %}
+                    Pas de donnée
+                {% endif %}
+            </li> 
         {% endfor %}
     </ul>
 </div>

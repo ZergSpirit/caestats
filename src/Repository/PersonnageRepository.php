@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Guilde;
 use App\Entity\Personnage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,7 +21,7 @@ class PersonnageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Personnage::class);
     }
-    
+
     //    /**
     //     * @return Personnage[] Returns an array of Personnage objects
     //     */

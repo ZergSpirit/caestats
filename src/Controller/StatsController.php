@@ -20,24 +20,33 @@ class StatsController extends AbstractController
     public function index(): Response
     {
 
-        $guildes = $this->entityManager->getRepository(Guilde::class)->findAll();
+        $guildes = $this->entityManager->getRepository(Guilde::class)->findBy(array(),array('nom' => 'ASC'));
         $totalBelligerants = $this->entityManager->getRepository(Belligerant::class)->countAll();
-        $resultWinners = [];
-        $results = [];
-        foreach ($guildes as $guilde) {
-            $resultWinners[$guilde->getNom()] = $this->entityManager->getRepository(Belligerant::class)->countWinnerHavingGuilde($guilde);
-            $results[$guilde->getNom()] = $this->entityManager->getRepository(Belligerant::class)->countHavingGuilde($guilde);
-        }
+        // $resultWinners = [];
+        // $results = [];
+        // foreach ($guildes as $guilde) {
+        //     $resultWinners[$guilde->getNom()] = $this->entityManager->getRepository(Belligerant::class)->countWinnerHavingGuilde($guilde);
+        //     $results[$guilde->getNom()] = $this->entityManager->getRepository(Belligerant::class)->countHavingGuilde($guilde);
+        // }
 
         $compoCount = $this->entityManager->getRepository(Compo::class)->countGroupByCode();
         $totalCompo = $this->entityManager->getRepository(Compo::class)->countAll();
+
+        $countGuilde = $this->entityManager->getRepository(Belligerant::class)->countByGuilde();
+        
+        $personnagesCountByGuilde = [];
+        foreach ($guildes as $guilde) {
+            $personnagesCountByGuilde[$guilde->getNom()] = $this->entityManager->getRepository(Compo::class)->countPersonnageByGuilde($guilde);
+        }
+
+
         return $this->render('stats/index.html.twig', [
             'controller_name' => 'StatsController',
-            'resultWinners' => $resultWinners,
-            'results' => $results,
             'compoCount' => $compoCount,
             'totalCompo' => $totalCompo,
-            'totalBelligerants' => $totalBelligerants
+            'countGuilde' => $countGuilde,
+            'totalBelligerants' => $totalBelligerants,
+            'personnagesCountByGuilde' => $personnagesCountByGuilde
         ]);
     }
 }

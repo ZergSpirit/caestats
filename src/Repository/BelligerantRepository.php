@@ -39,6 +39,17 @@ class BelligerantRepository extends ServiceEntityRepository
     }
 
 
+    public function countByGuilde(){
+
+        return $this->createQueryBuilder('b')
+                ->select('count(b.id) as count, g.code, g.nom')
+                ->innerJoin('b.compo', 'c')
+                ->innerJoin('c.guilde', 'g')
+                ->orderBy('count(b.id)','desc')
+                ->groupBy('g')
+                ->getQuery()->getArrayResult();
+    }
+
     public function countHavingGuilde($guilde){
 
         return $this->createQueryBuilder('b')

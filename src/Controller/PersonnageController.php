@@ -26,7 +26,7 @@ class PersonnageController extends AbstractController
         if($guildeEntity == null){
             throw new \Exception('Guild '.$guilde.' not found');
         }
-        $jsonContent = $this->serializer->serialize($guildeEntity->getPersonnages(), 'json');
+        $jsonContent = $this->serializer->serialize($this->entityManager->getRepository(Personnage::class)->findByGuilde($guildeEntity), 'json');
 
         return $this->json($jsonContent);
 

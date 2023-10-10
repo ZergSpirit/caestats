@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Compo;
+use App\Entity\Guilde;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,20 @@ class CompoRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Compo::class);
+    }
+
+    public function countPersonnageByGuilde(Guilde $guilde)
+    {
+        return  $this->createQueryBuilder('c')
+                   ->select('count(p.code) as count, p.code')
+                   ->innerJoin('c.guilde', 'g')
+                   ->innerJoin('c.personnages', 'p')
+                   ->where('g.id = :guilde')
+                   ->setParameter('guilde', $guilde->getId())
+                   ->groupBy('p.code')
+                   ->orderBy('count(p.code)', 'desc')
+                   ->getQuery()->getResult();
+               ;
     }
 
     public function countGroupByCode()
