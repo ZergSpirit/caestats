@@ -14,7 +14,7 @@
     Guildes favorites
     <ul>
         {% for key,value in results %}
-            <li>{{key}} : {% if results[key]>0 %} ({{(value/totalBelligerants)*100}}% {{value}}/{{totalBelligerants}}) {% else %} No data {% endif %}</li>
+            <li>{{key}} : {% if results[key]>0 %} ({{(value/totalBelligerants)*100|round(1)}}% {{value}}/{{totalBelligerants}}) {% else %} No data {% endif %}</li>
         {% endfor %}
     </ul>
     <br/>
@@ -22,7 +22,7 @@
     <ul>
         {% for key,value in compoCount %}
             {% if value['count'] > 1 %}
-                <li style="margin-bottom:25px;">{{(value['count']/totalCompo)*100}}% ({{value['count']}}/{{totalCompo}}) : 
+                <li style="margin-bottom:25px;">{{(value['count']/totalCompo)*100|round(1)}}% ({{value['count']}}/{{totalCompo}}) : 
                     <div style="display:inline-block;vertical-align:middle;">
                         {% for stringToParse in value['code']|split('_') %}
                             {% if loop.index == 1 %}
