@@ -1,134 +1,135 @@
 {% extends 'base.html.twig' %}
 
 {% block pageJavascripts %}
+
     <script type="application/javascript">
-    $(document).ready(function(){
+    $(window).on('load',function(){
 
-        var gamerId = '{{form.vars.value.gameId}}';
+    var gamerId = '{{form.vars.value.gameId}}';
 
-        $("#form_guilde1").change(function(){
-            var _this = $(this);
-            changeGuilde(_this.val(),"1");
-        });
-        $("#form_guilde1").change();
-        
-        $("#form_guilde2").change(function(){
-            var _this = $(this);
-            changeGuilde(_this.val(),"2");
-        });
-        $("#form_guilde2").change();
+    $("#form_guilde1").change(function(){
+        var _this = $(this);
+        changeGuilde(_this.val(),"1");
+    });
+    $("#form_guilde1").change();
+    
+    $("#form_guilde2").change(function(){
+        var _this = $(this);
+        changeGuilde(_this.val(),"2");
+    });
+    $("#form_guilde2").change();
 
-        $("#form_rixe").change(function(){
-            var _this = $(this);
-            if(_this.is(':checked')){
-                $('#form_personnage5Joueur1').attr('disabled','disabled');
-                $('#form_personnage5Joueur2').attr('disabled','disabled');
-            }
-            else{
-                $('#form_personnage5Joueur1').removeAttr('disabled');
-                $('#form_personnage5Joueur2').removeAttr('disabled');
-            }
-        });
-
-        $("#form_vainqueur1").change(function(){
-            var _this = $(this);
-            if(_this.is(':checked')){
-                 if(_this.is(':checked')){
-                    $('#form_vainqueur2').prop("checked",false);
-                }
-            }
-        });
-
-          $("#form_vainqueur2").change(function(){
-            var _this = $(this);
-            if(_this.is(':checked')){
-                 if(_this.is(':checked')){
-                    $('#form_vainqueur1').prop("checked",false);
-                }
-            }
-        });
-
-        $('#form_tournoi').change(function(){
-            var _this = $(this);
-            if(_this.val() != ''){
-                $('#form_ronde').removeAttr('disabled');
-            }
-            else {
-                $('#form_ronde').attr('disabled','disabled');
-            }
-        });
-        $("#form_tournoi").change();
-
-
+    $("#form_rixe").change(function(){
+        var _this = $(this);
+        if(_this.is(':checked')){
+            $('#form_personnage5Joueur1').attr('disabled','disabled');
+            $('#form_personnage5Joueur2').attr('disabled','disabled');
+        }
+        else{
+            $('#form_personnage5Joueur1').removeAttr('disabled');
+            $('#form_personnage5Joueur2').removeAttr('disabled');
+        }
     });
 
-    var changeGuilde = function(guilde,numeroJoueur){
-        $.ajax({
-            url : "/personnages/"+guilde,
-            success(data, textStatus, jqXHR){
-               var select = $('#form_personnage1Joueur'+numeroJoueur);
-               select.html('');
-                $.each(JSON.parse(data),function(index, iter){
-                select.append("<option value='"+iter.id+"'>"+iter.nom+"</option>");
-               });
-               select = $('#form_personnage2Joueur'+numeroJoueur);
-               select.html('');
-                $.each(JSON.parse(data),function(index, iter){
-                select.append("<option value='"+iter.id+"'>"+iter.nom+"</option>");
-               });
-               select = $('#form_personnage3Joueur'+numeroJoueur);
-               select.html('');
-                $.each(JSON.parse(data),function(index, iter){
-                select.append("<option value='"+iter.id+"'>"+iter.nom+"</option>");
-               });
-               select = $('#form_personnage4Joueur'+numeroJoueur);
-               select.html('');
-                $.each(JSON.parse(data),function(index, iter){
-                select.append("<option value='"+iter.id+"'>"+iter.nom+"</option>");
-               });
-               select = $('#form_personnage5Joueur'+numeroJoueur);
-               select.html('');
-                select.append("<option value=''></option>");
-                $.each(JSON.parse(data),function(index, iter){
-                    select.append("<option value='"+iter.id+"'>"+iter.nom+"</option>");
-                });
-               if(numeroJoueur='1'){
-                {% if form.vars.value.personnage1Joueur1 is not null %}
-                    $('#form_personnage1Joueur1').children("option[value={{form.vars.value.personnage1Joueur1.id}}]").attr("selected","selected");
-                {% endif %}
-                {% if form.vars.value.personnage2Joueur1 is not null %}
-                    $('#form_personnage2Joueur1').children("option[value={{form.vars.value.personnage2Joueur1.id}}]").attr("selected","selected");
-                {% endif %}
-                {% if form.vars.value.personnage3Joueur1 is not null %}
-                    $('#form_personnage3Joueur1').children("option[value={{form.vars.value.personnage3Joueur1.id}}]").attr("selected","selected");
-                {% endif %}
-                {% if form.vars.value.personnage4Joueur1 is not null %}
-                    $('#form_personnage4Joueur1').children("option[value={{form.vars.value.personnage4Joueur1.id}}]").attr("selected","selected");
-                {% endif %}
-                {% if form.vars.value.personnage5Joueur1 is not null %}
-                    $('#form_personnage5Joueur1').children("option[value={{form.vars.value.personnage5Joueur1.id}}]").attr("selected","selected");
-                {% endif %}
-               }
-               if(numeroJoueur='2'){
-                {% if form.vars.value.personnage1Joueur1 is not null %}
-                    $('#form_personnage1Joueur2').children("option[value={{form.vars.value.personnage1Joueur2.id}}]").attr("selected","selected");
-                {% endif %}
-                {% if form.vars.value.personnage2Joueur1 is not null %}
-                    $('#form_personnage2Joueur2').children("option[value={{form.vars.value.personnage2Joueur2.id}}]").attr("selected","selected");
-                {% endif %}
-                {% if form.vars.value.personnage3Joueur1 is not null %}
-                    $('#form_personnage3Joueur2').children("option[value={{form.vars.value.personnage3Joueur2.id}}]").attr("selected","selected");
-                {% endif %}
-                {% if form.vars.value.personnage4Joueur1 is not null %}
-                    $('#form_personnage4Joueur2').children("option[value={{form.vars.value.personnage4Joueur2.id}}]").attr("selected","selected");
-                {% endif %}
-                {% if form.vars.value.personnage5Joueur1 is not null %}
-                    $('#form_personnage5Joueur2').children("option[value={{form.vars.value.personnage5Joueur2.id}}]").attr("selected","selected");
-                {% endif %}
-               }
+    $("#form_vainqueur1").change(function(){
+        var _this = $(this);
+        if(_this.is(':checked')){
+             if(_this.is(':checked')){
+                $('#form_vainqueur2').prop("checked",false);
             }
-        });
-    };
+        }
+    });
+
+      $("#form_vainqueur2").change(function(){
+        var _this = $(this);
+        if(_this.is(':checked')){
+             if(_this.is(':checked')){
+                $('#form_vainqueur1').prop("checked",false);
+            }
+        }
+    });
+
+    $('#form_tournoi').change(function(){
+        var _this = $(this);
+        if(_this.val() != ''){
+            $('#form_ronde').removeAttr('disabled');
+        }
+        else {
+            $('#form_ronde').attr('disabled','disabled');
+        }
+    });
+    $("#form_tournoi").change();
+
+
+});
+
+var changeGuilde = function(guilde,numeroJoueur){
+    $.ajax({
+        url : "/personnages/"+guilde,
+        success(data, textStatus, jqXHR){
+           var select = $('#form_personnage1Joueur'+numeroJoueur);
+           select.html('');
+            $.each(JSON.parse(data),function(index, iter){
+            select.append("<option value='"+iter.id+"'>"+iter.nom+"</option>");
+           });
+           select = $('#form_personnage2Joueur'+numeroJoueur);
+           select.html('');
+            $.each(JSON.parse(data),function(index, iter){
+            select.append("<option value='"+iter.id+"'>"+iter.nom+"</option>");
+           });
+           select = $('#form_personnage3Joueur'+numeroJoueur);
+           select.html('');
+            $.each(JSON.parse(data),function(index, iter){
+            select.append("<option value='"+iter.id+"'>"+iter.nom+"</option>");
+           });
+           select = $('#form_personnage4Joueur'+numeroJoueur);
+           select.html('');
+            $.each(JSON.parse(data),function(index, iter){
+            select.append("<option value='"+iter.id+"'>"+iter.nom+"</option>");
+           });
+           select = $('#form_personnage5Joueur'+numeroJoueur);
+           select.html('');
+            select.append("<option value=''></option>");
+            $.each(JSON.parse(data),function(index, iter){
+                select.append("<option value='"+iter.id+"'>"+iter.nom+"</option>");
+            });
+           if(numeroJoueur='1'){
+            {% if form.vars.value.personnage1Joueur1 is not null %}
+                $('#form_personnage1Joueur1').children("option[value={{form.vars.value.personnage1Joueur1.id}}]").attr("selected","selected");
+            {% endif %}
+            {% if form.vars.value.personnage2Joueur1 is not null %}
+                $('#form_personnage2Joueur1').children("option[value={{form.vars.value.personnage2Joueur1.id}}]").attr("selected","selected");
+            {% endif %}
+            {% if form.vars.value.personnage3Joueur1 is not null %}
+                $('#form_personnage3Joueur1').children("option[value={{form.vars.value.personnage3Joueur1.id}}]").attr("selected","selected");
+            {% endif %}
+            {% if form.vars.value.personnage4Joueur1 is not null %}
+                $('#form_personnage4Joueur1').children("option[value={{form.vars.value.personnage4Joueur1.id}}]").attr("selected","selected");
+            {% endif %}
+            {% if form.vars.value.personnage5Joueur1 is not null %}
+                $('#form_personnage5Joueur1').children("option[value={{form.vars.value.personnage5Joueur1.id}}]").attr("selected","selected");
+            {% endif %}
+           }
+           if(numeroJoueur='2'){
+            {% if form.vars.value.personnage1Joueur1 is not null %}
+                $('#form_personnage1Joueur2').children("option[value={{form.vars.value.personnage1Joueur2.id}}]").attr("selected","selected");
+            {% endif %}
+            {% if form.vars.value.personnage2Joueur1 is not null %}
+                $('#form_personnage2Joueur2').children("option[value={{form.vars.value.personnage2Joueur2.id}}]").attr("selected","selected");
+            {% endif %}
+            {% if form.vars.value.personnage3Joueur1 is not null %}
+                $('#form_personnage3Joueur2').children("option[value={{form.vars.value.personnage3Joueur2.id}}]").attr("selected","selected");
+            {% endif %}
+            {% if form.vars.value.personnage4Joueur1 is not null %}
+                $('#form_personnage4Joueur2').children("option[value={{form.vars.value.personnage4Joueur2.id}}]").attr("selected","selected");
+            {% endif %}
+            {% if form.vars.value.personnage5Joueur1 is not null %}
+                $('#form_personnage5Joueur2').children("option[value={{form.vars.value.personnage5Joueur2.id}}]").attr("selected","selected");
+            {% endif %}
+           }
+        }
+    });
+};
 
 </script>
 
