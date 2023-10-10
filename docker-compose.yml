@@ -28,7 +28,7 @@ services:
     container_name: nginx
     image: nginx:stable-alpine
     ports:
-      - '8080:80'
+      - '80:80'
     volumes:
       - ./:/var/www/caestats
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
