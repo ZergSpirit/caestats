@@ -1,19 +1,12 @@
 server {
 
-    listen [::]:443 ssl;
-    listen 443 ssl;
-    listen 80; 
+    listen 80;
     index index.php;
-    server_name caestats.com www.caestats.com;
+    server_name localhost;
     root /var/www/caestats/public;
     error_log /var/log/nginx/project_error.log;
     access_log /var/log/nginx/project_access.log;
 
-
-    ssl_certificate /var/www/certbot/fullchain.pem;
-    ssl_certificate_key /var/www/certbot/privkey.pem;
-
-    
     location / {
         try_files $uri /index.php$is_args$args;
     }
