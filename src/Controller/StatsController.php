@@ -21,22 +21,23 @@ class StatsController extends AbstractController
     {
 
         $guildes = $this->entityManager->getRepository(Guilde::class)->findAll();
+        $totalBelligerants = $this->entityManager->getRepository(Belligerant::class)->countAll();
         $resultWinners = [];
         $results = [];
         foreach ($guildes as $guilde) {
             $resultWinners[$guilde->getNom()] = $this->entityManager->getRepository(Belligerant::class)->countWinnerHavingGuilde($guilde);
             $results[$guilde->getNom()] = $this->entityManager->getRepository(Belligerant::class)->countHavingGuilde($guilde);
-            //$guildeString = $guildeString.$guilde." : ".($this->entityManager->getRepository(Belligerant::class)->countWinnerHaving($guilde))."\r\n";
         }
 
         $compoCount = $this->entityManager->getRepository(Compo::class)->countGroupByCode();
-
-
+        $totalCompo = $this->entityManager->getRepository(Compo::class)->countAll();
         return $this->render('stats/index.html.twig', [
             'controller_name' => 'StatsController',
             'resultWinners' => $resultWinners,
             'results' => $results,
-            'compoCount' => $compoCount
+            'compoCount' => $compoCount,
+            'totalCompo' => $totalCompo,
+            'totalBelligerants' => $totalBelligerants
         ]);
     }
 }

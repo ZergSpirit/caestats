@@ -11,18 +11,34 @@
 <div class="example-wrapper">
     <h1>Statistiques</h1>
 
-    Guildes Winrate
+    Guildes favorites
     <ul>
-        {% for key,value in resultWinners %}
-            <li>{{key}} : {% if results[key]>0 %} ({{(value/results[key])*100}}% {{value}}/{{results[key]}}) {% else %} No data {% endif %}</li>
+        {% for key,value in results %}
+            <li>{{key}} : {% if results[key]>0 %} ({{(value/totalBelligerants)*100}}% {{value}}/{{totalBelligerants}}) {% else %} No data {% endif %}</li>
         {% endfor %}
     </ul>
     <br/>
     Compo les plus jouées
     <ul>
         {% for key,value in compoCount %}
-            {% if key > 1 %}
-                <li>{{key}} : {{value}}</li>
+            {% if value['count'] > 1 %}
+                <li style="margin-bottom:25px;">{{(value['count']/totalCompo)*100}}% ({{value['count']}}/{{totalCompo}}) : 
+                    <div style="display:inline-block;vertical-align:middle;">
+                        {% for stringToParse in value['code']|split('_') %}
+                            {% if loop.index == 1 %}
+                                <img src="{{asset('images/guilde/'~stringToParse~'.png')}}" title="{{stringToParse}}" style="max-width:50px;" />
+                            {% endif %}
+                            {% if loop.index > 1 and loop.index %}
+                                {% for perso in stringToParse|split('-') %}
+                                    <img src="{{asset('images/personnages/'~perso~'.png')}}" title="{{perso}}" style="max-width:50px;" />
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </li>
+            {% endif %}
+            {% if loop.index > 5 %}
+                {% set break = true %}
             {% endif %}
         {% endfor %}
     </ul>

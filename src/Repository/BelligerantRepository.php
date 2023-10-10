@@ -21,6 +21,12 @@ class BelligerantRepository extends ServiceEntityRepository
         parent::__construct($registry, Belligerant::class);
     }
 
+    public function countAll(){
+        return $this->createQueryBuilder('b')
+                ->select('count(b.id)')
+                ->getQuery()->getSingleScalarResult();
+    }
+
     public function countWinnerHavingGuilde($guilde){
 
         return $this->createQueryBuilder('b')

@@ -23,13 +23,22 @@ class CompoRepository extends ServiceEntityRepository
 
     public function countGroupByCode()
     {
-        $query =  $this->createQueryBuilder('c')
-                   ->select('count(c.id), c.code')
+        return  $this->createQueryBuilder('c')
+                   ->select('count(c.id) as count, c.code')
                    ->groupBy('c.code')
                    ->orderBy('count(c.id)','desc')
                    ->getQuery()->getArrayResult();
                ;
     }
+
+    public function countAll()
+    {
+        return  $this->createQueryBuilder('c')
+                   ->select('count(c.id) as count')
+                   ->getQuery()->getSingleScalarResult();
+               ;
+    }
+
 
 //    /**
 //     * @return Compo[] Returns an array of Compo objects
