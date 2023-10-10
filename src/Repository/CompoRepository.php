@@ -57,9 +57,9 @@ class CompoRepository extends ServiceEntityRepository
     public function countByGuildes()
     {
         return  $this->createQueryBuilder('c')
-            ->select('count(g.code) as count, g.nom')
+            ->select('count(g.nom) as count, g.nom')
             ->innerJoin('c.guilde', 'g')
-            ->groupBy('g.code')
+            ->groupBy('g.nom')
             ->getQuery()->getArrayResult();
         ;
     }
