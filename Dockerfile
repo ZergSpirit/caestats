@@ -16,5 +16,7 @@ RUN curl -sS https://get.symfony.com/cli/installer | bash
 #RUN mv /usr/bin/symfony /usr/local/bin/symfony
 RUN git config --global user.email "adrien.orsier@gmail.com" \ 
     && git config --global user.name "Zimfg"
+COPY . ./
+RUN composer install
 RUN npm install
 RUN npm run build
