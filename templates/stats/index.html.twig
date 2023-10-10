@@ -11,7 +11,7 @@
 <div class="example-wrapper">
     <h1>Statistiques</h1>
 
-    Guildes favorites
+    TOP 3 Guildes les plus jouées
     <ol>
         {% for key,value in countGuilde %}
             <li>{{value['nom']}} : ({{((value['count']/totalBelligerants)*100)|round(1)}}% {{value['count']}}/{{totalBelligerants}})</li>
@@ -21,7 +21,7 @@
         {% endfor %}
     </ol>
     <br/>
-    Compo les plus jouées
+    TOP 5 Compo les plus jouées
     <ol>
         {% for key,value in compoCount %}
             {% if value['count'] > 1 %}
@@ -46,7 +46,7 @@
         {% endfor %}
     </ol>
     <br/>
-    Personnages  les plus jouées
+    TOP 1 Personnages les plus jouées par guilde
     <ul>
         {% for key,value in personnagesCountByGuilde %}
             <li>
