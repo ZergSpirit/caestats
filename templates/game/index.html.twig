@@ -9,11 +9,26 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Historique de parties {% if joueur != null %} de {{joueur.nom}} {% endif %}</h1>
+    <h1>Historique de parties</h1>
+
+     {% if joueur != null or tournoi != null %} 
+        <ul>
+            {% if joueur != null %} 
+                <li>Parties de : {{joueur.nom}}</li>
+            {% endif %}
+             {% if tournoi != null %} 
+                <li>Tournoi : {{tournoi.nom}}</li>
+            {% endif %}
+        </ul>
+     {% endif %}
+
     <table>
         <tr>
             <th>
                 Date
+            </th>
+            <th>
+                Tournoi
             </th>
             <th style="width:200px;">
                 Joueur
@@ -31,9 +46,12 @@
                 <td rowspan="2">
                     {{game.date|date("d/m/Y")}}
                 </td>
+                <td rowspan="2">
+                    <a href="{{ path('app_game', {'tournoiId' : game.tournoi.id}) }}">{{game.tournoi.nom}}</a>
+                </td>
                 <td>
                     <div>
-                        {{game.belligerant1.joueur.nom}}
+                        <a href="{{ path('app_game', {'joueurId' : game.belligerant1.joueur.id}) }}">{{game.belligerant1.joueur.nom}}</a>
                         {% if game.vainqueur != null and game.belligerant1.joueur.id == game.vainqueur.id %}
                             <img src="{{asset('images/award-symbol.png')}}" title="Winner" style="max-width:20px;"/>
                         {% endif %}
@@ -67,7 +85,7 @@
             <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
                 <td>
                    <div>
-                        {{game.belligerant2.joueur.nom}}
+                        <a href="{{ path('app_game', {'joueurId' : game.belligerant2.joueur.id}) }}">{{game.belligerant2.joueur.nom}}</a>
                         {% if game.vainqueur != null and game.belligerant2.joueur.id == game.vainqueur.id %}
                             <img src="{{asset('images/award-symbol.png')}}" title="Winner" style="max-width:20px;"/>
                         {% endif %}
