@@ -78,7 +78,7 @@
                 <td>
                     <div>
                         <a href="{{ path('app_game', {'guildeId' : game.belligerant1.compo.guilde.id}) }}"><img src="{{asset('images/guilde/'~game.belligerant1.compo.guilde.code~'.png')}}" title="{{game.belligerant1.compo.guilde.nom}}" style="max-width:50px;" /></a>
-                        <a href="{{ path('app_game', {'compoCode' : game.belligerant1.compo.code}) }}">
+                        <a href="{{ path('app_game', {'compoCode' : game.belligerant1.compo.code}) }}" style="text-decoration:none;">
                             <span>
                                 {% for stringToParse in game.belligerant1.compo.code|split('_') %}
                                     {% if loop.index > 1 %}
@@ -116,7 +116,7 @@
                 <td>
                     <div>
                         <a href="{{ path('app_game', {'guildeId' : game.belligerant2.compo.guilde.id}) }}"><img src="{{asset('images/guilde/'~game.belligerant2.compo.guilde.code~'.png')}}" title="{{game.belligerant2.compo.guilde.nom}}" style="max-width:50px;" /></a>
-                        <a href="{{ path('app_game', {'compoCode' : game.belligerant2.compo.code}) }}">
+                        <a href="{{ path('app_game', {'compoCode' : game.belligerant2.compo.code}) }}" style="text-decoration:none;">
                             <span>
                                 {% for stringToParse in game.belligerant2.compo.code|split('_') %}
                                     {% if loop.index > 1 %}
