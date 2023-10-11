@@ -21,6 +21,18 @@ class PersonnageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Personnage::class);
     }
+    
+    public function findByGuilde(Guilde $guilde){
+            return $this->createQueryBuilder('p')
+                ->innerJoin('p.guildes', 'g')
+                ->where('g.id = :guilde')
+                ->setParameter('guilde', $guilde->getId())
+                ->orderBy('p.nom', 'ASC')
+                ->getQuery()
+                ->getResult()
+            ;
+    }
+
 
     //    /**
     //     * @return Personnage[] Returns an array of Personnage objects
