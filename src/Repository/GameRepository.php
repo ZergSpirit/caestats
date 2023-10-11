@@ -59,8 +59,6 @@ class GameRepository extends ServiceEntityRepository
         $query->addOrderBy('g.date', 'desc')
             ->addOrderBy('g.ronde', 'desc');
 
-        dd($query->getQuery()->getSQL());
-
         return $query->getQuery()->getResult();
     }
 
