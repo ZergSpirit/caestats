@@ -30,6 +30,9 @@
             <th>
                 Tournoi
             </th>
+            <th>
+                Ronde
+            </th>
             <th style="width:200px;">
                 Joueur
             </th>
@@ -48,6 +51,9 @@
                 </td>
                 <td rowspan="2">
                     <a href="{{ path('app_game', {'tournoiId' : game.tournoi.id}) }}">{{game.tournoi.nom}}</a>
+                </td>
+                 <td rowspan="2">
+                    {% if game.ronde != null %}{{game.ronde}}{% else %}N/A{% endif %}
                 </td>
                 <td>
                     <div>
