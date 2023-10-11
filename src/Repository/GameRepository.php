@@ -36,7 +36,7 @@ class GameRepository extends ServiceEntityRepository
             ->join("b2.joueur", "j2")
             ->join("g.tournoi", "t") 
             ->join("b1.compo", "c1")
-            ->join("b1.compo", "c2")
+            ->join("b2.compo", "c2")
             ->join("c1.guilde", "g1")
             ->join("c2.guilde", "g2");
         
