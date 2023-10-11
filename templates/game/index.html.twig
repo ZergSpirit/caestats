@@ -77,14 +77,18 @@
                 </td>
                 <td>
                     <div>
-                        <img src="{{asset('images/guilde/'~game.belligerant1.compo.guilde.code~'.png')}}" title="{{game.belligerant1.compo.guilde.nom}}" style="max-width:50px;" />
-                         {% for stringToParse in game.belligerant1.compo.code|split('_') %}
-                            {% if loop.index > 1 %}
-                                {% for perso in stringToParse|split('-') %}
-                                    <img src="{{asset('images/personnages/'~perso~'.png')}}" title="{{perso}}" style="max-width:50px;"/>
+                        <a href="{{ path('app_game', {'guildeId' : game.belligerant1.compo.guilde.id}) }}"><img src="{{asset('images/guilde/'~game.belligerant1.compo.guilde.code~'.png')}}" title="{{game.belligerant1.compo.guilde.nom}}" style="max-width:50px;" /></a>
+                        <a href="{{ path('app_game', {'compoCode' : game.belligerant1.compo.code}) }}">
+                            <span>
+                                {% for stringToParse in game.belligerant1.compo.code|split('_') %}
+                                    {% if loop.index > 1 %}
+                                        {% for perso in stringToParse|split('-') %}
+                                            <img src="{{asset('images/personnages/'~perso~'.png')}}" title="{{perso}}" style="max-width:50px;"/>
+                                        {% endfor %}
+                                    {% endif %}
                                 {% endfor %}
-                            {% endif %}
-                        {% endfor %}
+                            </span>
+                        </a>
                     </div>
                 </td>
             </tr>
@@ -111,14 +115,18 @@
                 </td>
                 <td>
                     <div>
-                        <img src="{{asset('images/guilde/'~game.belligerant2.compo.guilde.code~'.png')}}" title="{{game.belligerant2.compo.guilde.nom}}" style="max-width:50px;" />
-                         {% for stringToParse in game.belligerant2.compo.code|split('_') %}
-                            {% if loop.index > 1 %}
-                                {% for perso in stringToParse|split('-') %}
-                                    <img src="{{asset('images/personnages/'~perso~'.png')}}" title="{{perso}}" style="max-width:50px;" />
+                        <a href="{{ path('app_game', {'guildeId' : game.belligerant2.compo.guilde.id}) }}"><img src="{{asset('images/guilde/'~game.belligerant2.compo.guilde.code~'.png')}}" title="{{game.belligerant2.compo.guilde.nom}}" style="max-width:50px;" /></a>
+                        <a href="{{ path('app_game', {'compoCode' : game.belligerant2.compo.code}) }}">
+                            <span>
+                                {% for stringToParse in game.belligerant2.compo.code|split('_') %}
+                                    {% if loop.index > 1 %}
+                                        {% for perso in stringToParse|split('-') %}
+                                            <img src="{{asset('images/personnages/'~perso~'.png')}}" title="{{perso}}" style="max-width:50px;" />
+                                        {% endfor %}
+                                    {% endif %}
                                 {% endfor %}
-                            {% endif %}
-                        {% endfor %}
+                            </span>
+                        </a>
                     </div>
                 </td>
             </tr>

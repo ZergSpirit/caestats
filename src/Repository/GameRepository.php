@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Game;
+use App\Entity\Guilde;
 use App\Entity\Joueur;
 use App\Entity\Tournoi;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -26,23 +27,40 @@ class GameRepository extends ServiceEntityRepository
     /**
      * @return Game[] Returns an array of Game objects
      */
-    public function findAllByCriteria(?Joueur $joueur, ?Tournoi $tournoi){
+    public function findAllByCriteria(?Joueur $joueur, ?Tournoi $tournoi, ?Guilde $guilde, ?string $compoCode)
+    {
         $query = $this->createQueryBuilder('g');
+        $query->join("g.belligerant1", "b1") 
+            ->join("g.belligerant2", "b2")
+            ->join("b1.joueur", "j1")
+            ->join("b2.joueur", "j2")
+            ->join("g.tournoi", "t") 
+            ->join("b1.compo", "c1")
+            ->join("b1.compo", "c2")
+            ->join("c1.guilde", "g1")
+            ->join("c2.guilde", "g2");
+        
         if ($joueur != null) {
-            $query->join("g.belligerant1", "b1") 
-                ->join("g.belligerant2", "b2")
-                ->join("b1.joueur", "j1")
-                ->join("b2.joueur", "j2")
-                ->andWhere('j1.id =:joueur or j2.id =:joueur')
+            $query->andWhere('j1.id =:joueur or j2.id =:joueur')
                 ->setParameter('joueur', $joueur->getId());
         }
         if ($tournoi != null) {
-            $query->join("g.tournoi", "t") 
-                ->andWhere('t.id =:tournoi')
+            $query->andWhere('t.id =:tournoi')
                 ->setParameter('tournoi', $tournoi->getId());
+        }
+        if ($compoCode != null) {
+            $query->andWhere('c1.code =:compoCode or c2.code =:compoCode')
+                ->setParameter('compoCode', $compoCode);
+        }
+        if ($guilde != null) {
+            $query->andWhere('g1.id =:guilde or g2.id =:guilde')
+                ->setParameter('guilde', $guilde->getId());
         }
         $query->addOrderBy('g.date', 'desc')
             ->addOrderBy('g.ronde', 'desc');
+
+        dd($query->getQuery()->getSQL());
+
         return $query->getQuery()->getResult();
     }
 

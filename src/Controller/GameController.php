@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Entity\Guilde;
 use App\Entity\Joueur;
 use App\Entity\Tournoi;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +20,7 @@ class GameController extends AbstractController
     }
 
     #[Route('/games', name: 'app_game')]
-    public function index(#[MapQueryParameter] ?int $joueurId = null, #[MapQueryParameter] ?int $tournoiId = null): Response
+    public function index(#[MapQueryParameter] ?int $joueurId = null, #[MapQueryParameter] ?int $tournoiId = null, #[MapQueryParameter] ?int $guildeId = null, #[MapQueryParameter] ?string $compoCode = null): Response
     {
         $joueur = null;
         if ($joueurId != null) {
@@ -29,8 +30,12 @@ class GameController extends AbstractController
         if ($tournoiId != null) {
             $tournoi = $this->entityManager->getRepository(Tournoi::class)->find($tournoiId);
         } 
+        $guilde = null;
+        if ($guildeId != null) {
+            $guilde = $this->entityManager->getRepository(Guilde::class)->find($guildeId);
+        }
 
-        $games = $this->entityManager->getRepository(Game::class)->findAllByCriteria($joueur, $tournoi);
+        $games = $this->entityManager->getRepository(Game::class)->findAllByCriteria($joueur, $tournoi, $guilde, $compoCode);
 
         return $this->render('game/index.html.twig', [
             'controller_name' => 'GameController',
