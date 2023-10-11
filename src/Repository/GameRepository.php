@@ -41,8 +41,8 @@ class GameRepository extends ServiceEntityRepository
                 ->andWhere('t.id =:tournoi')
                 ->setParameter('tournoi', $tournoi->getId());
         }
-        $query->orderBy('g.date', 'desc');
-        $query->orderBy('g.ronde', 'desc');
+        $query->addOrderBy('g.date', 'desc')
+            ->addOrderBy('g.ronde', 'desc');
         return $query->getQuery()->getResult();
     }
 
