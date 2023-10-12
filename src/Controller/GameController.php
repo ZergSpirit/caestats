@@ -20,7 +20,7 @@ class GameController extends AbstractController
     }
 
     #[Route('/games', name: 'app_game')]
-    public function index(#[MapQueryParameter] ?int $joueurId = null, #[MapQueryParameter] ?int $tournoiId = null, #[MapQueryParameter] ?int $guildeId = null, #[MapQueryParameter] ?string $compoCode = null): Response
+    public function index(#[MapQueryParameter] ?int $joueurId = null, #[MapQueryParameter] ?int $tournoiId = null, #[MapQueryParameter] ?int $guildeId = null, #[MapQueryParameter] ?string $guildeCode = null, #[MapQueryParameter] ?string $compoCode = null): Response
     {
         $joueur = null;
         if ($joueurId != null) {
@@ -33,6 +33,9 @@ class GameController extends AbstractController
         $guilde = null;
         if ($guildeId != null) {
             $guilde = $this->entityManager->getRepository(Guilde::class)->find($guildeId);
+        }
+        if ($guildeCode != null) {
+            $guilde = $this->entityManager->getRepository(Guilde::class)->findOneBy(['code' => $guildeCode]);
         }
 
         $games = $this->entityManager->getRepository(Game::class)->findAllByCriteria($joueur, $tournoi, $guilde, $compoCode);

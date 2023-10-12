@@ -14,7 +14,14 @@
     TOP 3 Guildes les plus jouées
     <ol>
         {% for key,value in countGuilde %}
-            <li>{{value['nom']}} : ({{((value['count']/totalBelligerants)*100)|round(1)}}% {{value['count']}}/{{totalBelligerants}})</li>
+            <li>
+                <div style="display:inline-block;vertical-align:middle;">
+                    <a href="{{ path('app_game', {'guildeCode' : value['code']}) }}" style="text-decoration:none;">
+                        <img src="{{asset('images/guilde/'~value['code']~'.png')}}" title="{{value['nom']}}" style="max-width:50px;" />
+                    </a>
+                </div>
+                : {{((value['count']/totalBelligerants)*100)|round(1)}}% ({{value['count']}}/{{totalBelligerants}})
+            </li>
             {% if loop.index > 3 %}
                 {% set break = true %}
             {% endif %}
@@ -29,13 +36,19 @@
                     <div style="display:inline-block;vertical-align:middle;">
                         {% for stringToParse in value['code']|split('_') %}
                             {% if loop.index == 1 %}
-                                <img src="{{asset('images/guilde/'~stringToParse~'.png')}}" title="{{stringToParse}}" style="max-width:50px;" />
+                                <a href="{{ path('app_game', {'guildeCode' : stringToParse}) }}" style="text-decoration:none;">
+                                    <img src="{{asset('images/guilde/'~stringToParse~'.png')}}" title="{{stringToParse}}" style="max-width:50px;" />
+                                </a>
                             {% endif %}
-                            {% if loop.index > 1 and loop.index %}
-                                {% for perso in stringToParse|split('-') %}
-                                    <img src="{{asset('images/personnages/'~perso~'.png')}}" title="{{perso}}" style="max-width:50px;" />
-                                {% endfor %}
-                            {% endif %}
+                            <a href="{{ path('app_game', {'compoCode' : value['code']}) }}" style="text-decoration:none;">
+                                <span>
+                                    {% if loop.index > 1 and loop.index %}
+                                        {% for perso in stringToParse|split('-') %}
+                                            <img src="{{asset('images/personnages/'~perso~'.png')}}" title="{{perso}}" style="max-width:50px;" />
+                                        {% endfor %}
+                                    {% endif %}
+                                </span>
+                            </a>
                         {% endfor %}
                     </div>
                 </li>
