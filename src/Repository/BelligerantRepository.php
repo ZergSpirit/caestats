@@ -37,15 +37,13 @@ class BelligerantRepository extends ServiceEntityRepository
                                 ->setParameter("joueur", $joueur->getId())
                                 ->getQuery()->getSingleScalarResult();
 
-       $query = $this->createQueryBuilder('b')
+        $countGames['totalWins'] = $this->createQueryBuilder('b')
                                     ->select('count(b.id)')
                                     ->innerJoin("b.joueur", "j")
                                     ->where("j.id = :joueur")
                                     ->andWhere("b.vainqueur = true")
                                     ->setParameter("joueur", $joueur->getId())
-                                    ->getQuery();
-
-        dd($query->getSQL());
+                                    ->getQuery()->getSingleScalarResult();
 
 
         return $countGames;
