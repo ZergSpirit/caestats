@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Belligerant;
+use App\Entity\Joueur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,6 +22,33 @@ class BelligerantRepository extends ServiceEntityRepository
         parent::__construct($registry, Belligerant::class);
     }
 
+     /**
+    * @return Returns un array avec le nombre de victoire, le nombre de game et la dernière game
+     */
+    public function countGames(Joueur $joueur)
+    {
+        
+        $countGames = [];
+
+        $countGames['total'] = $this->createQueryBuilder('b')
+                                ->select('count(b.id)')
+                                ->innerJoin("b.joueur", "j")
+                                ->where("j.id = :joueur")
+                                ->setParameter("joueur", $joueur->getId())
+                                ->getQuery()->getSingleScalarResult();
+
+        $countGames['totalWins'] = $this->createQueryBuilder('b')
+                                    ->select('count(b.id)')
+                                    ->innerJoin("b.joueur", "j")
+                                    ->where("j.id = :joueur")
+                                    ->andWhere("b.vainqueur = true")
+                                    ->setParameter("joueur", $joueur->getId())
+                                    ->getQuery()->getSingleScalarResult();
+
+
+        return $countGames;
+    }
+   
     public function countAll(){
         return $this->createQueryBuilder('b')
                 ->select('count(b.id)')

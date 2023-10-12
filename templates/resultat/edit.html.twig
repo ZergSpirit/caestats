@@ -137,49 +137,47 @@ var changeGuilde = function(guilde,numeroJoueur){
 
 {% block body%} 
 
+    <div class="content">
+        {% if form.vars.value.gameId == null %}
+            Création d'une partie 
+        {% else %}
+            Modification d'une partie
+        {% endif %}
 
 
+        {{ form_start(form) }}
+            {{ form_row(form.date) }}
+            {{ form_row(form.tournoi) }} 
+            {{ form_row(form.ronde) }} 
+            {{ form_row(form.rixe) }}
+            {{ form_row(form.noRanking) }}
+            {{ form_row(form.noStats) }}
+            {{ form_row(form.missionControle) }}   
+            {{ form_row(form.missionCombat) }} 
+            <br/>
+            <div style="display: inline-block;width:400px;">
+            {{ form_row(form.joueur1) }} 
+            {{ form_row(form.scoreJoueur1) }}
+            {{ form_row(form.guilde1) }}
+            {{ form_row(form.personnage1Joueur1) }}
+            {{ form_row(form.personnage2Joueur1) }}
+            {{ form_row(form.personnage3Joueur1) }}
+            {{ form_row(form.personnage4Joueur1) }}
+            {{ form_row(form.personnage5Joueur1) }}
+            </div>
+            <div style="display: inline-block;width:400px;">
+            {{ form_row(form.joueur2) }} 
+            {{ form_row(form.scoreJoueur2) }}
+            {{ form_row(form.guilde2) }}
+            {{ form_row(form.personnage1Joueur2) }}
+            {{ form_row(form.personnage2Joueur2) }}
+            {{ form_row(form.personnage3Joueur2) }}
+            {{ form_row(form.personnage4Joueur2) }}
+            {{ form_row(form.personnage5Joueur2) }} 
+            </div>
 
-{% if form.vars.value.gameId == null %}
-    Création d'une partie 
-{% else %}
-    Modification d'une partie
-{% endif %}
+        {{ form_end(form) }}
 
-
-{{ form_start(form) }}
-    {{ form_row(form.date) }}
-    {{ form_row(form.tournoi) }} 
-    {{ form_row(form.ronde) }} 
-    {{ form_row(form.rixe) }}
-    {{ form_row(form.noRanking) }}
-    {{ form_row(form.noStats) }}
-    {{ form_row(form.missionControle) }}   
-    {{ form_row(form.missionCombat) }} 
-    <br/>
-    <div style="display: inline-block;width:400px;">
-    {{ form_row(form.joueur1) }} 
-    {{ form_row(form.scoreJoueur1) }}
-    {{ form_row(form.guilde1) }}
-    {{ form_row(form.personnage1Joueur1) }}
-    {{ form_row(form.personnage2Joueur1) }}
-    {{ form_row(form.personnage3Joueur1) }}
-    {{ form_row(form.personnage4Joueur1) }}
-    {{ form_row(form.personnage5Joueur1) }}
+        <a href="{{ path('resultat_list') }}">< Retour</a>
     </div>
-    <div style="display: inline-block;width:400px;">
-    {{ form_row(form.joueur2) }} 
-    {{ form_row(form.scoreJoueur2) }}
-    {{ form_row(form.guilde2) }}
-    {{ form_row(form.personnage1Joueur2) }}
-    {{ form_row(form.personnage2Joueur2) }}
-    {{ form_row(form.personnage3Joueur2) }}
-    {{ form_row(form.personnage4Joueur2) }}
-    {{ form_row(form.personnage5Joueur2) }} 
-    </div>
-
-{{ form_end(form) }}
-
-<a href="{{ path('resultat_list') }}">< Retour</a>
-
 {% endblock %}

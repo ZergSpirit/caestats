@@ -8,18 +8,33 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div>
+<div class="content">
     <h1>Classements des joueurs</h1>
 
-    <ul>
+    <table>
+        <tr>
+            <th>Rang</th>
+            <th>Elo</th>
+            <th>Nom</th>
+            <th>Winrate</th>
+            <th>V - E - D - T</th>
+            <th>Dernière partie</th>
+        </tr>
+            
         {% for joueur in joueursRanked %}
-            <li>{{loop.index}} : {{joueur.elo}} - <a href="{{ path('app_game', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></li>
+            <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                <td>{{loop.index}}</td>
+                <td>{{joueur.elo}}</td>
+                <td><a href="{{ path('app_game', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></td>
+                <td>{{((joueurGames[joueur.id]['totalWins']/joueurGames[joueur.id]['total'])*100)|round(1)}}% </td>
+                <td>{{joueurGames[joueur.id]['totalWins']}}V - {{joueurGames[joueur.id]['ties']}}E - {{joueurGames[joueur.id]['total'] - (joueurGames[joueur.id]['totalWins']+joueurGames[joueur.id]['ties'])}}D - {{joueurGames[joueur.id]['total']}}T</td>
+                <td>{{joueurGames[joueur.id]['lastGame']|date("d/m/Y")}} </td>
+            </tr>
         {% endfor %}
-    </ul>
+
+    </table>
 
     <br/>
-
-    <a href="{{ path('app_stats') }}">Statistiques</a>
 
 </div>
 {% endblock %}

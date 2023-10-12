@@ -133,7 +133,7 @@ class GameManager
         $this->entityManager->flush();
 
         //C'est un tournoi et il y a un vainqueur
-        if (!$data->isNoRanking() && $data->getGameId() == null && $data->getTournoi() != null && $data->getScoreJoueur1() != $data->getScoreJoueur2()) {
+        if (!$data->isNoRanking() && $data->getGameId() == null && $data->getTournoi() != null) {
             $this->eloManager->processMatch($game);
         }   
 

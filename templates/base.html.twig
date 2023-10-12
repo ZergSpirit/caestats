@@ -17,8 +17,14 @@
         {% endblock %}
     </head>
     <body>
+        <div class="topbar">
+            <a href="{{ path('app_ranking') }}"><img class="imgMenu" src="{{asset('images/ranking.png')}}" title="Classement elo" /></a>
+            <a href="{{ path('app_game') }}"><img class="imgMenu" src="{{asset('images/table.png')}}" title="Histoire des parties" /></a>
+            <a href="{{ path('app_stats') }}"><img class="imgMenu" src="{{asset('images/data-visualization.png')}}" title="Statistiques" /></a>
+            <span style="float:right;"><a href="{{ path('admin') }}"><img class="imgMenu" src="{{asset('images/affaires.png')}}" title="Admin" /></a></span>
+        </div>
         {% block body %}{% endblock %}
 
-        <div style="margin-top:50px;font-size:0.6em;">Les images du jeu Caeris appartiennent à la société Occicat (www.occicat.com)</div>
+        <div class="bottomBar">Les images du jeu Caeris appartiennent à la société Occicat (www.occicat.com)</div>
     </body>
 </html>

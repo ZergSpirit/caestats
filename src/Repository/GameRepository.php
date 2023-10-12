@@ -24,6 +24,37 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
+    public function countTies(Joueur $joueur)
+    {
+        return $this->createQueryBuilder('g')
+                        ->select('count(g.id)')
+                        ->innerJoin("g.belligerant1", "b1")
+                        ->innerJoin("g.belligerant1", "b2")
+                        ->innerJoin("b1.joueur", "j1")
+                        ->innerJoin("b2.joueur", "j2")
+                        ->andWhere('j1.id =:joueur or j2.id =:joueur')
+                        ->andWhere('g.vainqueur is null')
+                        ->setParameter("joueur", $joueur->getId())
+                        ->orderBy("g.date", "desc")
+                        ->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     */
+    public function lastGame(Joueur $joueur)
+    {
+        return $this->createQueryBuilder('g')
+                                    ->innerJoin("g.belligerant1", "b1")
+                                    ->innerJoin("g.belligerant1", "b2")
+                                    ->innerJoin("b1.joueur", "j1")
+                                    ->innerJoin("b2.joueur", "j2")
+                                    ->andWhere('j1.id =:joueur or j2.id =:joueur')
+                                    ->setParameter("joueur", $joueur->getId())
+                                    ->orderBy("g.date", "desc")
+                                    ->setMaxResults(1)
+                                    ->getQuery()->getOneOrNullResult();
+
+    }
     /**
      * @return Game[] Returns an array of Game objects
      */

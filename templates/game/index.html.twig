@@ -8,7 +8,7 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
+<div class="content">
     <h1>Historique de parties</h1>
 
      {% if joueur != null or tournoi != null %} 
@@ -22,12 +22,12 @@
         </ul>
      {% endif %}
 
-    <table style="max-width:1100px;">
+    <table class="games" style="max-width:1100px;">
         <tr>
             <th>
                 Date
             </th>
-            <th>
+            <th style="width:200px;">
                 Tournoi
             </th>
             <th>
@@ -75,7 +75,7 @@
                         {% endif %}
                     </div>
                 </td>
-                <td>
+                <td style="text-align:left;">
                     <div>
                         <a href="{{ path('app_game', {'guildeId' : game.belligerant1.compo.guilde.id}) }}"><img src="{{asset('images/guilde/'~game.belligerant1.compo.guilde.code~'.png')}}" title="{{game.belligerant1.compo.guilde.nom}}" style="max-width:50px;" /></a>
                         <a href="{{ path('app_game', {'compoCode' : game.belligerant1.compo.code}) }}" style="text-decoration:none;">
@@ -113,7 +113,7 @@
                         {% endif %}
                     </div>
                 </td>
-                <td>
+                <td style="text-align:left;">
                     <div>
                         <a href="{{ path('app_game', {'guildeId' : game.belligerant2.compo.guilde.id}) }}"><img src="{{asset('images/guilde/'~game.belligerant2.compo.guilde.code~'.png')}}" title="{{game.belligerant2.compo.guilde.nom}}" style="max-width:50px;" /></a>
                         <a href="{{ path('app_game', {'compoCode' : game.belligerant2.compo.code}) }}" style="text-decoration:none;">

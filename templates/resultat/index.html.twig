@@ -3,49 +3,50 @@
 
 {% block body%} 
 
-<table>
-    <tr>
-        <th>
-            Joueur 1 vs Joueur 2
-        </th>
-        <th>
-            Guilde 1 vs Guilde 2
-        </th>
-        <th>
-            Compo1 vs Compo 2
-        </th>
-        <th>
-            Date
-        </th>
-        <th>
-            Action
-        </th>
-    </tr>
-
-    {% for game in games %}
+<div class="content">
+    <table>
         <tr>
-            <td>
-                {{game.belligerant1.joueur.nom}} vs {{game.belligerant2.joueur.Nom}}
-            </td>  
-            <td>
-                {{game.belligerant1.compo.guilde.nom}} vs {{game.belligerant2.compo.guilde.nom}}
-            </td>
-            <td>
-                {{game.belligerant1.compo.code}} vs {{game.belligerant2.compo.code}}
-            </td>
-            <td>
-                {{game.date|date("d/m/Y")}}
-            </td>
-            <td>
-                <a href="{{ path('resultat_edit', {'id' : game.id}) }}">Modifier</a>
-            </td>
+            <th>
+                Joueur 1 vs Joueur 2
+            </th>
+            <th>
+                Guilde 1 vs Guilde 2
+            </th>
+            <th>
+                Compo1 vs Compo 2
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Action
+            </th>
         </tr>
-    {% endfor %}
+
+        {% for game in games %}
+            <tr>
+                <td>
+                    {{game.belligerant1.joueur.nom}} vs {{game.belligerant2.joueur.Nom}}
+                </td>  
+                <td>
+                    {{game.belligerant1.compo.guilde.nom}} vs {{game.belligerant2.compo.guilde.nom}}
+                </td>
+                <td>
+                    {{game.belligerant1.compo.code}} vs {{game.belligerant2.compo.code}}
+                </td>
+                <td>
+                    {{game.date|date("d/m/Y")}}
+                </td>
+                <td>
+                    <a href="{{ path('resultat_edit', {'id' : game.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% endfor %}
 
 
-</table>
+    </table>
 
 <a href="{{ path('resultat_edit') }}">Créer</a>
-
+</div>
 {% endblock %}
 

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Belligerant;
+use App\Entity\Game;
 use App\Entity\Joueur;
 use App\Service\EloManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,10 +30,20 @@ class RankingController extends AbstractController
     #[Route('/ranking', name: 'app_ranking')]
     public function index(): Response
     {   
+        $joueurRanked = $this->entityManager->getRepository(Joueur::class)->findAllSortedByEloRanking();
+
+        $joueurGames = [];
+        foreach ($joueurRanked as $joueur) {
+            $lastGame = $this->entityManager->getRepository(Game::class)->lastGame($joueur);
+            $joueurGames[$joueur->getId()] = $this->entityManager->getRepository(Belligerant::class)->countGames($joueur);
+            $joueurGames[$joueur->getId()]['lastGame'] = $lastGame == null? null : $lastGame->getDate();
+            $joueurGames[$joueur->getId()]['ties'] = $this->entityManager->getRepository(Game::class)->countTies($joueur);
+        }
 
         return $this->render('ranking/index.html.twig', [
             'controller_name' => 'RankingController',
-            'joueursRanked' => $this->entityManager->getRepository(Joueur::class)->findAllSortedByEloRanking()
+            'joueursRanked' => $joueurRanked,
+            'joueurGames' => $joueurGames
         ]);
     }
 }
