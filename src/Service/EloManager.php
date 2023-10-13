@@ -6,7 +6,6 @@ use App\Entity\EloLog;
 use App\Entity\Game;
 use App\Entity\Joueur;
 use Doctrine\ORM\EntityManagerInterface;
-use Zelenin\Elo\Match;
 use Zelenin\Elo\Player;
 
 class EloManager
