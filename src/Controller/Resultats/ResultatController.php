@@ -17,6 +17,8 @@ use App\Entity\MissionControle;
 use App\Entity\Personnage;
 use App\Entity\Tournoi;
 use App\Service\GameManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -81,8 +83,8 @@ class ResultatController extends AbstractController
         return $this->createFormBuilder($resultat)
             ->add('gameId', HiddenType::class)
             ->add('date', DateType::class, ['widget' => 'single_text'])
-            ->add('joueur1', EntityType::class, ['class' => Joueur::class, 'choice_label' => 'Nom', 'empty_data' => ''])
-            ->add('joueur2', EntityType::class, ['class' => Joueur::class, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('joueur1', EntityType::class, ['class' => Joueur::class, 'query_builder' => function (EntityRepository $er): QueryBuilder {return $er->createQueryBuilder('j')->orderBy('j.nom', 'ASC');}, 'choice_label' => 'Nom', 'empty_data' => ''])
+            ->add('joueur2', EntityType::class, ['class' => Joueur::class, 'query_builder' => function (EntityRepository $er): QueryBuilder {return $er->createQueryBuilder('j')->orderBy('j.nom', 'ASC');}, 'choice_label' => 'Nom', 'empty_data' => ''])
             ->add('scoreJoueur1', IntegerType::class, ['label' => 'Score joueur 1', 'required' => false])
             ->add('scoreJoueur2', IntegerType::class, ['label' => 'Score joueur 2', 'required' => false])
             ->add('guilde1', EntityType::class, ['class' => Guilde::class, 'choice_label' => 'Nom', 'empty_data' => ''])

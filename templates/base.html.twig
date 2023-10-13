@@ -21,6 +21,7 @@
             <a href="{{ path('app_ranking') }}"><img class="imgMenu" src="{{asset('images/ranking.png')}}" title="Classement elo" /></a>
             <a href="{{ path('app_game') }}"><img class="imgMenu" src="{{asset('images/table.png')}}" title="Histoire des parties" /></a>
             <a href="{{ path('app_stats') }}"><img class="imgMenu" src="{{asset('images/data-visualization.png')}}" title="Statistiques" /></a>
+            <span style="float:right;"><a href="{{ path('resultat_list') }}"><img class="imgMenu" src="{{asset('images/file.png')}}" title="Résultats" /></a></span>
             <span style="float:right;"><a href="{{ path('admin') }}"><img class="imgMenu" src="{{asset('images/affaires.png')}}" title="Admin" /></a></span>
         </div>
         {% block body %}{% endblock %}

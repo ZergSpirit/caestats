@@ -42,7 +42,8 @@ class CompoRepository extends ServiceEntityRepository
                    ->select('count(c.id) as count, c.code')
                    ->groupBy('c.code')
                    ->orderBy('count(c.id)','desc')
-                   ->getQuery()->getArrayResult();
+                   ->setMaxResults(3)
+                   ->getQuery()->getArrayResult()
                ;
     }
 
