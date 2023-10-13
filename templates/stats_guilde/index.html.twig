@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistique des Guildes{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    (Stats moyenne : {{((1/countGuilde|length)*100)|round(1)}}%)
+    <table class="games">
+        <tr>
+            <th>Guilde</th>
+            <th>Pick rate</th>
+            <th>Winrate</th>
+        </tr>
+        {% for key,value in countGuilde %}
+            <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                <td>
+                    <a href="{{ path('app_game', {'guildeCode' : key}) }}" style="text-decoration:none;">
+                        <img src="{{asset('images/guilde/'~key~'.png')}}" title="{{value['nom']}}" style="max-width:50px;" />
+                    </a>
+                </td>
+                <td>
+                    {{((value['count']/totalGames)*100)|round(1)}}% ({{value['count']}}/{{totalGames}})
+                </td>
+                <td>
+                    {{((value['countWinner']/totalGames)*100)|round(1)}}% ({{value['countWinner']}}/{{totalGames}})
+                </td>
+            </tr>
+        {% endfor %}
+    <table>
+
+    <h2>Winrate versus</h2>
+
+    <table class="versusTable">
+         <tr>
+            <td></td>
+            {% for guilde in guildes %}
+                <td>
+                    <a href="{{ path('app_game', {'guildeCode' : guilde.code}) }}" style="text-decoration:none;">
+                        <img src="{{asset('images/guilde/'~guilde.code~'.png')}}" title="{{guilde.nom}}" style="max-width:50px;" />
+                    </a>
+                </td>
+            {% endfor %}
+         </tr>
+         
+        {% for guilde in guildes %}
+            <tr>
+                <td>
+                    <a href="{{ path('app_game', {'guildeCode' : guilde.code}) }}" style="text-decoration:none;">
+                        <img src="{{asset('images/guilde/'~guilde.code~'.png')}}" title="{{guilde.nom}}" style="max-width:50px;" />
+                    </a>
+                </td>
+                {% for foe in guildes %}
+                    <td>
+                        {% if versusGuilde[guilde.code][foe.code]['total'] == null %}
+                            N/A
+                        {% else %}
+                            {{((versusGuilde[guilde.code][foe.code]['wins']/versusGuilde[guilde.code][foe.code]['total'])*100)|round(1)}}% ({{versusGuilde[guilde.code][foe.code]['wins']}}/{{versusGuilde[guilde.code][foe.code]['total']}})
+                        {% endif %}
+                        
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+         
+
+    </table>
+
+</div>
+{% endblock %}

@@ -3,10 +3,6 @@
 {% block title %}Statistiques sur le jeu de tournoi{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
 <div class="content">
     <h1>Statistiques</h1>
@@ -24,6 +20,7 @@
             </li>
         {% endfor %}
     </ol>
+    <a href="{{path('app_stats_guilde')}}">Plus de stats sur les guildes </a>
     <br/>
     TOP 3 Compo les plus jouées
     <ol>

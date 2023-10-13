@@ -24,6 +24,46 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
+     /**
+     * @return Array[] avec ['wins'] et ['total']
+     */
+    public function countGamesAgainstGuilde(Guilde $guilde, Guilde $foe)
+    {   
+        $result = [];
+        $query = $this->createQueryBuilder('g')
+            ->select("count(g.id)")
+            ->join("g.belligerant1", "b1") 
+            ->join("g.belligerant2", "b2")
+            ->join("b1.joueur", "j1")
+            ->join("b2.joueur", "j2")
+            ->join("g.tournoi", "t") 
+            ->join("b1.compo", "c1")
+            ->join("b2.compo", "c2")
+            ->join("c1.guilde", "g1")
+            ->join("c2.guilde", "g2")
+            ->andWhere('(g1.id =:guilde and g2.id =:foe) or (g2.id =:guilde and g1.id =:foe)')
+            ->andWhere('(g1.id =:guilde and b1.vainqueur=1) or (g2.id =:guilde and b2.vainqueur=1)')
+            ->setParameter('guilde', $guilde->getId())
+            ->setParameter('foe', $foe->getId());
+        $result['wins'] =  $query->getQuery()->getSingleScalarResult();
+        $query = $this->createQueryBuilder('g')
+            ->select("count(g.id)")
+            ->join("g.belligerant1", "b1") 
+            ->join("g.belligerant2", "b2")
+            ->join("b1.joueur", "j1")
+            ->join("b2.joueur", "j2")
+            ->join("g.tournoi", "t") 
+            ->join("b1.compo", "c1")
+            ->join("b2.compo", "c2")
+            ->join("c1.guilde", "g1")
+            ->join("c2.guilde", "g2")
+            ->andWhere('(g1.id =:guilde and g2.id =:foe) or (g2.id =:guilde and g1.id =:foe)')
+            ->setParameter('guilde', $guilde->getId())
+            ->setParameter('foe', $foe->getId());
+        $result['total'] =  $query->getQuery()->getSingleScalarResult();
+        return $result;
+    }
+
     public function countTies(Joueur $joueur)
     {
         return $this->createQueryBuilder('g')
@@ -118,6 +158,12 @@ class GameRepository extends ServiceEntityRepository
                    ->where('g.tournoi IS NOT NULL')
                    ->orderBy('g.date')
                    ->getQuery()->getResult();
+    }
+
+    public function countAll(){
+        return  $this->createQueryBuilder('g')
+                    ->select('count(g.id)')
+                    ->getQuery()->getSingleScalarResult();
     }
 
     public function save(Game $game)

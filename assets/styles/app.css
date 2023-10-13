@@ -27,3 +27,14 @@ body {
     margin-top:50px;
     font-size:0.6em;
 }
+.versusTable tr td {
+    border : 1px solid;
+    border-collapse: collapse;
+    padding : 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+.versusTable {
+    border-collapse: collapse;
+}
+

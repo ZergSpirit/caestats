@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Belligerant;
+use App\Entity\Guilde;
 use App\Entity\Joueur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -69,13 +70,38 @@ class BelligerantRepository extends ServiceEntityRepository
 
     public function countByGuilde(){
 
-        return $this->createQueryBuilder('b')
+        $countGames = [];
+
+        $countGames = $this->createQueryBuilder('b')
                 ->select('count(b.id) as count, g.code, g.nom')
                 ->innerJoin('b.compo', 'c')
                 ->innerJoin('c.guilde', 'g')
                 ->orderBy('count(b.id)','desc')
                 ->groupBy('g')
                 ->getQuery()->getArrayResult();
+
+        $winners =  $this->createQueryBuilder('b')
+                    ->select('count(b.id) as count, g.code, g.nom')
+                    ->innerJoin('b.compo', 'c')
+                    ->innerJoin('c.guilde', 'g')
+                    ->where('b.vainqueur = 1')
+                    ->orderBy('count(b.id)', 'desc')
+                    ->groupBy('g')
+                    ->getQuery()->getArrayResult();
+        
+        $result = [];
+        foreach ($winners as $winner) {
+            foreach ($countGames as $count) {
+                if ($count['code'] == $winner['code']) {
+                    $guildeInfo = [];
+                    $guildeInfo['count'] = $count['count'];
+                    $guildeInfo['countWinner'] = $winner['count'];
+                    $guildeInfo['nom'] = $count['nom'];
+                    $result[$count['code']] = $guildeInfo;
+                }
+            }
+        }
+        return $result;
     }
 
     public function countHavingGuilde($guilde){
@@ -87,6 +113,7 @@ class BelligerantRepository extends ServiceEntityRepository
                 ->setParameter('guilde', $guilde)
                 ->getQuery()->getSingleScalarResult();
     }
+
 
 //    /**
 //     * @return Belligerant[] Returns an array of Belligerant objects
