@@ -12,8 +12,8 @@
         {% for key,value in countGuilde %}
             <li>
                 <div style="display:inline-block;vertical-align:middle;">
-                    <a href="{{ path('app_game', {'guildeCode' : value['code']}) }}" style="text-decoration:none;">
-                        <img src="{{asset('images/guilde/'~value['code']~'.png')}}" title="{{value['nom']}}" style="max-width:50px;" />
+                    <a href="{{ path('app_game', {'guildeCode' : key}) }}" style="text-decoration:none;">
+                        <img src="{{asset('images/guilde/'~key~'.png')}}" title="{{value['nom']}}" style="max-width:50px;" />
                     </a>
                 </div>
                 : {{((value['count']/totalBelligerants)*100)|round(1)}}% ({{value['count']}}/{{totalBelligerants}})
