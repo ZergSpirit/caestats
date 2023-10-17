@@ -67,15 +67,37 @@ class StatsGameController extends AbstractController
             }
         }
        
-        $games = $this->entityManager->getRepository(Game::class)->findAllByCriteria($joueur, $tournoi, $guilde, $dto->getPersonnageJoueur1());
+        $results = $this->entityManager->getRepository(Game::class)->findAllByCriteria($joueur, $tournoi, $guilde, $dto->getPersonnageJoueur1());
         $form = $this->initForm($dto);
+        $result_stats = [];
+        $countTotal = 0;
+        $countWins = 0;
+        $countTies = 0;
+        $countDefeats = 0;
+        foreach ($results as $game) {
+            $belligerants = $dto->getRelevantBelligerants($game);
+            foreach ($belligerants as $belligerant) {
+                $countTotal++;
+                if ($game->getVainqueur() == null) {
+                    $countTies++;
+                } else if ($game->getVainqueur()->getId() == $belligerant->getJoueur()->getId()) {
+                    $countWins++;
+                } else {
+                    $countDefeats++;
+                }
+            }
+        }
+        $result_stats['wins'] = $countWins;
+        $result_stats['defeats'] = $countDefeats;
+        $result_stats['ties'] = $countTies;
+        $result_stats['total'] = $countTotal;
         
         return $this->render('stats_game/index.html.twig', [
             'controller_name' => 'StatsGameController',
             'form' => $form,
-            'result_stats' => null,
             'dto' => $dto,
-            'games' => $games
+            'games' => $results,
+            'result_stats' => $result_stats
         ]);
     }
 
@@ -85,7 +107,6 @@ class StatsGameController extends AbstractController
         $form = $this->initForm();
         $form->handleRequest($request);
         $dto = $form->getData();
-//?Joueur $joueur, ?Tournoi $tournoi, ?Guilde $guilde, ?ArrayCollection $compo = null, ?bool $rixe=null, ?MissionControle $missionControle=null, ?MissionCombat $missionCombat=null, ?Joueur $joueur2 = null, ?Guilde $guilde2= null, ?ArrayCollection $compo2= null
         $results = $this->entityManager->getRepository(Game::class)->findAllByCriteria($dto->getJoueur1(), $dto->getTournoi(), $dto->getGuilde1(), $dto->getPersonnageJoueur1(), $dto->isRixe(), $dto->getMissionControle(), $dto->getMissionCombat(), $dto->getJoueur2(), $dto->getGuilde2(), $dto->getPersonnageJoueur2());
         $result_stats = [];
         $countTotal = 0;

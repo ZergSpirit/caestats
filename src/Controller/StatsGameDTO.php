@@ -34,7 +34,7 @@ class StatsGameDTO
             $belligerants->add($game->getBelligerant1()->getJoueur()->getId() == $this->getJoueur1()->getId() ? $game->getBelligerant1() : $game->getBelligerant2());
             return $belligerants;
         }
-        if ($this->getPersonnageJoueur1() != null) {
+        if ($this->getPersonnageJoueur1() != null and $this->getPersonnageJoueur1()->count() > 0) {
             $belligerant1 = null;
             $belligerant2 = null;
             foreach ($this->getPersonnageJoueur1() as $perso) {
