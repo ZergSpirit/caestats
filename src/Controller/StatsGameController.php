@@ -76,14 +76,16 @@ class StatsGameController extends AbstractController
         $countDefeats = 0;
         foreach ($results as $game) {
             $belligerants = $dto->getRelevantBelligerants($game);
-            foreach ($belligerants as $belligerant) {
-                $countTotal++;
-                if ($game->getVainqueur() == null) {
-                    $countTies++;
-                } else if ($game->getVainqueur()->getId() == $belligerant->getJoueur()->getId()) {
-                    $countWins++;
-                } else {
-                    $countDefeats++;
+            if ($belligerants != null) {
+                foreach ($belligerants as $belligerant) {
+                    $countTotal++;
+                    if ($game->getVainqueur() == null) {
+                        $countTies++;
+                    } else if ($game->getVainqueur()->getId() == $belligerant->getJoueur()->getId()) {
+                        $countWins++;
+                    } else {
+                        $countDefeats++;
+                    }
                 }
             }
         }
