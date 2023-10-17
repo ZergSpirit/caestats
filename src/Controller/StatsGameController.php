@@ -115,9 +115,9 @@ class StatsGameController extends AbstractController
         $countWins = 0;
         $countTies = 0;
         $countDefeats = 0;
-        if ($belligerants != null) {
-            foreach ($results as $game) {
-                $belligerants = $dto->getRelevantBelligerants($game);
+        foreach ($results as $game) {
+            $belligerants = $dto->getRelevantBelligerants($game);
+            if ($belligerants != null) {
                 foreach ($belligerants as $belligerant) {
                     $countTotal++;
                     if ($game->getVainqueur() == null) {
