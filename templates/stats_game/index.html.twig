@@ -1,0 +1,267 @@
+{% extends 'base.html.twig' %}
+
+
+{% block pageJavascripts %}
+
+    <script type="application/javascript">
+    $(window).on('load',function(){
+        
+        $("#form_personnageJoueur1").hide();
+        $("label[for=form_personnageJoueur1]").hide();
+        $("#form_personnageJoueur2").hide();
+        $("label[for=form_personnageJoueur2]").hide();
+        $("#form_guilde1").change(function(){
+            var _this = $(this);
+            changeGuilde(_this.val(),"1");
+        });
+        $("#form_guilde1").change();
+         $("#form_guilde2").change(function(){
+            var _this = $(this);
+            changeGuilde(_this.val(),"2");
+        });
+        $("#form_guilde2").change();
+        loadSelection1();
+        loadSelection2();
+
+        $(document).on('click','.img-perso', function(){
+            var _this = $(this);
+            var option = $('option[data-option-id='+_this.attr('data-option-id')+']');
+            if(option.is(':selected')){
+                option.prop('selected',false);
+                _this.css('opacity','0.33');
+            }
+            else{
+                option.prop('selected',true);
+                _this.css('opacity','1');
+            }
+        });
+
+    });
+
+    var changeGuilde = function(guilde,numeroJoueur){
+        if(guilde==''){
+            var select = $("#form_personnageJoueur"+numeroJoueur);
+            select.html('');
+            var div = $('.personnageJoueur'+numeroJoueur);
+            div.html('');
+        }
+        else{
+            $.ajax({
+                url : "/personnages?guildeId="+guilde,
+                success : function(data, textStatus, jqXHR){
+                        var div = $('.personnageJoueur'+numeroJoueur);
+                        div.html('');
+                        var select = $("#form_personnageJoueur"+numeroJoueur);
+                        select.html('');
+                        $.each(JSON.parse(data),function(index, iter){
+                            div.append("<img src='/images/personnages/"+iter.code+".png' style='max-width:50px;opacity:0.33' class='img-perso' data-option-id='"+numeroJoueur+"_"+iter.id+"' />");
+                            select.append("<option value='"+iter.id+"' data-option-id='"+numeroJoueur+"_"+iter.id+"'>"+iter.nom+"</option>");
+                        });
+                        if(numeroJoueur == '1') {
+                            loadSelection1();
+                        }
+                        else{
+                            loadSelection2();
+                        }
+
+                    }
+            });
+        }
+    };
+
+    var loadSelection1 = function() {
+        {% if dto !=null and dto.personnageJoueur1 != null %}
+            {% for perso in dto.personnageJoueur1 %}
+                $("img[data-option-id=1_"+{{perso.id}}+"]").click();
+            {% endfor %}
+        {% endif %}
+    };
+
+    var loadSelection2 = function() {
+        {% if dto !=null and dto.personnageJoueur2 != null %}
+            {% for perso in dto.personnageJoueur2 %}
+                $("img[data-option-id=2_"+{{perso.id}}+"]").click();
+            {% endfor %}
+        {% endif %}
+    };
+
+</script>
+
+{% endblock %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block body %}
+<div class="content">
+        {{ form_start(form) }}
+            <div style="width:1200px;margin-bottom:20px;">
+                {{ form_row(form.tournoi) }} 
+                {{ form_row(form.rixe) }}
+                {{ form_row(form.missionControle) }}   
+                {{ form_row(form.missionCombat) }} 
+            </div>
+            <div style="display: inline-block;width:550px;">
+                {{ form_row(form.joueur1) }} 
+                {{ form_row(form.guilde1) }}
+                <div class="personnageJoueur1" style="display: inline-block;width:100%;height:58px;">
+                </div>
+                {{ form_row(form.personnageJoueur1) }}
+            </div>
+            <div style="display: inline-block;width:550px;">
+                {{ form_row(form.joueur2) }} 
+                {{ form_row(form.guilde2) }}
+                <div class="personnageJoueur2" style="display: inline-block;width:100%;height:58px;">
+                </div>
+                {{ form_row(form.personnageJoueur2) }}
+            </div>
+
+
+            <div style="display: none;width:400px;">
+            </div>
+
+        {{ form_end(form) }}
+
+        {% if result_stats != null and result_stats['total']>0 %}
+            <canvas id="chartId" aria-label="chart" height="350" width="580"></canvas>
+            <script type="application/javascript">
+                
+
+                var chrt = document.getElementById("chartId").getContext("2d");
+                var chartId = new Chart(chrt, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Victoires','Egalités','Défaites'],
+                        datasets: [{
+                        label: "Résultats",
+                        data: [{{result_stats['wins']}},{{result_stats['ties']}},{{result_stats['defeats']}}],
+                        backgroundColor: ['green', 'yellow', 'red'],
+                        hoverOffset: 5
+                        }],
+                    },
+                    options: {
+                        responsive: false,
+                    },
+                });
+
+            </script>
+
+        {% endif %}
+
+        <h1>Historique de parties</h1>
+
+    <table class="games" style="max-width:1100px;">
+        <tr>
+            <th>
+                Date
+            </th>
+            <th style="width:200px;">
+                Tournoi
+            </th>
+            <th>
+                Ronde
+            </th>
+            <th style="width:200px;">
+                Joueur
+            </th>
+            <th style="width:100px;">
+                Elo
+            </th>
+            <th style="width:750px;">
+                Compo
+            </th>
+        </tr>
+
+        {% for game in games %}
+            <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                <td rowspan="2">
+                    {{game.date|date("d/m/Y")}}
+                </td>
+                <td rowspan="2">
+                    <a href="{{ path('app_stats_game', {'tournoiId' : game.tournoi.id}) }}">{{game.tournoi.nom}}</a>
+                </td>
+                 <td rowspan="2">
+                    {% if game.ronde != null %}{{game.ronde}}{% else %}N/A{% endif %}
+                </td>
+                <td>
+                    <div>
+                        <a href="{{ path('app_stats_game', {'joueurId' : game.belligerant1.joueur.id}) }}">{{game.belligerant1.joueur.nom}}</a>
+                        {% if game.vainqueur != null and game.belligerant1.joueur.id == game.vainqueur.id %}
+                            <img src="{{asset('images/award-symbol.png')}}" title="Winner" style="max-width:20px;"/>
+                        {% endif %}
+                    </div>
+                </td>  
+                <td>
+                    <div>
+                         {% if game.eloLog is not null %}
+                            <div style="font-size:0.7em;">
+                                {{game.eloLog.previousEloJoueur1}}
+                            </div>
+                            <div style="font-size:0.6em;">
+                                {% if game.eloLog.variationEloJoueur1 > 0 %}+{% endif %}{{game.eloLog.variationEloJoueur1}}
+                            </div>
+                        {% endif %}
+                    </div>
+                </td>
+                <td style="text-align:left;">
+                    <div>
+                        <a href="{{ path('app_stats_game', {'guildeId' : game.belligerant1.compo.guilde.id}) }}"><img src="{{asset('images/guilde/'~game.belligerant1.compo.guilde.code~'.png')}}" title="{{game.belligerant1.compo.guilde.nom}}" style="max-width:50px;" /></a>
+                        <a href="{{ path('app_stats_game', {'compoCode' : game.belligerant1.compo.code}) }}" style="text-decoration:none;">
+                            <span>
+                                {% for stringToParse in game.belligerant1.compo.code|split('_') %}
+                                    {% if loop.index > 1 %}
+                                        {% for perso in stringToParse|split('-') %}
+                                            <img src="{{asset('images/personnages/'~perso~'.png')}}" title="{{perso}}" style="max-width:50px;"/>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                <td>
+                   <div>
+                        <a href="{{ path('app_stats_game', {'joueurId' : game.belligerant2.joueur.id}) }}">{{game.belligerant2.joueur.nom}}</a>
+                        {% if game.vainqueur != null and game.belligerant2.joueur.id == game.vainqueur.id %}
+                            <img src="{{asset('images/award-symbol.png')}}" title="Winner" style="max-width:20px;"/>
+                        {% endif %}
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        {% if game.eloLog is not null %}
+                            <div style="font-size:0.7em;">
+                                    {{game.eloLog.previousEloJoueur2}}
+                            </div>
+                            <div style="font-size:0.6em;">
+                                    {% if game.eloLog.variationEloJoueur2 > 0 %}+{% endif %}{{game.eloLog.variationEloJoueur2}}
+                            </div>
+                        {% endif %}
+                    </div>
+                </td>
+                <td style="text-align:left;">
+                    <div>
+                        <a href="{{ path('app_stats_game', {'guildeId' : game.belligerant2.compo.guilde.id}) }}"><img src="{{asset('images/guilde/'~game.belligerant2.compo.guilde.code~'.png')}}" title="{{game.belligerant2.compo.guilde.nom}}" style="max-width:50px;" /></a>
+                        <a href="{{ path('app_stats_game', {'compoCode' : game.belligerant2.compo.code}) }}" style="text-decoration:none;">
+                            <span>
+                                {% for stringToParse in game.belligerant2.compo.code|split('_') %}
+                                    {% if loop.index > 1 %}
+                                        {% for perso in stringToParse|split('-') %}
+                                            <img src="{{asset('images/personnages/'~perso~'.png')}}" title="{{perso}}" style="max-width:50px;" />
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+
+
+    </table>
+
+
+    </div>
+{% endblock %}

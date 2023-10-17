@@ -9,5 +9,5 @@
 import './styles/app.css';
 const $ = require('jquery');
 global.$ = global.jQuery = $;
-const Chart = require("chart.js");
+import Chart from 'chart.js/auto';
 global.Chart = Chart;

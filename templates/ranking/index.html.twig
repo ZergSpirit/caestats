@@ -25,7 +25,7 @@
             <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
                 <td>{{loop.index}}</td>
                 <td>{{joueur.elo}}</td>
-                <td><a href="{{ path('app_game', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></td>
+                <td><a href="{{ path('app_stats_game', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></td>
                 <td>{{((joueurGames[joueur.id]['totalWins']/joueurGames[joueur.id]['total'])*100)|round(1)}}% </td>
                 <td>{{joueurGames[joueur.id]['totalWins']}}V - {{joueurGames[joueur.id]['ties']}}E - {{joueurGames[joueur.id]['total'] - (joueurGames[joueur.id]['totalWins']+joueurGames[joueur.id]['ties'])}}D - {{joueurGames[joueur.id]['total']}}T</td>
                 <td>{{joueurGames[joueur.id]['lastGame']|date("d/m/Y")}} </td>

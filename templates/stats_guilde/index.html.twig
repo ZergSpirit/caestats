@@ -15,7 +15,7 @@
         {% for key,value in countGuilde %}
             <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
                 <td>
-                    <a href="{{ path('app_game', {'guildeCode' : key}) }}" style="text-decoration:none;">
+                    <a href="{{ path('app_stats_game', {'guildeCode' : key}) }}" style="text-decoration:none;">
                         <img src="{{asset('images/guilde/'~key~'.png')}}" title="{{value['nom']}}" style="max-width:50px;" />
                     </a>
                 </td>
@@ -36,7 +36,7 @@
             <td></td>
             {% for guilde in guildes %}
                 <td>
-                    <a href="{{ path('app_game', {'guildeCode' : guilde.code}) }}" style="text-decoration:none;">
+                    <a href="{{ path('app_stats_game', {'guildeCode' : guilde.code}) }}" style="text-decoration:none;">
                         <img src="{{asset('images/guilde/'~guilde.code~'.png')}}" title="{{guilde.nom}}" style="max-width:50px;" />
                     </a>
                 </td>
@@ -46,7 +46,7 @@
         {% for guilde in guildes %}
             <tr>
                 <td>
-                    <a href="{{ path('app_game', {'guildeCode' : guilde.code}) }}" style="text-decoration:none;">
+                    <a href="{{ path('app_stats_game', {'guildeCode' : guilde.code}) }}" style="text-decoration:none;">
                         <img src="{{asset('images/guilde/'~guilde.code~'.png')}}" title="{{guilde.nom}}" style="max-width:50px;" />
                     </a>
                 </td>

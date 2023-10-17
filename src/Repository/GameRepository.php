@@ -5,8 +5,12 @@ namespace App\Repository;
 use App\Entity\Game;
 use App\Entity\Guilde;
 use App\Entity\Joueur;
+use App\Entity\MissionCombat;
+use App\Entity\MissionControle;
+use App\Entity\Personnage;
 use App\Entity\Tournoi;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,6 +26,86 @@ class GameRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Game::class);
+    }
+
+    /**
+     * @return Game[] Returns an array of Game objects
+     */
+    public function findAllByCriteria(?Joueur $joueur=null, ?Tournoi $tournoi=null, ?Guilde $guilde=null, ?ArrayCollection $compo = null, ?bool $rixe=null, ?MissionControle $missionControle=null, ?MissionCombat $missionCombat=null, ?Joueur $joueur2 = null, ?Guilde $guilde2= null, ?ArrayCollection $compo2= null)
+    {
+        $query = $this->createQueryBuilder('g');
+        $query->join("g.missionControle", "controle")
+            ->join("g.missionCombat", "combat")
+            ->join("g.belligerant1", "b1") 
+            ->join("g.belligerant2", "b2")
+            ->join("b1.joueur", "j1")
+            ->join("b2.joueur", "j2")
+            ->join("g.tournoi", "t") 
+            ->join("b1.compo", "c1")
+            ->join("b2.compo", "c2")
+            ->join("c1.guilde", "g1")
+            ->join("c2.guilde", "g2");
+
+        if ($rixe != null) {
+            $query->andWhere('g.rixe =:rixe')
+                ->setParameter('rixe', $rixe);
+        }
+
+        if ($missionControle != null) {
+            $query->andWhere('controle.id =:controle')
+                ->setParameter('controle', $missionControle->getId());
+        }
+
+        if ($missionCombat != null) {
+            $query->andWhere('combat.id =:combat')
+                ->setParameter('combat', $missionCombat->getId());
+        }
+
+        if ($tournoi != null) {
+            $query->andWhere('t.id =:tournoi')
+                ->setParameter('tournoi', $tournoi->getId());
+        }
+    
+
+        if ($compo != null) {
+            $i = 0;
+            foreach ($compo as $perso) {
+                $query->andWhere("c1.code like :perso".$i." or c2.code like :perso".$i);
+                $query->setParameter("perso".$i, "%".$perso->getCode()."%");
+                $i++;
+            }
+        }
+        if ($compo2 != null) {
+            $i = 6;
+            foreach ($compo2 as $perso) {
+                $query->andWhere("c1.code like :perso".$i." or c2.code like :perso".$i);
+                $query->setParameter("perso".$i, "%".$perso->getCode()."%");
+                $i++;
+            }
+        }
+
+        if ($joueur != null) {
+            $query->andWhere('j1.id =:joueur or j2.id =:joueur')
+                ->setParameter('joueur', $joueur->getId());
+        }
+        if ($joueur2 != null) {
+            $query->andWhere('j1.id =:joueur2 or j2.id =:joueur2')
+                ->setParameter('joueur2', $joueur2->getId());
+        }
+       
+       
+        if ($guilde != null) {
+            $query->andWhere('g1.id =:guilde or g2.id =:guilde')
+                ->setParameter('guilde', $guilde->getId());
+        }
+        if ($guilde2 != null) {
+            $query->andWhere('g1.id =:guilde2 or g2.id =:guilde2')
+                ->setParameter('guilde2', $guilde2->getId());
+        }
+        $query->addOrderBy('g.date', 'desc')
+            ->addOrderBy('g.ronde', 'desc');
+        
+        return $query->getQuery()->getResult();
     }
 
      /**
@@ -95,43 +179,7 @@ class GameRepository extends ServiceEntityRepository
                                     ->getQuery()->getOneOrNullResult();
 
     }
-    /**
-     * @return Game[] Returns an array of Game objects
-     */
-    public function findAllByCriteria(?Joueur $joueur, ?Tournoi $tournoi, ?Guilde $guilde, ?string $compoCode)
-    {
-        $query = $this->createQueryBuilder('g');
-        $query->join("g.belligerant1", "b1") 
-            ->join("g.belligerant2", "b2")
-            ->join("b1.joueur", "j1")
-            ->join("b2.joueur", "j2")
-            ->join("g.tournoi", "t") 
-            ->join("b1.compo", "c1")
-            ->join("b2.compo", "c2")
-            ->join("c1.guilde", "g1")
-            ->join("c2.guilde", "g2");
-        
-        if ($joueur != null) {
-            $query->andWhere('j1.id =:joueur or j2.id =:joueur')
-                ->setParameter('joueur', $joueur->getId());
-        }
-        if ($tournoi != null) {
-            $query->andWhere('t.id =:tournoi')
-                ->setParameter('tournoi', $tournoi->getId());
-        }
-        if ($compoCode != null) {
-            $query->andWhere('c1.code =:compoCode or c2.code =:compoCode')
-                ->setParameter('compoCode', $compoCode);
-        }
-        if ($guilde != null) {
-            $query->andWhere('g1.id =:guilde or g2.id =:guilde')
-                ->setParameter('guilde', $guilde->getId());
-        }
-        $query->addOrderBy('g.date', 'desc')
-            ->addOrderBy('g.ronde', 'desc');
-
-        return $query->getQuery()->getResult();
-    }
+    
 
     public function findAllByJoueurOrderBydate(?Joueur $joueur){
         if ($joueur == null) {

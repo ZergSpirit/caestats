@@ -22,15 +22,21 @@ class PersonnageRepository extends ServiceEntityRepository
         parent::__construct($registry, Personnage::class);
     }
     
-    public function findByGuilde(Guilde $guilde){
-            return $this->createQueryBuilder('p')
-                ->innerJoin('p.guildes', 'g')
-                ->where('g.id = :guilde')
-                ->setParameter('guilde', $guilde->getId())
-                ->orderBy('p.nom', 'ASC')
-                ->getQuery()
-                ->getResult()
-            ;
+    public function findByGuildAndTerm(?Guilde $guilde = null, ?string $term =null) 
+    {
+        $query =  $this->createQueryBuilder('p')
+            ->innerJoin('p.guildes', 'g');
+        if ($guilde != null) {
+            $query->andWhere('g.id = :guilde')
+                ->setParameter('guilde', $guilde->getId());
+        }
+        if ($term != null) {
+            $query->andWhere('p.nom like :term')
+                ->setParameter('term', "%".$term."%");
+        }
+        return $query->orderBy('p.nom', 'ASC')
+                    ->getQuery()    
+                    ->getResult();
     }
 
 

@@ -65,7 +65,7 @@
 
 var changeGuilde = function(guilde,numeroJoueur){
     $.ajax({
-        url : "/personnages/"+guilde,
+        url : "/personnages?guildeId="+guilde,
         success(data, textStatus, jqXHR){
            var select = $('#form_personnage1Joueur'+numeroJoueur);
            select.html('');
