@@ -134,8 +134,8 @@ class StatsGameController extends AbstractController
             ->add('missionCombat', EntityType::class, ['class' => MissionCombat::class, 'choice_label' => 'Nom', 'empty_data' => '', 'required' => false])
             ->add('rixe', CheckboxType::class, ['label' => 'Rixe', 'required' => false])
             ->add('tournoi', EntityType::class, ['class'=>Tournoi::class,'choice_label'=>'Nom', 'required' => false])
-            ->add('personnageJoueur1', EntityType::class, ['multiple' => true, 'class'=>Personnage::class,'choice_label'=>'Nom', 'required' => false])
-            ->add('personnageJoueur2', EntityType::class, ['multiple' => true, 'class'=>Personnage::class,'choice_label'=>'Nom', 'required' => false])
+            ->add('personnageJoueur1', EntityType::class, ['multiple' => true, 'class'=>Personnage::class,'choice_label'=>'Nom', 'attr' => ['class' => 'hidden'], 'required' => false])
+            ->add('personnageJoueur2', EntityType::class, ['multiple' => true, 'class'=>Personnage::class,'choice_label'=>'Nom', 'attr' => ['class' => 'hidden'], 'required' => false])
             ->add('save', SubmitType::class, ['label'=>'Rechercher'])
             ->getForm();
     }

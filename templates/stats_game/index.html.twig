@@ -6,10 +6,6 @@
     <script type="application/javascript">
     $(window).on('load',function(){
         
-        $("#form_personnageJoueur1").hide();
-        $("label[for=form_personnageJoueur1]").hide();
-        $("#form_personnageJoueur2").hide();
-        $("label[for=form_personnageJoueur2]").hide();
         $("#form_guilde1").change(function(){
             var _this = $(this);
             changeGuilde(_this.val(),"1");

@@ -37,4 +37,12 @@ body {
 .versusTable {
     border-collapse: collapse;
 }
-
+.hidden {
+    display: none;
+}
+label[for="form_personnageJoueur1"] {
+    display: none;
+}
+label[for="form_personnageJoueur2"] {
+    display: none;
+}
