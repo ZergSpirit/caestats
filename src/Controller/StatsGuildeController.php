@@ -25,6 +25,7 @@ class StatsGuildeController extends AbstractController
         $guildes = $this->entityManager->getRepository(Guilde::class)->findBy(array(),array('nom' => 'ASC'));
         $countGuilde = $this->entityManager->getRepository(Belligerant::class)->countByGuilde();
         $totalGames = $this->entityManager->getRepository(Game::class)->countAll();
+        $totalBelligerants = $this->entityManager->getRepository(Belligerant::class)->countAll();
         
         $versusGuilde = [];
 
@@ -41,7 +42,8 @@ class StatsGuildeController extends AbstractController
             'guildes' => $guildes,
             'countGuilde' => $countGuilde,
             'totalGames' => $totalGames,
-            'versusGuilde' => $versusGuilde
+            'versusGuilde' => $versusGuilde,
+            'totalBelligerants' => $totalBelligerants
         ]);
     }
 }
