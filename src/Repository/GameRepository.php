@@ -66,31 +66,67 @@ class GameRepository extends ServiceEntityRepository
                 ->setParameter('tournoi', $tournoi->getId());
         }
     
-
-        if ($compo != null && $compo->count() > 0 ) {
+        if (($compo != null && $compo->count() > 0) && ($compo2 != null && $compo2->count() > 0)) {
             $i = 0;
+            $queryCompo = "";
             $queryC1 = "1=1";
             $queryC2 = "1=1";
             foreach ($compo as $perso) {
                 $queryC1=$queryC1." and c1.code like :perso".$i;
+                $query->setParameter("perso".$i, "%".$perso->getCode()."%");
+                $i++;
+            }
+            $i = 6;
+            foreach ($compo2 as $perso) {
                 $queryC2=$queryC2." and c2.code like :perso".$i;
                 $query->setParameter("perso".$i, "%".$perso->getCode()."%");
                 $i++;
             }
-            $query->andWhere("(".$queryC1.") or (".$queryC2.")");
+            $queryCompo = "((".$queryC1.") and (".$queryC2."))";
             
-        }
-        if ($compo2 != null && $compo2->count() > 0 ) {
-            $i = 6;
+            $i = 0;
             $queryC1 = "1=1";
             $queryC2 = "1=1";
-            foreach ($compo2 as $perso) {
-                $queryC1=$queryC1." and c1.code like :perso".$i;
-                $queryC2=$queryC2." and c2.code like :perso".$i;
+            foreach ($compo as $perso) {
+                $queryC1=$queryC1." and c2.code like :perso".$i;
                 $query->setParameter("perso".$i, "%".$perso->getCode()."%");
                 $i++;
             }
-            $query->andWhere("(".$queryC1.") or (".$queryC2.")");
+            $i = 6;
+            foreach ($compo2 as $perso) {
+                $queryC2=$queryC2." and c1.code like :perso".$i;
+                $query->setParameter("perso".$i, "%".$perso->getCode()."%");
+                $i++;
+            }
+            $queryCompo = $queryCompo. "or ((".$queryC1.") and (".$queryC2."))";
+            $query->andWhere($queryCompo);
+        } else {
+
+            if ($compo != null && $compo->count() > 0 ) {
+                $i = 0;
+                $queryC1 = "1=1";
+                $queryC2 = "1=1";
+                foreach ($compo as $perso) {
+                    $queryC1=$queryC1." and c1.code like :perso".$i;
+                    $queryC2=$queryC2." and c2.code like :perso".$i;
+                    $query->setParameter("perso".$i, "%".$perso->getCode()."%");
+                    $i++;
+                }
+                $query->andWhere("(".$queryC1.") or (".$queryC2.")");
+                
+            }
+            if ($compo2 != null && $compo2->count() > 0 ) {
+                $i = 6;
+                $queryC1 = "1=1";
+                $queryC2 = "1=1";
+                foreach ($compo2 as $perso) {
+                    $queryC1=$queryC1." and c1.code like :perso".$i;
+                    $queryC2=$queryC2." and c2.code like :perso".$i;
+                    $query->setParameter("perso".$i, "%".$perso->getCode()."%");
+                    $i++;
+                }
+                $query->andWhere("(".$queryC1.") or (".$queryC2.")");
+            }
         }
 
         if ($joueur != null) {
