@@ -23,6 +23,7 @@ class StatsGameDTO
     private ?Guilde $_guilde2 = null;
     private ?ArrayCollection $_personnageJoueur1 = null;
     private ?ArrayCollection $_personnageJoueur2 = null;
+    private ?string $_compoCode = null;
 
     /**
      * Retourne les belligerants qui matchent avec les critères du DTO
@@ -253,6 +254,24 @@ class StatsGameDTO
     public function setPersonnageJoueur2(?ArrayCollection $_personnageJoueur2): self
     {
         $this->_personnageJoueur2 = $_personnageJoueur2;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _compoCode
+     */
+    public function getCompoCode(): ?string
+    {
+        return $this->_compoCode;
+    }
+
+    /**
+     * Set the value of _compoCode
+     */
+    public function setCompoCode(?string $_compoCode): self
+    {
+        $this->_compoCode = $_compoCode;
 
         return $this;
     }

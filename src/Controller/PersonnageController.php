@@ -6,7 +6,7 @@ use App\Entity\Guilde;
 use App\Entity\Personnage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -21,13 +21,13 @@ class PersonnageController extends AbstractController
     }
 
     #[Route('/personnages', name: 'app_personnage')]
-    public function find(#[MapQueryParameter] ?int $guildeId  = null, #[MapQueryParameter] ?string $term = null): Response
+    public function find(#[MapQueryParameter] ?int $guildeId  = null, #[MapQueryParameter] ?string $term = null): JsonResponse
     {   
         $guildeEntity =  null;
         if ($guildeId != null) {
             $guildeEntity = $this->entityManager->getRepository(Guilde::class)->find($guildeId);
             if ($guildeEntity == null) {
-                throw new \Exception('Guild '.$guilde.' not found');
+                throw new \Exception('Guild '.$guildeId.' not found');
             }
         }
 
