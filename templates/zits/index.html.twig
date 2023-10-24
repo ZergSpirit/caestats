@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration ZITS{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    <h1>Cote des tournois</h1>
+
+    Tournois : 
+    <ul>
+        {% for tournoi in tournois %}
+            <li><a href="{{ path('app_zits_edit', {'id' : tournoi.id}) }}">{{tournoi.nom}}</a> - {{tournoi.date|date("d/m/y")}} : {{tournoi.zitsCote}}
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('app_zits_recalculate') }}">Recalculer les cotes</a>
+
+</div>
+{% endblock %}

@@ -21,6 +21,10 @@ class JoueurRepository extends ServiceEntityRepository
         parent::__construct($registry, Joueur::class);
     }
 
+    public function avgZits(){
+        $this->getEntityManager()->createQuery("select AVG(j.zits) from App\Entity\Joueur j")->execute();
+    }
+
     public function resetAllElo(){
         $this->getEntityManager()->createQuery("update App\Entity\Joueur j set j.elo=null")->execute();
     }

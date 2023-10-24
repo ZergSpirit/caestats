@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration ZITS{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    <h1>Tournoi {{tournoi.nom}}</h1>
+
+    <form method="post">
+
+        {% if tournoi.ranks.count > 0 %}
+            <ol>
+                {% for rank in tournoi.ranks %}
+                    <li>
+                        <select name="joueurs[{{loop.index-1}}]">
+                            {% for joueur in joueurs %}
+                                <option value='{{joueur.id}}' {% if rank.joueur.id == joueur.id %}selected="selected"{% endif %}>{{joueur.nom}}</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                {% endfor %}
+            </ol>
+        {% elseif tournoi.nbParticipants != null %}
+            <ol>
+                {% for i in 0..tournoi.nbParticipants-1 %}
+                    <li>
+                        <select name="joueurs[{{loop.index-1}}]">
+                            {% for joueur in joueurs %}
+                                <option value='{{joueur.id}}'>{{joueur.nom}}</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            TODO
+        {% endif %}
+
+
+        <input type="submit" />
+    </form>
+
+
+</div>
+{% endblock %}

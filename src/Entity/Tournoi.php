@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
 
 #[ORM\Entity(repositoryClass: TournoiRepository::class)]
 class Tournoi
@@ -31,9 +32,20 @@ class Tournoi
     #[ORM\Column(nullable: false)]
     private ?bool $online = null;
 
+    #[ORM\OneToMany(mappedBy: 'tournoi', targetEntity: Rank::class, orphanRemoval: true)]
+    #[OrderBy(["position" => "ASC"])]
+    private Collection $ranks;
+
+    #[ORM\Column(name:'zits_cote', nullable: true)]
+    private ?int $zitsCote = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $nbParticipants = null;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
+        $this->ranks = new ArrayCollection();
     }
 
   
@@ -136,6 +148,60 @@ class Tournoi
     public function setOnline(?bool $online): static
     {
         $this->online = $online;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rank>
+     */
+    public function getRanks(): Collection
+    {
+        return $this->ranks;
+    }
+
+    public function addRank(Rank $rank): static
+    {
+        if (!$this->ranks->contains($rank)) {
+            $this->ranks->add($rank);
+            $rank->setTournoi($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRank(Rank $rank): static
+    {
+        if ($this->ranks->removeElement($rank)) {
+            // set the owning side to null (unless already changed)
+            if ($rank->getTournoi() === $this) {
+                $rank->setTournoi(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getZitsCote(): ?int
+    {
+        return $this->zitsCote;
+    }
+
+    public function setZitsCote(?int $zitsCote): static
+    {
+        $this->zitsCote = $zitsCote;
+
+        return $this;
+    }
+
+    public function getNbParticipants(): ?int
+    {
+        return $this->nbParticipants;
+    }
+
+    public function setNbParticipants(?int $nbParticipants): static
+    {
+        $this->nbParticipants = $nbParticipants;
 
         return $this;
     }

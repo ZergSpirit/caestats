@@ -27,10 +27,17 @@ class Joueur
     #[ORM\OneToMany(mappedBy: 'vainqueur', targetEntity: Game::class)]
     private Collection $games;
 
+    #[ORM\OneToMany(mappedBy: 'joueur', targetEntity: Rank::class, orphanRemoval: true)]
+    private Collection $ranks;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $zits = null;
+
     public function __construct()
     {
         $this->belligerants = new ArrayCollection();
         $this->games = new ArrayCollection();
+        $this->ranks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,6 +131,48 @@ class Joueur
                 $game->setVainqueur(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rank>
+     */
+    public function getRanks(): Collection
+    {
+        return $this->ranks;
+    }
+
+    public function addRank(Rank $rank): static
+    {
+        if (!$this->ranks->contains($rank)) {
+            $this->ranks->add($rank);
+            $rank->setJoueur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRank(Rank $rank): static
+    {
+        if ($this->ranks->removeElement($rank)) {
+            // set the owning side to null (unless already changed)
+            if ($rank->getJoueur() === $this) {
+                $rank->setJoueur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getZits(): ?int
+    {
+        return $this->zits;
+    }
+
+    public function setZits(?int $zits): static
+    {
+        $this->zits = $zits;
 
         return $this;
     }

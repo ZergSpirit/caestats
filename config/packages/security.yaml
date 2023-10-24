@@ -40,6 +40,7 @@ security:
         - { path: ^/resultats, roles: ROLE_ADMIN }
         - { path: ^/resultat, roles: ROLE_ADMIN }
         - { path: ^/ranking/regenerate, roles: ROLE_ADMIN }
+        - { path: ^/zits, roles: ROLE_ADMIN }
          
          
 when@dev:
