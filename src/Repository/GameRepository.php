@@ -198,7 +198,7 @@ class GameRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('g')
                         ->select('count(g.id)')
                         ->innerJoin("g.belligerant1", "b1")
-                        ->innerJoin("g.belligerant1", "b2")
+                        ->innerJoin("g.belligerant2", "b2")
                         ->innerJoin("b1.joueur", "j1")
                         ->innerJoin("b2.joueur", "j2")
                         ->andWhere('j1.id =:joueur or j2.id =:joueur')
@@ -214,7 +214,7 @@ class GameRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('g')
                                     ->innerJoin("g.belligerant1", "b1")
-                                    ->innerJoin("g.belligerant1", "b2")
+                                    ->innerJoin("g.belligerant2", "b2")
                                     ->innerJoin("b1.joueur", "j1")
                                     ->innerJoin("b2.joueur", "j2")
                                     ->andWhere('j1.id =:joueur or j2.id =:joueur')
