@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Belligerant;
 use App\Entity\Game;
 use App\Entity\Joueur;
+use App\Entity\Rank;
 use App\Service\EloManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,20 +31,26 @@ class RankingController extends AbstractController
     #[Route('/ranking', name: 'app_ranking')]
     public function index(): Response
     {   
+        $joueurs = $this->entityManager->getRepository(Joueur::class)->findAll();
         $joueurRanked = $this->entityManager->getRepository(Joueur::class)->findAllSortedByEloRanking();
 
         $joueurGames = [];
-        foreach ($joueurRanked as $joueur) {
+        foreach ($joueurs as $joueur) {
             $lastGame = $this->entityManager->getRepository(Game::class)->lastGame($joueur);
             $joueurGames[$joueur->getId()] = $this->entityManager->getRepository(Belligerant::class)->countGames($joueur);
             $joueurGames[$joueur->getId()]['lastGame'] = $lastGame == null? null : $lastGame->getDate();
             $joueurGames[$joueur->getId()]['ties'] = $this->entityManager->getRepository(Game::class)->countTies($joueur);
+            $joueurGames[$joueur->getId()][1] = $this->entityManager->getRepository(Rank::class)->findTournamentNamesForPosition($joueur,1);
+            $joueurGames[$joueur->getId()][2] = $this->entityManager->getRepository(Rank::class)->findTournamentNamesForPosition($joueur,2);
+            $joueurGames[$joueur->getId()][3] = $this->entityManager->getRepository(Rank::class)->findTournamentNamesForPosition($joueur,3);
         }
+        $joueursRankedZits = $this->entityManager->getRepository(Joueur::class)->findAllSortedByZitsRanking();
 
         return $this->render('ranking/index.html.twig', [
             'controller_name' => 'RankingController',
             'joueursRanked' => $joueurRanked,
-            'joueurGames' => $joueurGames
+            'joueurGames' => $joueurGames,
+            'joueursRankedZits' => $joueursRankedZits
         ]);
     }
 }

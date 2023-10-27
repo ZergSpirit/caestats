@@ -1,5 +1,13 @@
 {% extends 'base.html.twig' %}
 
+{% block pageJavascripts %}
+    <script type="application/javascript">
+    $(window).on('load',function(){
+        $("#tabs").tabs();
+    });
+    </script>
+{% endblock %}
+
 {% block title %}Caestats - classement ELO des joueurs{% endblock %}
 
 {% block body %}
@@ -11,30 +19,72 @@
 <div class="content">
     <h1>Classements des joueurs</h1>
 
-    <table>
-        <tr>
-            <th>Rang</th>
-            <th>Elo</th>
-            <th>Nom</th>
-            <th>Winrate</th>
-            <th>V - E - D - T</th>
-            <th>Dernière partie</th>
-        </tr>
-            
-        {% for joueur in joueursRanked %}
-            <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
-                <td>{{loop.index}}</td>
-                <td>{{joueur.elo}}</td>
-                <td><a href="{{ path('app_stats_game', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></td>
-                <td>{{((joueurGames[joueur.id]['totalWins']/joueurGames[joueur.id]['total'])*100)|round(1)}}% </td>
-                <td>{{joueurGames[joueur.id]['totalWins']}}V - {{joueurGames[joueur.id]['ties']}}E - {{joueurGames[joueur.id]['total'] - (joueurGames[joueur.id]['totalWins']+joueurGames[joueur.id]['ties'])}}D - {{joueurGames[joueur.id]['total']}}T</td>
-                <td>{{joueurGames[joueur.id]['lastGame']|date("d/m/Y")}} </td>
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Elo</a></li>
+            <li><a href="#tabs-2">ZITS</a></li>
+        </ul>
+    <div id="tabs-1">
+        <table>
+            <tr>
+                <th>Rang</th>
+                <th>Elo</th>
+                <th>Nom</th>
+                <th>Winrate</th>
+                <th>V - E - D - T</th>
+                <th>Dernière partie</th>
             </tr>
-        {% endfor %}
+                
+            {% for joueur in joueursRanked %}
+                <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                    <td>{{loop.index}}</td>
+                    <td>{{joueur.elo}}</td>
+                    <td><a href="{{ path('app_stats_game', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></td>
+                    <td>{{((joueurGames[joueur.id]['totalWins']/joueurGames[joueur.id]['total'])*100)|round(1)}}% </td>
+                    <td>{{joueurGames[joueur.id]['totalWins']}}V - {{joueurGames[joueur.id]['ties']}}E - {{joueurGames[joueur.id]['total'] - (joueurGames[joueur.id]['totalWins']+joueurGames[joueur.id]['ties'])}}D - {{joueurGames[joueur.id]['total']}}T</td>
+                    <td>{{joueurGames[joueur.id]['lastGame']|date("d/m/Y")}} </td>
+                </tr>
+            {% endfor %}
 
-    </table>
+        </table>
+    </div>
+    <div id="tabs-2">
+        <table>
+            <tr>
+                <th>Rang</th>
+                <th>ZITS</th>
+                <th>Nom</th>
+                <th>Trophée</th>
+            </tr>
+                
+            {% for joueur in joueursRankedZits %}
+                <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                    <td>{{loop.index}}</td>
+                    <td>{{joueur.zits}}</td>
+                    <td><a href="{{ path('app_zits_detail', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></td>
+                    <td>
+                        {% if joueurGames[joueur.id][1] is not empty %}
+                            {% for tournament in joueurGames[joueur.id][1][0] %}
+                                <img src="{{asset('images/cup_1.png')}}" title="{{tournament}}" style="max-width:30px;vertical-align: middle;"/>
+                            {% endfor %}
+                        {% endif %}
+                        {% if joueurGames[joueur.id][2] is not empty %}
+                            {% for tournament in joueurGames[joueur.id][2][0] %}
+                                <img src="{{asset('images/cup_2.png')}}" title="{{tournament}}" style="max-width:30px;vertical-align: middle;"/>
+                            {% endfor %}
+                        {% endif %}
+                        {% if joueurGames[joueur.id][3] is not empty %}
+                            {% for tournament in joueurGames[joueur.id][3][0] %}
+                                <img src="{{asset('images/cup_3.png')}}" title="{{tournament}}" style="max-width:30px;vertical-align: middle;"/>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
 
-    <br/>
-
+        </table>
+        <h4>ZITS (Ze Incredible Tournament System) est un système de classement en Béta qui met en avant les participations et victoires aux tournois plutôt que les résultats des rencontres entre les joueurs. C'est un système "à la t3" qui récompense la participation et les bons résulats à des tournois. Pourquoi faire ca si T3 existe? Parce que ca m'amuse ;p</h4>
+    </div>
 </div>
+    
 {% endblock %}

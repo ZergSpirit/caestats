@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du classement ZITS de {{joueur.nom}}{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    <h2>Tournoi(s) de <a href="{{ path('app_stats_game', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></h2>
+    <table class="games" style="max-width:1100px;">
+            <tr>
+                <th>
+                    Date
+                </th>
+                <th style="width:200px;">
+                    Tournoi
+                </th>
+                <th>
+                    Rang
+                </th>
+                <th style="width:200px;">
+                    Zits
+                </th>
+            </tr>
+
+            {% for rank in ranks %}
+                <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                    <td>
+                        {{rank.tournoi.date|date("d/m/Y")}}
+                    </td>
+                    <td>
+                        <a href="{{ path('app_stats_game', {'tournoiId' : rank.tournoi.id, 'joueurId' : rank.joueur.id}) }}">{{rank.tournoi.nom}}</a>
+                    </td>
+                    <td>
+                    {% if rank.position < 4 %}
+                        <div style="display:inline-block;vertical-align:bottom;">
+                            <img src="{{asset('images/cup_'~rank.position~'.png')}}" title="{{rank.position}}" style="max-width:20px;vertical-align: middle;"/>
+                        </div>
+                    {% else %}
+                        {{rank.position}}
+                    {% endif %}
+                    </td>  
+                    <td>
+                        {{(rank.ratio * rank.tournoi.zitsCote)|round(0)}}
+                    </td>
+                </tr>
+            {% endfor %}
+             <tr>
+                <td colspan="3">
+                    Total
+                </td>
+                <td>
+                    {{joueur.zits}}
+                </td>
+            </tr>
+
+
+    </table>
+
+    <h2>Tournoi(s) archivés de {{joueur.nom}}</h2>
+    <table class="games" style="max-width:1100px;">
+            <tr>
+                <th>
+                    Date
+                </th>
+                <th style="width:200px;">
+                    Tournoi
+                </th>
+                <th>
+                    Rang
+                </th>
+                <th style="width:200px;">
+                    Zits
+                </th>
+            </tr>
+
+            {% for rank in archivedRanks %}
+                <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                    <td>
+                        {{rank.tournoi.date|date("d/m/Y")}}
+                    </td>
+                    <td>
+                        <a href="{{ path('app_stats_game', {'tournoiId' : rank.tournoi.id, 'joueurId' : rank.joueur.id}) }}">{{rank.tournoi.nom}}</a>
+                    </td>
+                    <td>
+                        {{rank.position}}
+                    </td>  
+                    <td>
+                        {{(rank.ratio * rank.tournoi.zitsCote)|round(0)}}
+                    </td>
+                </tr>
+            {% endfor %}
+
+
+    </table>
+
+</div>
+{% endblock %}

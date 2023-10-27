@@ -8,6 +8,7 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 const $ = require('jquery');
+require('jquery-ui/ui/widgets/tabs');
 global.$ = global.jQuery = $;
 import Chart from 'chart.js/auto';
 global.Chart = Chart;

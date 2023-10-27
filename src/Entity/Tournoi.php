@@ -42,6 +42,12 @@ class Tournoi
     #[ORM\Column(nullable: true)]
     private ?int $nbParticipants = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $avgZitsAtDate = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $totalPlayerZitsAtDate = null;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -202,6 +208,30 @@ class Tournoi
     public function setNbParticipants(?int $nbParticipants): static
     {
         $this->nbParticipants = $nbParticipants;
+
+        return $this;
+    }
+
+    public function getAvgZitsAtDate(): ?int
+    {
+        return $this->avgZitsAtDate;
+    }
+
+    public function setAvgZitsAtDate(?int $avgZitsAtDate): static
+    {
+        $this->avgZitsAtDate = $avgZitsAtDate;
+
+        return $this;
+    }
+
+    public function getTotalPlayerZitsAtDate(): ?int
+    {
+        return $this->totalPlayerZitsAtDate;
+    }
+
+    public function setTotalPlayerZitsAtDate(?int $totalPlayerZitsAtDate): static
+    {
+        $this->totalPlayerZitsAtDate = $totalPlayerZitsAtDate;
 
         return $this;
     }

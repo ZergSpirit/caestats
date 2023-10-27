@@ -18,6 +18,11 @@
                                 <option value='{{joueur.id}}' {% if rank.joueur.id == joueur.id %}selected="selected"{% endif %}>{{joueur.nom}}</option>
                             {% endfor %}
                         </select>
+                        {% if tournoi.zitsCote*rank.ratio < 1 %}
+                            1
+                        {% else %}
+                            {{(tournoi.zitsCote*rank.ratio)|round(0)}}
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ol>
@@ -26,6 +31,7 @@
                 {% for i in 0..tournoi.nbParticipants-1 %}
                     <li>
                         <select name="joueurs[{{loop.index-1}}]">
+                            <option value=''></option>
                             {% for joueur in joueurs %}
                                 <option value='{{joueur.id}}'>{{joueur.nom}}</option>
                             {% endfor %}
@@ -34,7 +40,18 @@
                 {% endfor %}
             </ol>
         {% else %}
-            TODO
+            <ol>
+                {% for i in 0..15 %}
+                    <li>
+                        <select name="joueurs[{{loop.index-1}}]">
+                            <option value=''></option>
+                            {% for joueur in joueurs %}
+                                <option value='{{joueur.id}}'>{{joueur.nom}}</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                {% endfor %}
+            </ol>
         {% endif %}
 
 

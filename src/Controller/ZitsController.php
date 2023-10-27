@@ -19,18 +19,13 @@ class ZitsController extends AbstractController
     public function __construct(private EntityManagerInterface $entityManager, private ZitsManager $zitsManager){
 
     }
-
-    #[Route('/zits/recaltulate', name: 'app_zits_recalculate')]
+    
+    #[Route('/zits/recalculate', name: 'app_zits_recalculate')]
     public function recalculate(): Response
     {   
 
-        $tournois = $this->entityManager->getRepository(Tournoi::class)->findBy(array(), array('date' => 'DESC'));
-        $today = new DateTime();
-
-        foreach ($tournois as $tournoi) {
-            $this->zitsManager->updateCote($tournoi);
-        }
-
+        $this->zitsManager->recalculateAllZits();
+        
         return $this->render('zits/index.html.twig', [
             'controller_name' => 'ZitsController',
             'tournois' => $this->entityManager->getRepository(Tournoi::class)->findBy(array(), array('date' => 'DESC'))
@@ -74,6 +69,9 @@ class ZitsController extends AbstractController
 
         $i = 1;
         foreach ($joueurs as $id) {
+            if($id == null){
+                continue;
+            }
             $rank = new Rank();
             $rank->setTournoi($tournoi);
             $rank->setPosition($i);
@@ -81,6 +79,8 @@ class ZitsController extends AbstractController
             $this->entityManager->getRepository(Rank::class)->save($rank);
             $i++;
         }   
+        $tournoi->setNbParticipants($i);
+        $this->entityManager->getRepository(Tournoi::class)->save($tournoi);
 
         return $this->redirect('/zits');
     }

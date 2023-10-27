@@ -1,3 +1,4 @@
+@import '~jquery-ui/themes/base/all.css';
 body {
     background-color: lightgray;
 }

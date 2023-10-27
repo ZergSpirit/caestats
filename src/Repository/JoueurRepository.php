@@ -21,6 +21,10 @@ class JoueurRepository extends ServiceEntityRepository
         parent::__construct($registry, Joueur::class);
     }
 
+    public function resetAllZits(){
+        $this->getEntityManager()->createQuery("update App\Entity\Joueur j set j.zits=null")->execute();
+    }
+
     public function avgZits(){
         $this->getEntityManager()->createQuery("select AVG(j.zits) from App\Entity\Joueur j")->execute();
     }
@@ -39,6 +43,13 @@ class JoueurRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('j')
                    ->where('j.elo IS NOT NULL')
                    ->orderBy('j.elo','desc')
+                   ->getQuery()->getResult();
+    }
+
+    public function findAllSortedByZitsRanking(){
+        return $this->createQueryBuilder('j')
+                   ->where('j.zits IS NOT NULL')
+                   ->orderBy('j.zits','desc')
                    ->getQuery()->getResult();
     }
 

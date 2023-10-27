@@ -21,6 +21,10 @@ class TournoiRepository extends ServiceEntityRepository
         parent::__construct($registry, Tournoi::class);
     }
 
+    public function resetAllZits(){
+        $this->getEntityManager()->createQuery("update App\Entity\Tournoi t set t.zitsCote=null, t.avgZitsAtDate=null, t.totalPlayerZitsAtDate=null")->execute();
+    }
+
     public function save(Tournoi $tournoi)
     {
         $this->getEntityManager()->persist($tournoi);

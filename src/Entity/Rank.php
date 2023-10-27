@@ -24,6 +24,9 @@ class Rank
     #[ORM\Column]
     private ?int $position = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $ratio = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +64,18 @@ class Rank
     public function setPosition(int $position): static
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    public function getRatio(): ?float
+    {
+        return $this->ratio;
+    }
+
+    public function setRatio(?float $ratio): static
+    {
+        $this->ratio = $ratio;
 
         return $this;
     }
