@@ -6,6 +6,7 @@ use App\Repository\RankRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RankRepository::class)]
+#[ORM\Table(name : 'ranktable')]
 class Rank
 {
     #[ORM\Id]
