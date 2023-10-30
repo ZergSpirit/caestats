@@ -48,6 +48,9 @@ class Tournoi
     #[ORM\Column(nullable: true)]
     private ?int $totalPlayerZitsAtDate = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $zitsFadingMonthElapsed = null;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -232,6 +235,18 @@ class Tournoi
     public function setTotalPlayerZitsAtDate(?int $totalPlayerZitsAtDate): static
     {
         $this->totalPlayerZitsAtDate = $totalPlayerZitsAtDate;
+
+        return $this;
+    }
+
+    public function getZitsFadingMonthElapsed(): ?int
+    {
+        return $this->zitsFadingMonthElapsed;
+    }
+
+    public function setZitsFadingMonthElapsed(?int $zitsFadingMonthElapsed): static
+    {
+        $this->zitsFadingMonthElapsed = $zitsFadingMonthElapsed;
 
         return $this;
     }

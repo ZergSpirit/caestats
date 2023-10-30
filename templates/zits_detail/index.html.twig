@@ -29,6 +29,9 @@
                     </td>
                     <td>
                         <a href="{{ path('app_stats_game', {'tournoiId' : rank.tournoi.id, 'joueurId' : rank.joueur.id}) }}">{{rank.tournoi.nom}}</a>
+                        {% if rank.tournoi.zitsFadingMonthElapsed > 0 %}
+                            <img src="{{asset('images/hourglass.png')}}" title="Points appliqués : {{12-rank.tournoi.zitsFadingMonthElapsed}}/12 de {{(rank.ratio*rank.tournoi.zitsCote)|round(0)}}" style="max-width:20px;vertical-align: middle;"/>
+                        {% endif %}
                     </td>
                     <td>
                     {% if rank.position < 4 %}
@@ -40,7 +43,7 @@
                     {% endif %}
                     </td>  
                     <td>
-                        {{(rank.ratio * rank.tournoi.zitsCote)|round(0)}}
+                        {{rank.zitsEarned}}
                     </td>
                 </tr>
             {% endfor %}

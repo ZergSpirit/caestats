@@ -14,23 +14,29 @@ class ZitsManager
     public $MIN_RATIO_FOR_ZITS_AVERAGE = 0.5;
     public $FACTOR = 20;
     public $NB_JOUEUR_FACTOR = 10;
+    public $NEW_TOURNOI_ZITS_RATIO = 0.8;
 
     public function recalculateAllZits()
     {
         $this->entityManager->getRepository(Tournoi::class)->resetAllZits();
         $this->entityManager->getRepository(Rank::class)->resetAllZits();
         $this->entityManager->getRepository(Joueur::class)->resetAllZits();
-
         foreach ($this->entityManager->getRepository(Tournoi::class)->findBy(array(), array("date" => "asc")) as $tournoi) {
-            $this->createZits($tournoi);
+            $this->createZits($tournoi, true);
         }
+        $this->fadeAllZits(new DateTime());
     }
 
-    public function createZits(Tournoi $tournoi){
+    public function createZits(Tournoi $tournoi, bool $fadePreviousTournois){
         if ($tournoi->getRanks() == null || $tournoi->getRanks()->count() == 0) {
             return;
         }
-        $currentDateTime = new DateTime;
+        //On fade tous les autres tournois à date de celui-ci. En effet, la cote du tournoi hors Fade ne doit jamais bouger dans le temps.
+        //C'est les points des joueurs qui se réduisent dans le temps par le fade. Donc, au jour J ou le tournoi est fini, on calcul sa cote par rapport
+        //aux classements des joueurs à cette date, et ca ne bougera plus.
+        if($fadePreviousTournois) {
+            $this->fadeAllZits($tournoi->getDate());
+        }
         $totalZits = 0;
         $totalJoueurs = 0;
         foreach ($tournoi->getRanks() as $rank) {
@@ -38,10 +44,7 @@ class ZitsManager
             $totalJoueurs++;
         }
         $avg = $this->entityManager->getRepository(Joueur::class)->avgZits();
-        $tournoi->setAvgZitsAtDate(round($avg));
-        $tournoi->setTotalPlayerZitsAtDate($totalZits);
-        $tournoi->setNbParticipants($totalJoueurs);
-        $tournoi->setZitsCote($this->createCote($tournoi->getDate(),$totalZits,$totalJoueurs, $tournoi->getAvgZitsAtDate()));
+        $this->createCote($totalZits,$totalJoueurs, $avg, $tournoi);
         $this->entityManager->getRepository(Tournoi::class)->save($tournoi);
 
         //<<Cote tournoi>>*(((nbjoueur+1-classement)/nbjoueur)+  (si rang 1,2,3 =>(0.5*(1/classement))))
@@ -49,7 +52,7 @@ class ZitsManager
             $ratio = (($totalJoueurs+1-$rank->getPosition())/$totalJoueurs);
             //Bonus du top 3
             if($rank->getPosition() < 4){
-                $ratio = $ratio +(0.4*(1/$rank->getPosition()));
+                $ratio = $ratio +(0.5*(1/$rank->getPosition()));
             }
             else{
                 $ratio = $ratio * (4/$rank->getPosition());
@@ -70,53 +73,64 @@ class ZitsManager
        
     }
 
-    public function fadeAllZits(){
-        $this->entityManager->getRepository(Joueur::class)->resetAllZits();
+    public function fadeAllZits(?DateTime $date){
+        //$this->entityManager->getRepository(Joueur::class)->resetAllZits();
+        //TODO, sur la méthode ci dessus, l'entiyManager n'a pas l'air de flush les changements
+        foreach ($this->entityManager->getRepository(Joueur::class)->findAll() as $joueur) {
+            $joueur->setZits(null);
+            $this->entityManager->getRepository(Joueur::class)->save($joueur);
+        }
         foreach ($this->entityManager->getRepository(Tournoi::class)->findBy(array(), array("date" => "asc")) as $tournoi) {
-            $this->fadeZits($tournoi);
+            //Pas de fade sur des tournoi qui n'ont pas encore de cote
+            if($tournoi->getZitsCote() == null){
+                continue;
+            }
+            $fade = $this->calculateFade($tournoi->getDate(), $date, $tournoi);
+            $this->entityManager->getRepository(Tournoi::class)->save($tournoi);
             foreach ($tournoi->getRanks() as $rank){
-                $joueur = $rank->getJoueur();
+                $joueur = $this->entityManager->getRepository(Joueur::class)->find($rank->getJoueur()->getId());
                 if($joueur->getZits() == null){
                     $joueur->setZits(0);
                 }
-                $joueur->setZits($joueur->getZits()+(round($rank->getRatio() * $tournoi->getZitsCote())));
+                $rank->setZitsEarned(round($rank->getRatio() * $tournoi->getZitsCote()*$fade));
+                $joueur->setZits($joueur->getZits()+$rank->getZitsEarned());
                 $this->entityManager->getRepository(Joueur::class)->save($joueur);
+                $this->entityManager->getRepository(Rank::class)->save($rank);
             }
         }
     }
 
-    public function fadeZits(Tournoi $tournoi)
-    {
-        $tournoi->setZitsCote($this->applyTimeOnZits($tournoi->getDate(),$tournoi->getZitsCote()));
-    }
-
      //"(((%moyenne ZITS tournoi%/%%moyenne zits nationale%%)*(2+(nbjoueur/16)))*20)*((12+1-%%anciennete_tournoi%%)/12)"
-    private function createCote(DateTime $dateTournoi, $totalZits, $totalJoueurs, $avgZits)
+    private function createCote($totalZits, $totalJoueurs, $avgZits, Tournoi $tournoi)
     {
-        $currentDateTime = new DateTime;
-        $dateInterval = $currentDateTime->diff($dateTournoi);
-        $totalMonths = 12 * $dateInterval->y + $dateInterval->m;
+        $tournoi->setAvgZitsAtDate(round($avgZits));
+        $tournoi->setTotalPlayerZitsAtDate($totalZits);
+        $tournoi->setNbParticipants($totalJoueurs);
         //First tournoi ever
         if($avgZits == 0 && $totalZits == 0) {
-            $cote = 1;
+            $cote = $this->NEW_TOURNOI_ZITS_RATIO;
         //Cote minimal sur les ratio Zits : $MIN_RATIO_FOR_ZITS_AVERAGE
         } else if ($totalZits == 0 || $avgZits == 0) {
             $cote = $this->MIN_RATIO_FOR_ZITS_AVERAGE;
         } else {
             $cote = ($totalZits/$totalJoueurs)/$avgZits < $this->MIN_RATIO_FOR_ZITS_AVERAGE ? $this->MIN_RATIO_FOR_ZITS_AVERAGE : ($totalZits/$totalJoueurs)/$avgZits;
         }
-        $cote = $cote*(2+($totalJoueurs/$this->NB_JOUEUR_FACTOR)+$this->FACTOR);
-        $cote = $this->applyTimeOnZits($dateTournoi, $cote);
+        //$cote = $cote*(2+($totalJoueurs/$this->NB_JOUEUR_FACTOR)+$this->FACTOR);
+        $cote = $cote*(1+($totalJoueurs/$this->NB_JOUEUR_FACTOR))*$this->FACTOR;
+        $tournoi->setZitsCote($cote);
+        $this->entityManager->getRepository(Tournoi::class)->save($tournoi);
         return $cote;
     }
 
-    private function applyTimeOnZits(DateTime $dateTournoi, $cote)
+    private function calculateFade(DateTime $dateTournoi, ?DateTime $currentDateTime, Tournoi $tournoi)
     {
-        $currentDateTime = new DateTime;
+        if($currentDateTime == null){
+            $currentDateTime = new DateTime;
+        }
         $dateInterval = $currentDateTime->diff($dateTournoi);
         $totalMonths = 12 * $dateInterval->y + $dateInterval->m;
-        $cote = $cote*((12+1-$totalMonths)/12);
-        return round($cote);
+        $tournoi->setZitsFadingMonthElapsed($totalMonths);
+        return ((12-$totalMonths)/12);
     }
 
 }

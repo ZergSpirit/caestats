@@ -23,10 +23,13 @@ class JoueurRepository extends ServiceEntityRepository
 
     public function resetAllZits(){
         $this->getEntityManager()->createQuery("update App\Entity\Joueur j set j.zits=null")->execute();
+        $this->getEntityManager()->flush();
     }
 
     public function avgZits(){
-        $this->getEntityManager()->createQuery("select AVG(j.zits) from App\Entity\Joueur j")->execute();
+        return $this->createQueryBuilder('j')
+                    ->select('avg(j.zits)')
+                    ->getQuery()->getSingleScalarResult();
     }
 
     public function resetAllElo(){
