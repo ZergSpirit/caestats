@@ -29,13 +29,11 @@
                     </td>
                     <td>
                         <a href="{{ path('app_stats_game', {'tournoiId' : rank.tournoi.id, 'joueurId' : rank.joueur.id}) }}">{{rank.tournoi.nom}}</a>
-                        {% if rank.tournoi.zitsFadingMonthElapsed > 0 %}
-                            <img src="{{asset('images/hourglass.png')}}" title="Points appliqués : {{12-rank.tournoi.zitsFadingMonthElapsed}}/12 de {{(rank.ratio*rank.tournoi.zitsCote)|round(0)}}" style="max-width:20px;vertical-align: middle;"/>
-                        {% endif %}
+                        <span title="Cote du tournoi">({{rank.tournoi.zitsCote}})</span>
                     </td>
                     <td>
                     {% if rank.position < 4 %}
-                        <div style="display:inline-block;vertical-align:bottom;">
+                        <div style="display:inline-block;">
                             <img src="{{asset('images/cup_'~rank.position~'.png')}}" title="{{rank.position}}" style="max-width:20px;vertical-align: middle;"/>
                         </div>
                     {% else %}
@@ -43,7 +41,12 @@
                     {% endif %}
                     </td>  
                     <td>
-                        {{rank.zitsEarned}}
+                        <span title="<<bonus_podium>>*<<malus_rang>>*cote*fading">{{rank.zitsEarned}}</span>
+                         {% if rank.tournoi.zitsFadingMonthElapsed > 0 %}
+                            <div style="display:inline-block;">
+                                <img src="{{asset('images/hourglass.png')}}" title="Fading appliqué : {{12-rank.tournoi.zitsFadingMonthElapsed}}/12 ({{(rank.ratio*rank.tournoi.zitsCote)|round(0)}} sans Fading)" style="max-width:20px;vertical-align: middle;"/>
+                            </div>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

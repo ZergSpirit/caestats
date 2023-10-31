@@ -100,7 +100,7 @@ class ZitsManager
         }
     }
 
-     //"(((%moyenne ZITS tournoi%/%%moyenne zits nationale%%)*(2+(nbjoueur/16)))*20)*((12+1-%%anciennete_tournoi%%)/12)"
+     //"(((%moyenne ZITS tournoi%/%%moyenne zits nationale%%)*(1+(nbjoueur/16)))*20)*((12+1-%%anciennete_tournoi%%)/12)"
     private function createCote($totalZits, $totalJoueurs, $avgZits, Tournoi $tournoi)
     {
         $tournoi->setAvgZitsAtDate(round($avgZits));
