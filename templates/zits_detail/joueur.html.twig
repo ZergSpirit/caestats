@@ -29,7 +29,7 @@
                         {{rank.tournoi.date|date("d/m/Y")}}
                     </td>
                     <td>
-                        <a href="{{ path('app_stats_game', {'tournoiId' : rank.tournoi.id, 'joueurId' : rank.joueur.id}) }}">{{rank.tournoi.nom}}</a>
+                        <a href="{{ path('app_zits_tournoi_detail', {'tournoiId' : rank.tournoi.id}) }}">{{rank.tournoi.nom}}</a>
                         <span title="Cote du tournoi">({{rank.tournoi.zitsCote}})</span>
                     </td>
                     <td>

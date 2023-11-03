@@ -61,7 +61,7 @@
                 <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
                     <td>{{loop.index}}</td>
                     <td>{{joueur.zits}}</td>
-                    <td><a href="{{ path('app_zits_detail', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></td>
+                    <td><a href="{{ path('app_zits_joueur_detail', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></td>
                     <td>
                         {% if joueurGames[joueur.id][1] is not empty %}
                             {% for tournament in joueurGames[joueur.id][1][0] %}

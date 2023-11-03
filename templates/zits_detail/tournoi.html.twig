@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tournoi {{tournoi.nom}}{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    <h2 style="margin-bottom:5px;">Tournoi {{tournoi.nom}}</h2>
+    <div style="font-size:0.7em;font-style:italic;">
+        {{tournoi.date|date("d/m/Y")}}, il y a {{tournoi.zitsFadingMonthElapsed}} mois. {% if tournoi.zitsFadingMonthElapsed > 12 %}Archivé.{% endif %}
+    </div>
+    <div style="font-size:0.7em;margin-bottom:10px;">
+        <a href="{{ path('app_stats_game', {'tournoiId' : tournoi.id}) }}">Aller à la liste détaillée des parties</a>
+    </div>
+    <table class="games" style="max-width:1100px;">
+            <tr>
+                <th>
+                    Rang
+                </th>
+                <th style="width:200px;">
+                    Nom du joueur
+                </th>
+                <th>
+                    Zits gagnés
+                </th>
+            </tr>
+            
+
+            {% for rank in tournoi.ranks %}
+                <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                    <td>
+                       {% if rank.position < 4 %}
+                        <div style="display:inline-block;">
+                            <img src="{{asset('images/cup_'~rank.position~'.png')}}"  title="Multiplicateur : {{rank.ratio|round(2)}}" style="max-width:20px;vertical-align: middle;"/>
+                        </div>
+                        {% else %}
+                            <span title="Multiplicateur : {{rank.ratio|round(2)}}">{{rank.position}}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                       <a href="{{ path('app_zits_joueur_detail', {'joueurId' : rank.joueur.id}) }}">{{rank.joueur.nom}}</a>
+                    </td>
+                    <td>
+                        <span title="multiplicateur_rang*cote*fading ({{rank.ratio|round(2)}}*{{rank.tournoi.zitsCote}}*{{((12-rank.tournoi.zitsFadingMonthElapsed)/12)|round(2)}})">{{rank.zitsEarned}}</span>
+                         {% if rank.tournoi.zitsFadingMonthElapsed > 0 %}
+                            <div style="display:inline-block;">
+                                <img src="{{asset('images/hourglass.png')}}" title="Fading appliqué : {{12-rank.tournoi.zitsFadingMonthElapsed}}/12 ({{(rank.ratio*rank.tournoi.zitsCote)|round(0)}} sans Fading)" style="max-width:20px;vertical-align: middle;"/>
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+    </table>
+
+</div>
+{% endblock %}
