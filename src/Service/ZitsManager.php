@@ -50,9 +50,10 @@ class ZitsManager
         //<<Cote tournoi>>*(((nbjoueur+1-classement)/nbjoueur)+  (si rang 1,2,3 =>(0.5*(1/classement))))
         foreach ($tournoi->getRanks() as $rank) {
             $ratio = (($totalJoueurs+1-$rank->getPosition())/$totalJoueurs);
+            //$ratio = 1;
             //Bonus du top 3
             if($rank->getPosition() < 4){
-                $ratio = $ratio +(0.5*(1/$rank->getPosition()));
+                $ratio = $ratio +(0.6*(1/$rank->getPosition()));
             }
             else{
                 $ratio = $ratio * (4/$rank->getPosition());

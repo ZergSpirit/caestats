@@ -193,6 +193,90 @@ class GameRepository extends ServiceEntityRepository
         return $result;
     }
 
+    public function countGamesWithMissionCombat(Guilde $guilde, MissionCombat $missionCombat)
+    {
+        $result = [];
+        $query = $this->createQueryBuilder('g')
+            ->select("count(g.id)")
+            ->join("g.belligerant1", "b1") 
+            ->join("g.belligerant2", "b2")
+            ->join("b1.joueur", "j1")
+            ->join("b2.joueur", "j2")
+            ->join("g.tournoi", "t") 
+            ->join("b1.compo", "c1")
+            ->join("b2.compo", "c2")
+            ->join("c1.guilde", "g1")
+            ->join("c2.guilde", "g2")
+            ->join("g.missionCombat","m")
+            ->andWhere('(g1.id =:guilde or g2.id =:guilde)')
+            ->andWhere('m.id =:mission')
+            ->andWhere('(g1.id =:guilde and b1.vainqueur=1) or (g2.id =:guilde and b2.vainqueur=1)')
+            ->setParameter('guilde', $guilde->getId())
+            ->setParameter("mission",$missionCombat->getId());
+        $result['wins'] =  $query->getQuery()->getSingleScalarResult();
+        $query = $this->createQueryBuilder('g')
+            ->select("count(g.id)")
+            ->join("g.belligerant1", "b1") 
+            ->join("g.belligerant2", "b2")
+            ->join("b1.joueur", "j1")
+            ->join("b2.joueur", "j2")
+            ->join("g.tournoi", "t") 
+            ->join("b1.compo", "c1")
+            ->join("b2.compo", "c2")
+            ->join("c1.guilde", "g1")
+            ->join("c2.guilde", "g2")
+            ->join("g.missionCombat","m")
+            ->andWhere('(g1.id =:guilde or g2.id =:guilde)')
+            ->andWhere('m.id =:mission')
+            ->setParameter('guilde', $guilde->getId())
+            ->setParameter("mission",$missionCombat->getId());
+        $result['total'] =  $query->getQuery()->getSingleScalarResult();
+        return $result;
+    }
+
+    public function countGamesWithMissionControle(Guilde $guilde, MissionControle $missionControle)
+    {
+        $result = [];
+        $query = $this->createQueryBuilder('g')
+            ->select("count(g.id)")
+            ->join("g.belligerant1", "b1") 
+            ->join("g.belligerant2", "b2")
+            ->join("b1.joueur", "j1")
+            ->join("b2.joueur", "j2")
+            ->join("g.tournoi", "t") 
+            ->join("b1.compo", "c1")
+            ->join("b2.compo", "c2")
+            ->join("c1.guilde", "g1")
+            ->join("c2.guilde", "g2")
+            ->join("g.missionControle","m")
+            ->andWhere('(g1.id =:guilde or g2.id =:guilde)')
+            ->andWhere('m.id =:mission')
+            ->andWhere('(g1.id =:guilde and b1.vainqueur=1) or (g2.id =:guilde and b2.vainqueur=1)')
+            ->setParameter('guilde', $guilde->getId())
+            ->setParameter("mission",$missionControle->getId());
+        $result['wins'] =  $query->getQuery()->getSingleScalarResult();
+        $query = $this->createQueryBuilder('g')
+            ->select("count(g.id)")
+            ->join("g.belligerant1", "b1") 
+            ->join("g.belligerant2", "b2")
+            ->join("b1.joueur", "j1")
+            ->join("b2.joueur", "j2")
+            ->join("g.tournoi", "t") 
+            ->join("b1.compo", "c1")
+            ->join("b2.compo", "c2")
+            ->join("c1.guilde", "g1")
+            ->join("c2.guilde", "g2")
+            ->join("g.missionControle","m")
+            ->andWhere('(g1.id =:guilde or g2.id =:guilde)')
+            ->andWhere('m.id =:mission')
+            ->setParameter('guilde', $guilde->getId())
+            ->setParameter("mission",$missionControle->getId());
+        $result['total'] =  $query->getQuery()->getSingleScalarResult();
+        return $result;
+    }
+
+
+
     public function countTies(Joueur $joueur)
     {
         return $this->createQueryBuilder('g')

@@ -66,5 +66,77 @@
 
     </table>
 
+    <h2>Winrate mission de combat</h2>
+    <table class="versusTable">
+    <tr>
+            <td></td>
+            {% for mission in missionCombats %}
+                <td>
+                    <a href="{{ path('app_stats_game', {'missionCombatId' : mission.id}) }}" style="text-decoration:none;">
+                       {{mission.nom}}
+                    </a>
+                </td>
+            {% endfor %}
+         </tr>
+         
+        {% for guilde in guildes %}
+            <tr>
+                <td>
+                    <a href="{{ path('app_stats_game', {'guildeCode' : guilde.code}) }}" style="text-decoration:none;">
+                        <img src="{{asset('images/guilde/'~guilde.code~'.png')}}" title="{{guilde.nom}}" style="max-width:50px;" />
+                    </a>
+                </td>
+                {% for mission in missionCombats %}
+                    <td>
+                        {% if versusMissionsCombat[guilde.code][mission.code]['total'] == null %}
+                            N/A
+                        {% else %}
+                            {{((versusMissionsCombat[guilde.code][mission.code]['wins']/versusMissionsCombat[guilde.code][mission.code]['total'])*100)|round(1)}}% ({{versusMissionsCombat[guilde.code][mission.code]['wins']}}/{{versusMissionsCombat[guilde.code][mission.code]['total']}})
+                        {% endif %}
+                        
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+         
+    </table>
+
+
+    <h2>Winrate mission de controles</h2>
+    <table class="versusTable">
+    <tr>
+            <td></td>
+            {% for mission in missionControles %}
+                <td>
+                    <a href="{{ path('app_stats_game', {'missionControleId' : mission.id}) }}" style="text-decoration:none;">
+                       {{mission.nom}}
+                    </a>
+                </td>
+            {% endfor %}
+         </tr>
+         
+        {% for guilde in guildes %}
+            <tr>
+                <td>
+                    <a href="{{ path('app_stats_game', {'guildeCode' : guilde.code}) }}" style="text-decoration:none;">
+                        <img src="{{asset('images/guilde/'~guilde.code~'.png')}}" title="{{guilde.nom}}" style="max-width:50px;" />
+                    </a>
+                </td>
+                {% for mission in missionControles %}
+                    <td>
+                        {% if versusMissionsControle[guilde.code][mission.code]['total'] == null %}
+                            N/A
+                        {% else %}
+                            {{((versusMissionsControle[guilde.code][mission.code]['wins']/versusMissionsControle[guilde.code][mission.code]['total'])*100)|round(1)}}% ({{versusMissionsControle[guilde.code][mission.code]['wins']}}/{{versusMissionsControle[guilde.code][mission.code]['total']}})
+                        {% endif %}
+                        
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+         
+    </table>
+
+
 </div>
 {% endblock %}

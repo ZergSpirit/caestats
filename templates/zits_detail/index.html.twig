@@ -21,6 +21,7 @@
                     Zits
                 </th>
             </tr>
+            
 
             {% for rank in ranks %}
                 <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
@@ -34,14 +35,14 @@
                     <td>
                     {% if rank.position < 4 %}
                         <div style="display:inline-block;">
-                            <img src="{{asset('images/cup_'~rank.position~'.png')}}" title="{{rank.position}}" style="max-width:20px;vertical-align: middle;"/>
+                            <img src="{{asset('images/cup_'~rank.position~'.png')}}"  title="Multiplicateur : {{rank.ratio|round(2)}}" style="max-width:20px;vertical-align: middle;"/>
                         </div>
                     {% else %}
-                        {{rank.position}}
+                        <span title="Multiplicateur : {{rank.ratio|round(2)}}">{{rank.position}}</span>
                     {% endif %}
                     </td>  
                     <td>
-                        <span title="<<bonus_podium>>*<<malus_rang>>*cote*fading">{{rank.zitsEarned}}</span>
+                        <span title="multiplicateur_rang*cote*fading ({{rank.ratio|round(2)}}*{{rank.tournoi.zitsCote}}*{{((12-rank.tournoi.zitsFadingMonthElapsed)/12)|round(2)}})">{{rank.zitsEarned}}</span>
                          {% if rank.tournoi.zitsFadingMonthElapsed > 0 %}
                             <div style="display:inline-block;">
                                 <img src="{{asset('images/hourglass.png')}}" title="Fading appliqué : {{12-rank.tournoi.zitsFadingMonthElapsed}}/12 ({{(rank.ratio*rank.tournoi.zitsCote)|round(0)}} sans Fading)" style="max-width:20px;vertical-align: middle;"/>
