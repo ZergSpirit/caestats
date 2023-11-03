@@ -7,7 +7,7 @@
 <div class="content">
     <h2 style="margin-bottom:5px;">Tournoi {{tournoi.nom}}</h2>
     <div style="font-size:0.7em;font-style:italic;">
-        {{tournoi.date|date("d/m/Y")}}, il y a {{tournoi.zitsFadingMonthElapsed}} mois. {% if tournoi.zitsFadingMonthElapsed > 12 %}Archivé.{% endif %}
+        {{tournoi.date|date("d/m/Y")}}, {{tournoi.zitsFadingMonthElapsed}} mois d'ancienneté pris en compte. {% if tournoi.zitsFadingMonthElapsed > 12 %}Archivé.{% endif %}
     </div>
     <div style="font-size:0.7em;margin-bottom:10px;">
         <a href="{{ path('app_stats_game', {'tournoiId' : tournoi.id}) }}">Aller à la liste détaillée des parties</a>
