@@ -28,6 +28,43 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
+     /**
+    * @return Returns un array avec le nombre de victoire, le nombre de game et la dernière game
+     */
+    public function countGames(Joueur $joueur)
+    {
+        
+        $countGames = [];
+
+        $countGames['total'] = $this->createQueryBuilder('g')
+                                ->select('count(g.id)')
+                                ->innerJoin("g.belligerant1","b1")
+                                ->innerJoin("g.belligerant2","b2")
+                                ->innerJoin("b1.joueur", "j1")
+                                ->innerJoin("b2.joueur", "j2")
+                                ->innerJoin("g.tournoi", "t")
+                                ->andWhere("j1.id = :joueur or j2.id =:joueur")
+                                ->andWhere("t.notRanked = false")
+                                ->setParameter("joueur", $joueur->getId())
+                                ->getQuery()->getSingleScalarResult();
+
+        $countGames['totalWins'] = $this->createQueryBuilder('g')
+                                    ->select('count(g.id)')
+                                    ->innerJoin("g.belligerant1","b1")
+                                    ->innerJoin("g.belligerant2","b2")
+                                    ->innerJoin("b1.joueur", "j1")
+                                    ->innerJoin("b2.joueur", "j2")
+                                    ->innerJoin("g.tournoi", "t")
+                                    ->andWhere("j1.id = :joueur or j2.id =:joueur")
+                                    ->andWhere("(b1.vainqueur = true and j1.id = :joueur) or (b2.vainqueur=true and j2.id =:joueur)")
+                                    ->andWhere("t.notRanked = false")
+                                    ->setParameter("joueur", $joueur->getId())
+                                    ->getQuery()->getSingleScalarResult();
+
+
+        return $countGames;
+    }
+
     /**
      * @return Game[] Returns an array of Game objects
      */
@@ -329,10 +366,11 @@ class GameRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function findAllWhereTournoiIsNotNull()
+    public function findAllWhereTournoiIsNotNullAndRanked()
     {
         return  $this->createQueryBuilder('g')
-                   ->where('g.tournoi IS NOT NULL')
+                   ->andWhere('g.tournoi IS NOT NULL')
+                   ->andWhere('g.notRanked = false')
                    ->orderBy('g.date')
                    ->getQuery()->getResult();
     }

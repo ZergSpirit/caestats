@@ -51,6 +51,9 @@ class Tournoi
     #[ORM\Column(nullable: true)]
     private ?int $zitsFadingMonthElapsed = null;
 
+    #[ORM\Column]
+    private bool $notRanked = false;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -247,6 +250,18 @@ class Tournoi
     public function setZitsFadingMonthElapsed(?int $zitsFadingMonthElapsed): static
     {
         $this->zitsFadingMonthElapsed = $zitsFadingMonthElapsed;
+
+        return $this;
+    }
+
+    public function isNotRanked(): bool
+    {
+        return $this->notRanked;
+    }
+
+    public function setNotRanked(bool $notRanked): static
+    {
+        $this->notRanked = $notRanked;
 
         return $this;
     }

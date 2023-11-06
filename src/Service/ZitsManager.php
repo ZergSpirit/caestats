@@ -21,14 +21,14 @@ class ZitsManager
         $this->entityManager->getRepository(Tournoi::class)->resetAllZits();
         $this->entityManager->getRepository(Rank::class)->resetAllZits();
         $this->entityManager->getRepository(Joueur::class)->resetAllZits();
-        foreach ($this->entityManager->getRepository(Tournoi::class)->findBy(array(), array("date" => "asc")) as $tournoi) {
+        foreach ($this->entityManager->getRepository(Tournoi::class)->findBy(array("notRanked" => false), array("date" => "asc")) as $tournoi) {
             $this->createZits($tournoi, true);
         }
         $this->fadeAllZits(new DateTime());
     }
 
     public function createZits(Tournoi $tournoi, bool $fadePreviousTournois){
-        if ($tournoi->getRanks() == null || $tournoi->getRanks()->count() == 0) {
+        if ($tournoi->getRanks() == null || $tournoi->getRanks()->count() == 0 || $tournoi->isNotRanked()) {
             return;
         }
         //On fade tous les autres tournois à date de celui-ci. En effet, la cote du tournoi hors Fade ne doit jamais bouger dans le temps.

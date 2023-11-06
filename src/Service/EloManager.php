@@ -81,7 +81,7 @@ class EloManager
     {   
         $this->entityManager->getRepository(Joueur::class)->resetAllElo();
         $this->entityManager->getRepository(EloLog::class)->reset();
-        $games = $this->entityManager->getRepository(Game::class)->findAllWhereTournoiIsNotNull();
+        $games = $this->entityManager->getRepository(Game::class)->findAllWhereTournoiIsNotNullAndRanked();
         foreach ($games as $game) {
             $this->processMatch($game);
         }

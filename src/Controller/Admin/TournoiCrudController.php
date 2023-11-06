@@ -21,12 +21,13 @@ class TournoiCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->hideOnForm(),
             TextField::new('nom'),
             DateField::new('date'),
             TextField::new('ville'),
             BooleanField::new('online'),
-            IntegerField::new('nbParticipants')
+            IntegerField::new('nbParticipants'),
+            BooleanField::new('notRanked')
         ];
     }
     
