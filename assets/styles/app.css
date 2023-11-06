@@ -17,6 +17,7 @@ body {
 }
 .games tr td {
     text-align:center;
+    font-size:0.6em;
 }
 .imgMenu {
     max-width: 50px;
