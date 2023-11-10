@@ -40,9 +40,10 @@ class GameManager
             $game = new Game();
             $game->setBelligerant1(new Belligerant());
             $game->setBelligerant2(new Belligerant());
-            $game->getBelligerant1()->setCompo(new Compo());
-            $game->getBelligerant2()->setCompo(new Compo());
         }
+
+        $game->getBelligerant1()->setCompo(new Compo());
+        $game->getBelligerant2()->setCompo(new Compo());
         
         if ($data->getScoreJoueur1() > $data->getScoreJoueur2()) {
             $vainqueur = $this->entityManager->getRepository(Joueur::class)->find($data->getJoueur1());
