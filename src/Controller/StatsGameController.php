@@ -73,7 +73,17 @@ class StatsGameController extends AbstractController
             $dto->setMissionControle($this->entityManager->getRepository(MissionControle::class)->find($missionControleId));
         }
         //?Joueur $joueur=null, ?Tournoi $tournoi=null, ?Guilde $guilde=null, ?ArrayCollection $compo = null, ?bool $rixe=null, ?MissionControle $missionControle=null, ?MissionCombat $missionCombat=null, ?Joueur $joueur2 = null, ?Guilde $guilde2= null, ?ArrayCollection $compo2= null
-        $results = $this->entityManager->getRepository(Game::class)->findAllByCriteria($joueur, $tournoi, $guilde, $dto->getPersonnageJoueur1(), $dto->isRixe(), $dto->getMissionControle(), $dto->getMissionCombat(), null, null, null);
+        //$joueur, $tournoi, $guilde, $dto->getPersonnageJoueur1(), $dto->isRixe(), $dto->getMissionControle(), $dto->getMissionCombat(), null, null, null
+        $results = $this->entityManager->getRepository(Game::class)->findAllByCriteria(
+        array(
+            "joueur" => $joueur,
+            "tournoi" => $tournoi,
+            "guilde" => $guilde,
+            "compo" => $dto->getPersonnageJoueur1(),
+            "rixe" => $dto->isRixe(),
+            "missionControle" => $dto->getMissionControle(),
+            "missionCombat" => $dto->getMissionCombat()
+        ));
         $form = $this->initForm($dto);
         $result_stats = [];
         $countTotal = 0;
@@ -115,7 +125,20 @@ class StatsGameController extends AbstractController
         $form = $this->initForm();
         $form->handleRequest($request);
         $dto = $form->getData();
-        $results = $this->entityManager->getRepository(Game::class)->findAllByCriteria($dto->getJoueur1(), $dto->getTournoi(), $dto->getGuilde1(), $dto->getPersonnageJoueur1(), $dto->isRixe(), $dto->getMissionControle(), $dto->getMissionCombat(), $dto->getJoueur2(), $dto->getGuilde2(), $dto->getPersonnageJoueur2());
+        //$dto->getJoueur1(), $dto->getTournoi(), $dto->getGuilde1(), $dto->getPersonnageJoueur1(), $dto->isRixe(), $dto->getMissionControle(), $dto->getMissionCombat(), $dto->getJoueur2(), $dto->getGuilde2(), $dto->getPersonnageJoueur2()
+        $results = $this->entityManager->getRepository(Game::class)->findAllByCriteria(
+        array(
+            "joueur" => $dto->getJoueur1(),
+            "joueur2" => $dto->getJoueur2(),
+            "tournoi" => $dto->getTournoi(),
+            "guilde" => $dto->getGuilde1(),
+            "guilde2" => $dto->getGuilde2(),
+            "compo" => $dto->getPersonnageJoueur1(),
+            "compo2" => $dto->getPersonnageJoueur2(),
+            "rixe" => $dto->isRixe(),
+            "missionControle" => $dto->getMissionControle(),
+            "missionCombat" => $dto->getMissionCombat()
+        ));
         $result_stats = [];
         $countTotal = 0;
         $countWins = 0;

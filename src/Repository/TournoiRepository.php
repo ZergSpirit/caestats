@@ -21,6 +21,18 @@ class TournoiRepository extends ServiceEntityRepository
         parent::__construct($registry, Tournoi::class);
     }
 
+    public function getRondes(Tournoi $tournoi) {
+        return $this->createQueryBuilder('t')
+        ->select("g.ronde")
+        ->innerJoin('t.games','g')
+        ->andWhere('t.id =:tournoi')
+        ->setParameter("tournoi", $tournoi->getId())
+        ->groupBy('g.ronde')
+        ->getQuery()
+        ->getArrayResult()
+        ;
+    }
+
     public function resetAllZits(){
         $this->getEntityManager()->createQuery("update App\Entity\Tournoi t set t.zitsCote=null, t.avgZitsAtDate=null, t.totalPlayerZitsAtDate=null")->execute();
     }

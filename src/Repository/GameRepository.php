@@ -28,6 +28,22 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
+    public function deleteGames($tournoi, $ronde){
+
+        $ids = $this->createQueryBuilder('g')
+            ->select('g.id')
+            ->innerJoin('g.tournoi','t')               
+            ->andWhere('t.id = :tournoi')
+            ->andWhere('g.ronde =:ronde')
+            ->setParameter('tournoi', $tournoi->getId())
+            ->setParameter('ronde',$ronde)->getQuery()->getResult();
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->delete('App\Entity\Game', 'g') 
+            ->andWhere('g.id in(:ids)')
+            ->setParameter('ids',$ids)->getQuery()->execute();
+    }
+
      /**
     * @return Returns un array avec le nombre de victoire, le nombre de game et la dernière game
      */
@@ -68,7 +84,8 @@ class GameRepository extends ServiceEntityRepository
     /**
      * @return Game[] Returns an array of Game objects
      */
-    public function findAllByCriteria(?Joueur $joueur=null, ?Tournoi $tournoi=null, ?Guilde $guilde=null, ?ArrayCollection $compo = null, ?bool $rixe=null, ?MissionControle $missionControle=null, ?MissionCombat $missionCombat=null, ?Joueur $joueur2 = null, ?Guilde $guilde2= null, ?ArrayCollection $compo2= null)
+    //?Joueur $joueur=null, ?Tournoi $tournoi=null, ?Guilde $guilde=null, ?ArrayCollection $compo = null, ?bool $rixe=null, ?MissionControle $missionControle=null, ?MissionCombat $missionCombat=null, ?Joueur $joueur2 = null, ?Guilde $guilde2= null, ?ArrayCollection $compo2= null, ?int $ronde
+    public function findAllByCriteria(array $parameters)
     {
         $query = $this->createQueryBuilder('g');
         $query->join("g.missionControle", "controle")
@@ -83,26 +100,27 @@ class GameRepository extends ServiceEntityRepository
             ->join("c1.guilde", "g1")
             ->join("c2.guilde", "g2");
 
-        if ($rixe != null) {
+        if (isset($parameters['rixe']) && $parameters['rixe'] != null) {
             $query->andWhere('g.rixe =:rixe')
-                ->setParameter('rixe', $rixe);
+                ->setParameter('rixe', $parameters['rixe']);
         }
 
-        if ($missionControle != null) {
+        if (isset($parameters['missionControle']) && $parameters['missionControle'] != null) {
             $query->andWhere('controle.id =:controle')
-                ->setParameter('controle', $missionControle->getId());
+                ->setParameter('controle', $parameters['missionControle']->getId());
         }
 
-        if ($missionCombat != null) {
+        if (isset($parameters['missionCombat']) && $parameters['missionCombat'] != null) {
             $query->andWhere('combat.id =:combat')
-                ->setParameter('combat', $missionCombat->getId());
+                ->setParameter('combat', $parameters['missionCombat']->getId());
         }
 
-        if ($tournoi != null) {
+        if (isset($parameters['tournoi']) && $parameters['tournoi'] != null) {
             $query->andWhere('t.id =:tournoi')
-                ->setParameter('tournoi', $tournoi->getId());
+                ->setParameter('tournoi', $parameters['tournoi']->getId());
         }
-    
+        $compo = isset($parameters['compo']) && $parameters['compo'] != null ? $parameters['compo'] : null;
+        $compo2 = isset($parameters['compo2'])  && $parameters['compo2'] != null? $parameters['compo2'] : null;
         if (($compo != null && $compo->count() > 0) && ($compo2 != null && $compo2->count() > 0)) {
             $i = 0;
             $queryCompo = "";
@@ -166,24 +184,30 @@ class GameRepository extends ServiceEntityRepository
             }
         }
 
-        if ($joueur != null) {
+        if (isset($parameters['joueur']) && $parameters['joueur'] != null) {
             $query->andWhere('j1.id =:joueur or j2.id =:joueur')
-                ->setParameter('joueur', $joueur->getId());
+                ->setParameter('joueur', $parameters['joueur']->getId());
         }
-        if ($joueur2 != null) {
+        if (isset($parameters['joueur2']) && $parameters['joueur2'] != null) {
             $query->andWhere('j1.id =:joueur2 or j2.id =:joueur2')
-                ->setParameter('joueur2', $joueur2->getId());
+                ->setParameter('joueur2', $parameters['joueur2']->getId());
         }
        
        
-        if ($guilde != null) {
+        if (isset($parameters['guilde']) && $parameters['guilde'] != null) {
             $query->andWhere('g1.id =:guilde or g2.id =:guilde')
-                ->setParameter('guilde', $guilde->getId());
+                ->setParameter('guilde', $parameters['guilde']->getId());
         }
-        if ($guilde2 != null) {
+        if (isset($parameters['guilde2']) && $parameters['guilde2'] != null) {
             $query->andWhere('g1.id =:guilde2 or g2.id =:guilde2')
-                ->setParameter('guilde2', $guilde2->getId());
+                ->setParameter('guilde2', $parameters['guilde2']->getId());
         }
+        if(isset($parameters['ronde']) && $parameters['ronde'] != null){
+            $query->andWhere('g.ronde =:ronde')
+            ->setParameter('ronde', $parameters['ronde']);
+        }
+
+
         $query->addOrderBy('g.date', 'desc')
             ->addOrderBy('g.ronde', 'desc');
         

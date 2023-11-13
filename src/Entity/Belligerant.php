@@ -27,6 +27,16 @@ class Belligerant
     #[ORM\Column(nullable: true)]
     private ?int $score = null;
 
+    public function __construct(?Joueur $joueur = null, ?Guilde $guilde = null){
+        $this->setJoueur($joueur);
+        if($guilde != null){
+            $compo = new Compo();
+            $compo->setGuilde($guilde);
+            $compo->addBelligerant($this);
+            $this->setCompo($compo);
+        }
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -25,7 +25,7 @@ class Compo
     #[ORM\OneToMany(mappedBy: 'compo', targetEntity: Belligerant::class)]
     private Collection $belligerants;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     private ?string $code = null;
 
     #[ORM\Column]

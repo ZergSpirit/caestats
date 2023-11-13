@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block pageJavascripts %}
+    <script type="application/javascript">
+        $(window).on('load',function(){
+            $("#tabs").tabs();
+
+            $('#addJoueur').click(function(){
+                var joueurOption = $('#joueurSelect').children(':selected');
+                var guildeOption = $('#guildeSelect').children(':selected');
+                if($('#joueurListe').children('li[data-joueur-id='+joueurOption.val()+']').length > 0){
+                    return;
+                }
+                var li = $('<li></li>');
+                li.html(joueurOption.html()+'('+guildeOption.html()+')<a class="delJoueur" data-joueur-id="'+joueurOption.val()+'" href="#"><img src="{{asset('images/remove.png')}}" style="max-width:20px"/></a>');
+                li.attr('data-joueur-id',joueurOption.val());
+                li.append('<input type="hidden" name="belligerants[]" value="'+joueurOption.val()+'-'+guildeOption.val()+'"/>');
+                $('#joueurListe').append(li);
+                return false;
+            });
+        });
+        $(document).on('click','.delJoueur',function(){
+            var _this = $(this);
+            _this.parent('li').remove();
+        });
+    </script>
+{% endblock %}
+
+
+{% block title %}Hello TournoiController!{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    <h1>{{ tournoi.nom }}</h1>
+
+   <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Dashboard</a></li>
+            {% for ronde in rondes %}
+                <li><a href="{{ path('app_tournoi_ronde', {'tournoiId' : tournoi.id, 'ronde' : ronde['ronde']}) }}">Ronde {{ronde['ronde']}}</a></li>
+            {% endfor %}
+        </ul>
+    <div id="tabs-1">
+            {% if rondes|length == 0 %}
+                {{ form_start(form) }}
+                    <h3>Info sur le tournoi</h3>
+                    {{ form_row(form.id) }} 
+                    {{ form_row(form.useSeeds) }} 
+                    <h4>Joueurs<h4>
+                    Ajouter:
+                    <select id="joueurSelect">
+                        {% for joueur in joueurs %}
+                            <option value="{{joueur.id}}">{{joueur.nom}}</option>
+                        {% endfor %}
+                    </select>
+                    <select id="guildeSelect">
+                        {% for guilde in guildes %}
+                            <option value="{{guilde.id}}">{{guilde.nom}}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="button" id="addJoueur" value="Ajouter" />
+                    <ul id="joueurListe">
+
+                    </ul>
+                    <h3>Première ronde</h3>
+                    {{ form_row(form.missionControle) }} 
+                    {{ form_row(form.missionCombat) }} 
+                    {{ form_row(form.rixe) }} 
+                {{form_end(form)}}
+            {% else %}
+               Utiliser le seed pour faire les rondes : {{dto.useSeeds == null ? 'N/A' : dto.useSeeds}}
+               <br/>
+               Joueurs:
+               <ul>
+                    {% for joueur in dto.joueurs %}
+                        <li>{{joueur.nom}} ({{joueur.zits == null? 0 : joueur.zits}})
+                    {% endfor %}
+               </ul>
+               {{rondes|last['ronde']}} rondes
+            {% endif %}
+    </div>
+
+</div>
+{% endblock %}

@@ -5,14 +5,38 @@
 {% block body %}
 
 <div class="content">
-    <h1>Cote des tournois</h1>
+    <h1>ZITS Manager</h1>
 
-    Tournois : 
-    <ul>
-        {% for tournoi in tournois %}
-            <li><a href="{{ path('app_zits_edit', {'id' : tournoi.id}) }}">{{tournoi.nom}}</a> - {{tournoi.date|date("d/m/y")}} : {{tournoi.zitsCote}}
+    <table class="games" style="width:800px;">
+        <tr>
+            <th>Nom</th>
+            <th>Date</th>
+            <th>ZITS Cote</th>
+            <th>Actions</th>
+        </tr>
+         {% for tournoi in tournois %}
+            <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
+                <td>
+                    {{tournoi.nom}}
+                </td>
+                <td>
+                    {{tournoi.date|date("d/m/y")}}
+                </td>
+                <td>
+                    {{tournoi.zitsCote}}
+                </td>
+                <td>
+                    {% if tournoi.managedByCaestats %}
+                        <a href="{{ path('app_tournoi', {'tournoiId' : tournoi.id}) }}"><img src="{{asset('images/planning.png')}}" title="Gére le tournoi" style="max-width:20px;" /></a>
+                    {% else %}
+                        <a href="{{ path('app_zits_edit', {'id' : tournoi.id}) }}"><img src="{{asset('images/rank.png')}}" title="Classement" style="max-width:20px;" /></a>
+                    {% endif %}
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
+
+    </table>
+
 
     <a href="{{ path('app_zits_recalculate') }}">Recalculer les cotes</a>
 

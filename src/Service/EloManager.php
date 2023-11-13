@@ -37,6 +37,10 @@ class EloManager
             return;
         }
 
+        if($game->getBelligerant1()->getScore() == null || $game->getBelligerant2()->getScore() == null ){
+            return;
+        }
+
         if ($joueur1->getElo() == null) {
             $joueur1->setElo($this->STARTING_ELO);
         }

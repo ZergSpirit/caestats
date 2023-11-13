@@ -54,6 +54,12 @@ class Tournoi
     #[ORM\Column]
     private bool $notRanked = false;
 
+    #[ORM\Column]
+    private ?bool $managedByCaestats = false;
+
+    #[ORM\Column]
+    private ?bool $useSeeds = false;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -262,6 +268,30 @@ class Tournoi
     public function setNotRanked(bool $notRanked): static
     {
         $this->notRanked = $notRanked;
+
+        return $this;
+    }
+
+    public function isManagedByCaestats(): ?bool
+    {
+        return $this->managedByCaestats;
+    }
+
+    public function setManagedByCaestats(bool $managedByCaestats): static
+    {
+        $this->managedByCaestats = $managedByCaestats;
+
+        return $this;
+    }
+
+    public function isUseSeeds(): ?bool
+    {
+        return $this->useSeeds;
+    }
+
+    public function setUseSeeds(bool $useSeeds): static
+    {
+        $this->useSeeds = $useSeeds;
 
         return $this;
     }

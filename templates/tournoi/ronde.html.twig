@@ -1,0 +1,7 @@
+<ul>
+{% for game in games %}
+    <li>{{game.belligerant1.joueur.nom}} vs {{game.belligerant2.joueur.nom}}</li>
+{% endfor %}
+</ul>
+
+<a href="{{ path('app_tournoi_ronde_delete', {'tournoiId' : tournoi.id, 'ronde' : ronde}) }}" style="text-decoration:none;">Supprimer la ronde</a>
