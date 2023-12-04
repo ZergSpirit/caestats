@@ -52,8 +52,10 @@
                 </td>
                 {% for foe in guildes %}
                     <td>
-                        {% if versusGuilde[guilde.code][foe.code]['total'] == null %}
-                            N/A
+                        {% if guilde.code == foe.code %}
+                            -
+                        {% elseif versusGuilde[guilde.code][foe.code]['total'] == null %}
+                            No data
                         {% else %}
                             {{((versusGuilde[guilde.code][foe.code]['wins']/versusGuilde[guilde.code][foe.code]['total'])*100)|round(1)}}% ({{versusGuilde[guilde.code][foe.code]['wins']}}/{{versusGuilde[guilde.code][foe.code]['total']}})
                         {% endif %}
