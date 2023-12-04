@@ -64,18 +64,18 @@
                     <td><a href="{{ path('app_zits_joueur_detail', {'joueurId' : joueur.id}) }}">{{joueur.nom}}</a></td>
                     <td>
                         {% if joueurGames[joueur.id][1] is not empty %}
-                            {% for tournament in joueurGames[joueur.id][1][0] %}
-                                <img src="{{asset('images/cup_1.png')}}" title="{{tournament}}" style="max-width:30px;vertical-align: middle;"/>
+                            {% for tournament in joueurGames[joueur.id][1] %}
+                                <img src="{{asset('images/cup_1.png')}}" title="{{tournament['nom']}}" style="max-width:30px;vertical-align: middle;"/>
                             {% endfor %}
                         {% endif %}
                         {% if joueurGames[joueur.id][2] is not empty %}
-                            {% for tournament in joueurGames[joueur.id][2][0] %}
-                                <img src="{{asset('images/cup_2.png')}}" title="{{tournament}}" style="max-width:30px;vertical-align: middle;"/>
+                            {% for tournament in joueurGames[joueur.id][2] %}
+                                <img src="{{asset('images/cup_2.png')}}" title="{{tournament['nom']}}" style="max-width:30px;vertical-align: middle;"/>
                             {% endfor %}
                         {% endif %}
                         {% if joueurGames[joueur.id][3] is not empty %}
-                            {% for tournament in joueurGames[joueur.id][3][0] %}
-                                <img src="{{asset('images/cup_3.png')}}" title="{{tournament}}" style="max-width:30px;vertical-align: middle;"/>
+                            {% for tournament in joueurGames[joueur.id][3] %}
+                                <img src="{{asset('images/cup_3.png')}}" title="{{tournament['nom']}}" style="max-width:30px;vertical-align: middle;"/>
                             {% endfor %}
                         {% endif %}
                     </td>
