@@ -228,16 +228,34 @@ class GameRepository extends ServiceEntityRepository
             $query->andWhere('j1.id =:joueur2 or j2.id =:joueur2')
                 ->setParameter('joueur2', $parameters['joueur2']->getId());
         }
-       
-       
-        if (isset($parameters['guilde']) && $parameters['guilde'] != null) {
-            $query->andWhere('g1.id =:guilde or g2.id =:guilde')
-                ->setParameter('guilde', $parameters['guilde']->getId());
+        
+        $guilde1 = null;
+        $guilde2 = null;
+
+        if(isset($parameters['guilde']) && $parameters['guilde'] != null){
+            $guilde1 = $parameters['guilde']->getId();
         }
-        if (isset($parameters['guilde2']) && $parameters['guilde2'] != null) {
-            $query->andWhere('g1.id =:guilde2 or g2.id =:guilde2')
-                ->setParameter('guilde2', $parameters['guilde2']->getId());
+        if(isset($parameters['guilde2']) && $parameters['guilde2'] != null){
+            $guilde2 = $parameters['guilde2']->getId();
         }
+        //Cas des matchs mirrois
+        if($guilde1 != null && $guilde2 != null && $guilde1 == $guilde2){
+            $query->andWhere('(g1.id =:guilde and g2.id =:guilde2) or (g2.id =:guilde and g1.id =:guilde2)')
+            ->setParameter('guilde', $guilde1)
+            ->setParameter('guilde2', $guilde2);
+        }
+        //Autres cas
+        else{
+            if ($guilde1 != null) {
+                $query->andWhere('g1.id =:guilde or g2.id =:guilde')
+                    ->setParameter('guilde', $guilde1);
+            }
+            if ($guilde2 != null) {
+                $query->andWhere('g1.id =:guilde2 or g2.id =:guilde2')
+                    ->setParameter('guilde2', $guilde2);
+            }
+        }
+        
         if(isset($parameters['ronde']) && $parameters['ronde'] != null){
             $query->andWhere('g.ronde =:ronde')
             ->setParameter('ronde', $parameters['ronde']);
@@ -272,6 +290,22 @@ class GameRepository extends ServiceEntityRepository
             ->setParameter('guilde', $guilde->getId())
             ->setParameter('foe', $foe->getId());
         $result['wins'] =  $query->getQuery()->getSingleScalarResult();
+        $query = $this->createQueryBuilder('g')
+            ->select("count(g.id)")
+            ->join("g.belligerant1", "b1") 
+            ->join("g.belligerant2", "b2")
+            ->join("b1.joueur", "j1")
+            ->join("b2.joueur", "j2")
+            ->join("g.tournoi", "t") 
+            ->join("b1.compo", "c1")
+            ->join("b2.compo", "c2")
+            ->join("c1.guilde", "g1")
+            ->join("c2.guilde", "g2")
+            ->andWhere('(g1.id =:guilde and g2.id =:foe) or (g2.id =:guilde and g1.id =:foe)')
+            ->andWhere('g.vainqueur is null')
+            ->setParameter('guilde', $guilde->getId())
+            ->setParameter('foe', $foe->getId());
+        $result['ties'] =  $query->getQuery()->getSingleScalarResult();
         $query = $this->createQueryBuilder('g')
             ->select("count(g.id)")
             ->join("g.belligerant1", "b1") 

@@ -40,6 +40,7 @@ class StatsGuildeController extends AbstractController
                 $result = $this->entityManager->getRepository(Game::class)->countGamesAgainstGuilde($guilde, $foe);
                 $versusGuilde[$guilde->getCode()][$foe->getCode()]['wins'] = $result['wins'];
                 $versusGuilde[$guilde->getCode()][$foe->getCode()]['total'] = $result['total'];
+                $versusGuilde[$guilde->getCode()][$foe->getCode()]['ties'] = $result['ties'];
 
                 foreach ($missionCombats as $mission){
                     $result = $this->entityManager->getRepository(Game::class)->countGamesWithMissionCombat($guilde,$mission);

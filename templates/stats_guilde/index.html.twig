@@ -29,7 +29,7 @@
         {% endfor %}
     <table>
 
-    <h2>Winrate versus</h2>
+    <h2>Winrate versus (égalité = victoire pour ces stats)</h2>
 
     <table class="versusTable">
          <tr>
@@ -57,7 +57,7 @@
                         {% elseif versusGuilde[guilde.code][foe.code]['total'] == null %}
                             No data
                         {% else %}
-                            {{((versusGuilde[guilde.code][foe.code]['wins']/versusGuilde[guilde.code][foe.code]['total'])*100)|round(1)}}% ({{versusGuilde[guilde.code][foe.code]['wins']}}/{{versusGuilde[guilde.code][foe.code]['total']}})
+                            {{(((versusGuilde[guilde.code][foe.code]['wins']+versusGuilde[guilde.code][foe.code]['ties'])/versusGuilde[guilde.code][foe.code]['total'])*100)|round(1)}}% ({{(versusGuilde[guilde.code][foe.code]['wins']+versusGuilde[guilde.code][foe.code]['ties'])}}/{{versusGuilde[guilde.code][foe.code]['total']}})
                         {% endif %}
                         
                     </td>
