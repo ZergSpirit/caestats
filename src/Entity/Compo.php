@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CompoRepository::class)]
 class Compo
 {
@@ -22,8 +23,8 @@ class Compo
     #[ORM\JoinColumn(nullable: false)]
     private ?Guilde $guilde = null;
 
-    #[ORM\OneToMany(mappedBy: 'compo', targetEntity: Belligerant::class)]
-    private Collection $belligerants;
+    #[ORM\OneToOne(mappedBy: 'compo', targetEntity: Belligerant::class)]
+    private Belligerant $belligerant;
 
     #[ORM\Column(length: 255,nullable: true)]
     private ?string $code = null;
@@ -31,10 +32,26 @@ class Compo
     #[ORM\Column]
     private bool $noStats = false;
 
+    #[ORM\PreUpdate]
+    public function setCurrentCodeValue_update(): void
+    {
+        $this->updateCode();
+    }
+    #[ORM\PrePersist]
+    public function setCurrentCodeValue_persist(): void
+    {
+        $this->updateCode();
+    }
+
+    private function updateCode(){
+        $arrayCompo = $this->getPersonnages()->toArray();
+        usort($arrayCompo, fn($a, $b) => strcmp($a, $b));
+        $this->setCode(strtoupper($this->getGuilde()->getCode().'_'.implode('-', $arrayCompo)));
+    }
+
     public function __construct()
     {
         $this->personnages = new ArrayCollection();
-        $this->belligerants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -78,36 +95,6 @@ class Compo
         return $this;
     }
 
-    /**
-     * @return Collection<int, Belligerant>
-     */
-    public function getBelligerants(): Collection
-    {
-        return $this->belligerants;
-    }
-
-    public function addBelligerant(Belligerant $belligerant): static
-    {
-        if (!$this->belligerants->contains($belligerant)) {
-            $this->belligerants->add($belligerant);
-            $belligerant->setCompo($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBelligerant(Belligerant $belligerant): static
-    {
-        if ($this->belligerants->removeElement($belligerant)) {
-            // set the owning side to null (unless already changed)
-            if ($belligerant->getCompo() === $this) {
-                $belligerant->setCompo(null);
-            }
-        }
-
-        return $this;
-    }
-
 
     /**
      * Get the value of code
@@ -135,6 +122,25 @@ class Compo
     public function setNoStats(bool $noStats): static
     {
         $this->noStats = $noStats;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of belligerant
+     */
+    public function getBelligerant(): Belligerant
+    {
+        return $this->belligerant;
+    }
+
+    /**
+     * Set the value of belligerant
+     */
+    public function setBelligerant(Belligerant $belligerant): self
+    {
+        $this->belligerant = $belligerant;
 
         return $this;
     }

@@ -28,7 +28,7 @@ class Rank
     #[ORM\Column(nullable: true)]
     private ?float $ratio = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable:true)]
     private ?int $zitsEarned = null;
 
     public function getId(): ?int

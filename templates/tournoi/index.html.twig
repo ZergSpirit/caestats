@@ -3,11 +3,14 @@
 {% block pageJavascripts %}
     <script type="application/javascript">
         $(window).on('load',function(){
-            $("#tabs").tabs();
+            $("#tabs").tabs({
+            load: function(event, ui) { showCompo(); }
+            });
 
             $('#addJoueur').click(function(){
                 var joueurOption = $('#joueurSelect').children(':selected');
                 var guildeOption = $('#guildeSelect').children(':selected');
+                var spanNbJoueur = $('#nbJoueur');
                 if($('#joueurListe').children('li[data-joueur-id='+joueurOption.val()+']').length > 0){
                     return;
                 }
@@ -16,18 +19,85 @@
                 li.attr('data-joueur-id',joueurOption.val());
                 li.append('<input type="hidden" name="belligerants[]" value="'+joueurOption.val()+'-'+guildeOption.val()+'"/>');
                 $('#joueurListe').append(li);
+                var nbJoueur = $('#nbJoueur').html();
+                if(nbJoueur == ''){
+                    $('#nbJoueur').html('1');
+                }
+                else{
+                    nbJoueur++;
+                    $('#nbJoueur').html(nbJoueur);
+                }
                 return false;
             });
+
+            $(document).on('click','.img-perso', function(){
+                var _this = $(this);
+                var option = $('option[data-option-id='+_this.attr('data-option-id')+']');
+                if(option.is(':selected')){
+                    option.prop('selected',false);
+                    _this.css('opacity','0.33');
+                }
+                else{
+                    option.prop('selected',true);
+                    _this.css('opacity','1');
+                }
+            });
+
+
         });
         $(document).on('click','.delJoueur',function(){
             var _this = $(this);
             _this.parent('li').remove();
+            var spanNbJoueur = $('#nbJoueur');
+            var nbJoueur = $('#nbJoueur').html();
+                if(nbJoueur == '1'){
+                    $('#nbJoueur').html('');
+                }
+                else{
+                    nbJoueur--;
+                    $('#nbJoueur').html(nbJoueur);
+                }
         });
+
+        var showCompo = function(){
+            $.each($('.personnagesJoueur'), function(index,iter){
+                var _this = $(this);
+                $.ajax({
+                    url : "/personnages?guildeId="+_this.attr('data-guilde-id'),
+                    success : function(data, textStatus, jqXHR){
+                            _this.html('');
+                            var select = $("#"+_this.attr("data-select-id"));
+                            select.html('');
+                            var belligerantId = _this.attr("data-belligerant-id");
+                            $.each(JSON.parse(data),function(index, iter){
+                                _this.append("<img src='/images/personnages/"+iter.code+".png' style='max-width:40px;opacity:0.33' class='img-perso' data-option-id='"+belligerantId+"_"+iter.id+"'/>");
+                                select.append("<option data-option-id='"+belligerantId+"_"+iter.id+"' value='"+iter.id+"'>"+iter.nom+"</option>");
+                            });
+                            loadSelection(belligerantId);
+                        }
+                });
+            });
+
+            loadSelection();
+
+        }
+
+        var loadSelection = function(belligerantId) {
+            for (var key in arrayBelligerant) {
+                var belligerant = arrayBelligerant[key].idBelligerant;
+                if(belligerantId == belligerant){
+                    arrayBelligerant[key].personnages.forEach(function(item, index, array){
+                        $("img[data-option-id="+belligerant+"_"+item+"]").click();
+                    })
+                }
+            }
+        };
+
     </script>
 {% endblock %}
 
 
-{% block title %}Hello TournoiController!{% endblock %}
+{% block title %}Gestion de tournoi{% endblock %}
 
 {% block body %}
 
@@ -47,7 +117,7 @@
                     <h3>Info sur le tournoi</h3>
                     {{ form_row(form.id) }} 
                     {{ form_row(form.useSeeds) }} 
-                    <h4>Joueurs<h4>
+                    <h4>Joueurs (<span id="nbJoueur"></span>)<h4>
                     Ajouter:
                     <select id="joueurSelect">
                         {% for joueur in joueurs %}
@@ -74,7 +144,7 @@
                Joueurs:
                <ul>
                     {% for joueur in dto.joueurs %}
-                        <li>{{joueur.nom}} ({{joueur.zits == null? 0 : joueur.zits}})
+                        <li>({{dto.joueurCountGames[joueur.id]['totalWins']}} - {{dto.joueurCountGames[joueur.id]['ties']}} / {{dto.joueurCountGames[joueur.id]['total']}}){{joueur.nom}} ({{joueur.zits == null? 0 : joueur.zits}})
                     {% endfor %}
                </ul>
                {{rondes|last['ronde']}} rondes

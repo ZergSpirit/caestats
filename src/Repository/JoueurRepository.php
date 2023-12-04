@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Joueur;
+use App\Entity\Tournoi;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,15 @@ class JoueurRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Joueur::class);
+    }
+
+    public function findJoueursInTournament(Tournoi $tournoi){
+        return $this->createQueryBuilder('j')
+                    ->innerJoin("j.ranks","r")
+                    ->innerJoin("r.tournoi" ,"t")
+                   ->where('t.id =:tournoi')
+                   ->setParameter("tournoi",$tournoi->getId())
+                   ->getQuery()->getResult();
     }
 
     public function resetAllZits(){

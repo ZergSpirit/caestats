@@ -1,7 +1,78 @@
-<ul>
-{% for game in games %}
-    <li>{{game.belligerant1.joueur.nom}} vs {{game.belligerant2.joueur.nom}}</li>
-{% endfor %}
-</ul>
+<script type="application/javascript">
+ var arrayBelligerant=[
+  {% for game in games %}
+        {
+            idBelligerant:{{game.belligerant1.id}}, personnages:[{% for personnage in game.belligerant1.compo.personnages%}{{personnage.id}}, {% endfor %}]
+        },
+        {
+            idBelligerant:{{game.belligerant2.id}}, personnages:[{% for personnage in game.belligerant2.compo.personnages%}{{personnage.id}}, {% endfor %}]
+        },
+       
+  {% endfor %}
+   ];
 
+</script>
+
+<form method="post" action="{{ path('app_tournoi_post_ronde', {'tournoiId' : tournoi.id, 'ronde' : ronde} ) }}">
+    <input type="hidden" name="tournoiId" value="{{tournoi.id}}" />
+    <input type="hidden" name="ronde" value="{{ronde}}" />
+    {% for game in games %}
+        <table class="versusTable">
+            <tr>
+                <td>
+                    {{game.belligerant1.joueur.nom}}<img src="{{asset('images/guilde/'~game.belligerant1.compo.guilde.code~'.png')}}" title="{{game.belligerant1.compo.guilde.nom}}" style="max-width:50px;" />
+                </td>
+                <td>
+                    {{game.belligerant2.joueur.nom}}<img src="{{asset('images/guilde/'~game.belligerant2.compo.guilde.code~'.png')}}" title="{{game.belligerant2.compo.guilde.nom}}" style="max-width:50px;" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="personnagesJoueur" data-belligerant-id="{{game.belligerant1.id}}" data-guilde-id="{{game.belligerant1.compo.guilde.id}}" data-select-id="games_{{loop.index}}_belligerant1Personnages" style="display: inline-block;width:100%;height:58px;"></div>
+                    <select id="games_{{loop.index}}_belligerant1Personnages" name="belligerant{{game.belligerant1.id}}Personnages[]" multiple="multiple" style="display:none"></select>
+                </td>
+                <td>
+                    <div class="personnagesJoueur" data-belligerant-id="{{game.belligerant2.id}}" data-guilde-id="{{game.belligerant2.compo.guilde.id}}" data-select-id="games_{{loop.index}}_belligerant2Personnages" style="display: inline-block;width:100%;height:58px;"></div>
+                    <select id="games_{{loop.index}}_belligerant2Personnages" name="belligerant{{game.belligerant2.id}}Personnages[]" multiple="multiple" style="display:none"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="games[{{loop.index}}].belligerant1Score" type="text" name="belligerant{{game.belligerant1.id}}Score" value="{{game.belligerant1.score}}" />
+                </td>
+                 <td>
+                    <input id="games[{{loop.index}}].belligerant2Score" type="text" name="belligerant{{game.belligerant2.id}}Score" value="{{game.belligerant2.score}}" />
+                </td>
+            </tr>
+        </table>
+    {% endfor %}
+
+    <input type="submit" value="Enregistrer" />
+
+
+<br/>
+{% if leftOutPlayer != null %}
+    Joueur sans adversaire cette ronde : {{leftOutPlayer.nom}}
+{% endif %}
+<br/>
+
+    <h3>Nouvelle ronde</h3>
+    <label for="missionControle">Mission de controle</label>
+    <select id="missionControle" name="missionControleId">
+        {% for missionControle in missionControles %}
+            <option value="{{missionControle.id}}">{{missionControle.Nom}}</option>
+        {% endfor %}
+    </select>
+    <br/>
+    <label for="missionCombat">Mission de combat</label>
+    <select id="missionCombat" name="missionCombatId">
+        {% for missionCombat in missionCombats %}
+            <option value="{{missionCombat.id}}">{{missionCombat.Nom}}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Créer la nouvelle ronde" />
+</form>
+<br/>
 <a href="{{ path('app_tournoi_ronde_delete', {'tournoiId' : tournoi.id, 'ronde' : ronde}) }}" style="text-decoration:none;">Supprimer la ronde</a>
+<br/>
+<a href="{{ path('app_tournoi_ronde_reshuffle', {'tournoiId' : tournoi.id, 'ronde' : ronde}) }}" style="text-decoration:none;">Recalculer la ronde</a>

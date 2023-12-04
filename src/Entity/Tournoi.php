@@ -32,7 +32,7 @@ class Tournoi
     #[ORM\Column(nullable: false)]
     private ?bool $online = null;
 
-    #[ORM\OneToMany(mappedBy: 'tournoi', targetEntity: Rank::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'tournoi', targetEntity: Rank::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     #[OrderBy(["position" => "ASC"])]
     private Collection $ranks;
 
@@ -59,6 +59,9 @@ class Tournoi
 
     #[ORM\Column]
     private ?bool $useSeeds = false;
+
+    #[ORM\Column]
+    private ?bool $finished = false;
 
     public function __construct()
     {
@@ -292,6 +295,18 @@ class Tournoi
     public function setUseSeeds(bool $useSeeds): static
     {
         $this->useSeeds = $useSeeds;
+
+        return $this;
+    }
+
+    public function isFinished(): ?bool
+    {
+        return $this->finished;
+    }
+
+    public function setFinished(bool $finished): static
+    {
+        $this->finished = $finished;
 
         return $this;
     }

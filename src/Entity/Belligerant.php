@@ -17,7 +17,7 @@ class Belligerant
     #[ORM\JoinColumn(nullable: false)]
     private ?Joueur $joueur = null;
 
-    #[ORM\ManyToOne(inversedBy: 'belligerants', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'belligerant', orphanRemoval: true, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Compo $compo = null;
 
@@ -32,7 +32,6 @@ class Belligerant
         if($guilde != null){
             $compo = new Compo();
             $compo->setGuilde($guilde);
-            $compo->addBelligerant($this);
             $this->setCompo($compo);
         }
     }

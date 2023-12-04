@@ -80,6 +80,7 @@ class ZitsController extends AbstractController
             $i++;
         }   
         $tournoi->setNbParticipants($i);
+        $tournoi->setFinished(true);
         $this->entityManager->getRepository(Tournoi::class)->save($tournoi);
 
         return $this->redirect('/zits');

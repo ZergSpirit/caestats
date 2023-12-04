@@ -11,10 +11,11 @@ class TournoiDTO
 
     private ?int $id = null;
     private ?bool $useSeeds = null;
-    private ArrayCollection $joueurs;
+    private ?ArrayCollection $joueurs = null;
     private ?bool $rixe = null;
     private ?MissionControle $missionControle = null;
     private ?MissionCombat $missionCombat = null;
+    private ?array $joueurCountGames = null; 
 
 
     public function __construct(?Tournoi $tournoi = null){
@@ -23,14 +24,12 @@ class TournoiDTO
         }
         $this->setId($tournoi->getId());
         $joueurCollection = new ArrayCollection();
-        foreach($tournoi->getGames() as $game){
-            if($game->getRonde() == 1){
-                $joueurCollection->add($game->getBelligerant1()->getJoueur());
-                $joueurCollection->add($game->getBelligerant2()->getJoueur());
-            }
+        foreach($tournoi->getRanks() as $rank){
+            $joueurCollection->add($rank->getJoueur());
         }
         $this->setJoueurs($joueurCollection);
         $this->setUseSeeds($tournoi->isUseSeeds());
+
     }
 
     /**
@@ -73,7 +72,7 @@ class TournoiDTO
     /**
      * Get the value of joueurs
      */
-    public function getJoueurs(): ArrayCollection
+    public function getJoueurs(): ?ArrayCollection
     {
         return $this->joueurs;
     }
@@ -81,7 +80,7 @@ class TournoiDTO
     /**
      * Set the value of joueurs
      */
-    public function setJoueurs(ArrayCollection $joueurs): self
+    public function setJoueurs(?ArrayCollection $joueurs): self
     {
         $this->joueurs = $joueurs;
 
@@ -138,6 +137,24 @@ class TournoiDTO
     public function setMissionControle(?MissionControle $missionControle): self
     {
         $this->missionControle = $missionControle;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of joueurCountGames
+     */
+    public function getJoueurCountGames(): ?array
+    {
+        return $this->joueurCountGames;
+    }
+
+    /**
+     * Set the value of joueurCountGames
+     */
+    public function setJoueurCountGames(?array $joueurCountGames): self
+    {
+        $this->joueurCountGames = $joueurCountGames;
 
         return $this;
     }

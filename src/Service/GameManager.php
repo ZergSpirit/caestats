@@ -88,9 +88,6 @@ class GameManager
         if ($data->getPersonnage5Joueur1() != null) {
             $game->getBelligerant1()->getCompo()->addPersonnage($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage5Joueur1()));
         }
-        $arrayCompo1 = $game->getBelligerant1()->getCompo()->getPersonnages()->toArray();
-        usort($arrayCompo1, fn($a,$b) => strcmp($a, $b));
-        $game->getBelligerant1()->getCompo()->setCode(strtoupper($game->getBelligerant1()->getCompo()->getGuilde()->getCode().'_'.implode('-', $arrayCompo1)));
 
         $game->getBelligerant2()->setJoueur($this->entityManager->getRepository(Joueur::class)->find($data->getJoueur2()));
         $game->getBelligerant2()->setScore($data->getScoreJoueur2());
@@ -109,9 +106,6 @@ class GameManager
         if ($data->getPersonnage5Joueur2() != null) {
             $game->getBelligerant2()->getCompo()->addPersonnage($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage5Joueur2()));
         }
-        $arrayCompo2 = $game->getBelligerant2()->getCompo()->getPersonnages()->toArray();
-        usort($arrayCompo2, fn($a, $b) => strcmp($a, $b));
-        $game->getBelligerant2()->getCompo()->setCode(strtoupper($game->getBelligerant2()->getCompo()->getGuilde()->getCode().'_'.implode('-', $arrayCompo2)));
 
         $game->setMissionCombat($this->entityManager->getRepository(MissionCombat::class)->find($data->getMissionCombat()));
         $game->setMissionControle($this->entityManager->getRepository(MissionControle::class)->find($data->getMissionControle()));

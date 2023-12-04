@@ -44,38 +44,74 @@ class GameRepository extends ServiceEntityRepository
             ->setParameter('ids',$ids)->getQuery()->execute();
     }
 
+    public function findGames($tournoi, $ronde){
+
+        return $this->createQueryBuilder('g')
+            ->innerJoin('g.tournoi','t')               
+            ->andWhere('t.id = :tournoi')
+            ->andWhere('g.ronde =:ronde')
+            ->setParameter('tournoi', $tournoi->getId())
+            ->setParameter('ronde',$ronde)->getQuery()->getResult();
+    }
+
      /**
     * @return Returns un array avec le nombre de victoire, le nombre de game et la dernière game
      */
-    public function countGames(Joueur $joueur)
+    public function countGames(Joueur $joueur, ?Tournoi $tournoi = null)
     {
         
         $countGames = [];
 
-        $countGames['total'] = $this->createQueryBuilder('g')
-                                ->select('count(g.id)')
-                                ->innerJoin("g.belligerant1","b1")
-                                ->innerJoin("g.belligerant2","b2")
-                                ->innerJoin("b1.joueur", "j1")
-                                ->innerJoin("b2.joueur", "j2")
-                                ->innerJoin("g.tournoi", "t")
-                                ->andWhere("j1.id = :joueur or j2.id =:joueur")
-                                ->andWhere("t.notRanked = false")
-                                ->setParameter("joueur", $joueur->getId())
-                                ->getQuery()->getSingleScalarResult();
+        $query = $this->createQueryBuilder('g')
+            ->select('count(g.id)')
+            ->innerJoin("g.belligerant1","b1")
+            ->innerJoin("g.belligerant2","b2")
+            ->innerJoin("b1.joueur", "j1")
+            ->innerJoin("b2.joueur", "j2")
+            ->innerJoin("g.tournoi", "t")
+            ->andWhere("j1.id = :joueur or j2.id =:joueur")
+            ->andWhere("t.notRanked = false")
+            ->setParameter("joueur", $joueur->getId());
+        if($tournoi != null){
+            $query->andWhere("t.id =:tournoi")
+                ->setParameter("tournoi",$tournoi->getId());
+        }
+        $countGames['total'] = $query->getQuery()->getSingleScalarResult();
 
-        $countGames['totalWins'] = $this->createQueryBuilder('g')
-                                    ->select('count(g.id)')
-                                    ->innerJoin("g.belligerant1","b1")
-                                    ->innerJoin("g.belligerant2","b2")
-                                    ->innerJoin("b1.joueur", "j1")
-                                    ->innerJoin("b2.joueur", "j2")
-                                    ->innerJoin("g.tournoi", "t")
-                                    ->andWhere("j1.id = :joueur or j2.id =:joueur")
-                                    ->andWhere("(b1.vainqueur = true and j1.id = :joueur) or (b2.vainqueur=true and j2.id =:joueur)")
-                                    ->andWhere("t.notRanked = false")
-                                    ->setParameter("joueur", $joueur->getId())
-                                    ->getQuery()->getSingleScalarResult();
+        $query = $this->createQueryBuilder('g')
+                ->select('count(g.id)')
+                ->innerJoin("g.belligerant1","b1")
+                ->innerJoin("g.belligerant2","b2")
+                ->innerJoin("b1.joueur", "j1")
+                ->innerJoin("b2.joueur", "j2")
+                ->innerJoin("g.tournoi", "t")
+                ->andWhere("j1.id = :joueur or j2.id =:joueur")
+                ->andWhere("(b1.vainqueur = true and j1.id = :joueur) or (b2.vainqueur=true and j2.id =:joueur)")
+                ->andWhere("t.notRanked = false")
+                ->setParameter("joueur", $joueur->getId());
+        if($tournoi != null){
+            $query->andWhere("t.id =:tournoi")
+                ->setParameter("tournoi",$tournoi->getId());
+        }
+        $countGames['totalWins'] = $query->getQuery()->getSingleScalarResult();
+
+        $query = $this->createQueryBuilder('g')
+                        ->select('count(g.id)')
+                        ->innerJoin("g.belligerant1", "b1")
+                        ->innerJoin("g.belligerant2", "b2")
+                        ->innerJoin("b1.joueur", "j1")
+                        ->innerJoin("b2.joueur", "j2")
+                        ->innerJoin("g.tournoi", "t")
+                        ->andWhere('j1.id =:joueur or j2.id =:joueur')
+                        ->andWhere('g.vainqueur is null')
+                        ->setParameter("joueur", $joueur->getId())
+                        ->orderBy("g.date", "desc");
+        if($tournoi != null){
+            $query->andWhere("t.id =:tournoi")
+                ->setParameter("tournoi",$tournoi->getId());
+        }
+
+        $countGames['ties'] = $query->getQuery()->getSingleScalarResult();
 
 
         return $countGames;

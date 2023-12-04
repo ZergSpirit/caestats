@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Joueur;
 use App\Entity\Rank;
+use App\Entity\Tournoi;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -20,6 +21,20 @@ class RankRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Rank::class);
+    }
+
+    public function deleteRanks(Tournoi $tournoi){
+
+        $ids = $this->createQueryBuilder('r')
+        ->select('r.id')
+        ->innerJoin('r.tournoi','t')               
+        ->andWhere('t.id = :tournoi')
+        ->setParameter('tournoi', $tournoi->getId())->getQuery()->getResult();
+
+        $this->getEntityManager()->createQueryBuilder()
+        ->delete('App\Entity\Rank', 'r') 
+        ->andWhere('r.id in(:ids)')
+        ->setParameter('ids',$ids)->getQuery()->execute();
     }
 
     public function findAllActiveRanks(Joueur $joueur){

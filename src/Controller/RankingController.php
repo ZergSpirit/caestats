@@ -46,6 +46,7 @@ class RankingController extends AbstractController
         }
         $joueursRankedZits = $this->entityManager->getRepository(Joueur::class)->findAllSortedByZitsRanking();
 
+
         return $this->render('ranking/index.html.twig', [
             'controller_name' => 'RankingController',
             'joueursRanked' => $joueurRanked,

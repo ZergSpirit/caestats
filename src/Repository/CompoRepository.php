@@ -22,6 +22,12 @@ class CompoRepository extends ServiceEntityRepository
         parent::__construct($registry, Compo::class);
     }
 
+    public function save(Compo $compo)
+    {
+        $this->getEntityManager()->persist($compo);
+        $this->getEntityManager()->flush($compo);
+    }
+
     public function countPersonnageByGuilde(Guilde $guilde)
     {
         return  $this->createQueryBuilder('c')

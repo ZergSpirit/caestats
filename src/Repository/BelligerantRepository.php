@@ -22,7 +22,13 @@ class BelligerantRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Belligerant::class);
     }
-   
+    
+    public function save(Belligerant $belligerant)
+    {
+        $this->getEntityManager()->persist($belligerant);
+        $this->getEntityManager()->flush($belligerant);
+    }
+
     public function countAll(){
         return $this->createQueryBuilder('b')
                 ->select('count(b.id)')

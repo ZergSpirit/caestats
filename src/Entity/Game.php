@@ -20,11 +20,11 @@ class Game
     #[ORM\ManyToOne(inversedBy: 'games')]
     private ?Tournoi $tournoi = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(orphanRemoval: true, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Belligerant $belligerant1 = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(orphanRemoval: true, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Belligerant $belligerant2 = null;
 

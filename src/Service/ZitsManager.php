@@ -28,7 +28,9 @@ class ZitsManager
     }
 
     public function createZits(Tournoi $tournoi, bool $fadePreviousTournois){
-        if ($tournoi->getRanks() == null || $tournoi->getRanks()->count() == 0 || $tournoi->isNotRanked()) {
+        if ($tournoi->getRanks() == null || $tournoi->getRanks()->count() == 0 || $tournoi->isNotRanked() || !$tournoi->isFinished()) {
+            $tournoi->setZitsCote(null);
+            $this->entityManager->getRepository(Tournoi::class)->save($tournoi);
             return;
         }
         //On fade tous les autres tournois à date de celui-ci. En effet, la cote du tournoi hors Fade ne doit jamais bouger dans le temps.
