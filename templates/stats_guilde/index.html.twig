@@ -29,7 +29,7 @@
         {% endfor %}
     <table>
 
-    <h2>Winrate versus (égalité = victoire pour ces stats)</h2>
+    <h2>Winrate versus</h2>
 
     <table class="versusTable">
          <tr>
@@ -57,7 +57,7 @@
                         {% elseif versusGuilde[guilde.code][foe.code]['total'] == null %}
                             No data
                         {% else %}
-                            {{(((versusGuilde[guilde.code][foe.code]['wins']+versusGuilde[guilde.code][foe.code]['ties'])/versusGuilde[guilde.code][foe.code]['total'])*100)|round(1)}}% ({{(versusGuilde[guilde.code][foe.code]['wins']+versusGuilde[guilde.code][foe.code]['ties'])}}/{{versusGuilde[guilde.code][foe.code]['total']}})
+                            {{((versusGuilde[guilde.code][foe.code]['wins']/(versusGuilde[guilde.code][foe.code]['total']-versusGuilde[guilde.code][foe.code]['ties']))*100)|round(1)}}% ({{versusGuilde[guilde.code][foe.code]['wins']}}/{{(versusGuilde[guilde.code][foe.code]['total']-versusGuilde[guilde.code][foe.code]['ties'])}})
                         {% endif %}
                         
                     </td>
@@ -67,6 +67,9 @@
          
 
     </table>
+    <div style="font-size:0.7em;font-style:italic;">
+        Les égalités ne sont pas comptées pour ces stats. Donc si la guilde A vs guilde B = 7 victoires chacun et 4 nuls, les deux guildes auront 50% de winrate chaucun.
+    </div>
 
     <h2>Winrate mission de combat</h2>
     <table class="versusTable">
