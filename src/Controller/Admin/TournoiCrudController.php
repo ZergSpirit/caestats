@@ -27,6 +27,7 @@ class TournoiCrudController extends AbstractCrudController
             TextField::new('ville'),
             BooleanField::new('online'),
             IntegerField::new('nbParticipants'),
+            BooleanField::new('finished'),
             BooleanField::new('notRanked'),
             BooleanField::new('managedByCaestats')
         ];
