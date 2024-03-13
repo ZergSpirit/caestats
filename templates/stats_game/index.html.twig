@@ -182,7 +182,8 @@
                     {% if game.ronde != null %}{{game.ronde}}{% else %}N/A{% endif %}
                 </td>
                 <td>
-                    <div>
+                    <div style="text-align:left;">
+                        {{game.belligerant1.score}} 
                         <a href="{{ path('app_stats_game', {'joueurId' : game.belligerant1.joueur.id}) }}">{{game.belligerant1.joueur.nom}}</a>
                         {% if game.vainqueur != null and game.belligerant1.joueur.id == game.vainqueur.id %}
                             <img src="{{asset('images/award-symbol.png')}}" title="Winner" style="max-width:20px;"/>
@@ -245,8 +246,10 @@
             </tr>
             <tr style="{% if loop.index % 2 == 0 %}background-color:rgb(40, 135, 140,0.5);{% else %}background-color:rgb(210, 149, 50,0.5);{% endif %}">
                 <td>
-                   <div>
+                   <div style="text-align:left;">
+                        {{game.belligerant2.score}}
                         <a href="{{ path('app_stats_game', {'joueurId' : game.belligerant2.joueur.id}) }}">{{game.belligerant2.joueur.nom}}</a>
+                        
                         {% if game.vainqueur != null and game.belligerant2.joueur.id == game.vainqueur.id %}
                             <img src="{{asset('images/award-symbol.png')}}" title="Winner" style="max-width:20px;"/>
                         {% endif %}
