@@ -466,7 +466,8 @@ class GameRepository extends ServiceEntityRepository
                    ->join("g.tournoi", "t") 
                    ->andWhere('g.tournoi IS NOT NULL')
                    ->andWhere('t.notRanked = false')
-                   ->orderBy('g.date')
+                   ->addOrderBy('g.date')
+                   ->addOrderBy('g.ronde', 'asc')
                    ->getQuery()->getResult();
     }
 
