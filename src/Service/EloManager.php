@@ -6,6 +6,7 @@ use App\Entity\EloLog;
 use App\Entity\Game;
 use App\Entity\Joueur;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Zelenin\Elo\Player;
 
 class EloManager
@@ -16,13 +17,14 @@ class EloManager
     /**
      * Construct avec injection
      */
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager, private LoggerInterface $logger)
     {
         
     }
 
     public function processMatch(Game $game)
     {   
+        $this->logger->info("processMatch game: ".$game->getId());
         if ($game->getTournoi() != null) {
             if($game->getBelligerant1()->getScore() == $game->getBelligerant2()->getScore()){
                 $joueurWinner = null;
@@ -34,10 +36,12 @@ class EloManager
             $joueur2 = $game->getBelligerant2()->getJoueur();
         } 
         else {
+            $this->logger->info("processMatch fini, pas de tournoi ");
             return;
         }
 
         if($game->getBelligerant1()->getScore() == null || $game->getBelligerant2()->getScore() == null ){
+            $this->logger->info("processMatch fini, score manquant");
             return;
         }
 
