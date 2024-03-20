@@ -25,8 +25,8 @@ class EloManager
     public function processMatch(Game $game)
     {   
         $this->logger->info("processMatch game: ".$game->getId());
-        if ($game->getTournoi() != null) {
-            if($game->getBelligerant1()->getScore() == $game->getBelligerant2()->getScore()){
+        if ($game->getTournoi() !== null) {
+            if($game->getBelligerant1()->getScore() === $game->getBelligerant2()->getScore()){
                 $joueurWinner = null;
             }
             else {
@@ -45,20 +45,20 @@ class EloManager
             return;
         }
 
-        if ($joueur1->getElo() == null) {
+        if ($joueur1->getElo() === null) {
             $joueur1->setElo($this->STARTING_ELO);
         }
-        if ($joueur2->getElo() == null) {
+        if ($joueur2->getElo() === null) {
             $joueur2->setElo($this->STARTING_ELO);
         }
 
         $player1 = new Player($joueur1->getElo());
         $player2 = new Player($joueur2->getElo());
         $match = new EloMatch($player1, $player2);
-        if ($joueurWinner == null) {
+        if ($joueurWinner === null) {
             $match->setScore(0.5, 0.5);
         }
-        else if ($joueurWinner->getId() == $joueur1->getId()) {
+        else if ($joueurWinner->getId() === $joueur1->getId()) {
             $match->setScore(1, 0);
         } 
         else {

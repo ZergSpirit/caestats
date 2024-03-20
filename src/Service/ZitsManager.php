@@ -63,7 +63,7 @@ class ZitsManager
             $rank->setRatio($ratio);
             $this->entityManager->getRepository(Rank::class)->save($rank);
             $joueur = $rank->getJoueur();
-            if($joueur->getZits() == null){
+            if($joueur->getZits() === null){
                 $joueur->setZits(0);
             }
             $zitsEarned = round($rank->getRatio() * $tournoi->getZitsCote());
@@ -85,14 +85,14 @@ class ZitsManager
         }
         foreach ($this->entityManager->getRepository(Tournoi::class)->findBy(array(), array("date" => "asc")) as $tournoi) {
             //Pas de fade sur des tournoi qui n'ont pas encore de cote
-            if($tournoi->getZitsCote() == null){
+            if($tournoi->getZitsCote() === null){
                 continue;
             }
             $fade = $this->calculateFade($tournoi->getDate(), $date, $tournoi);
             $this->entityManager->getRepository(Tournoi::class)->save($tournoi);
             foreach ($tournoi->getRanks() as $rank){
                 $joueur = $this->entityManager->getRepository(Joueur::class)->find($rank->getJoueur()->getId());
-                if($joueur->getZits() == null){
+                if($joueur->getZits() === null){
                     $joueur->setZits(0);
                 }
                 $rank->setZitsEarned(round($rank->getRatio() * $tournoi->getZitsCote()*$fade));
