@@ -463,8 +463,9 @@ class GameRepository extends ServiceEntityRepository
     public function findAllWhereTournoiIsNotNullAndRanked()
     {
         return  $this->createQueryBuilder('g')
+                   ->join("g.tournoi", "t") 
                    ->andWhere('g.tournoi IS NOT NULL')
-                   ->andWhere('g.notRanked = false')
+                   ->andWhere('t.notRanked = false')
                    ->orderBy('g.date')
                    ->getQuery()->getResult();
     }
