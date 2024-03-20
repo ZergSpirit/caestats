@@ -41,7 +41,7 @@ class EloManager
         }
 
         if($game->getBelligerant1()->getScore() == null || $game->getBelligerant2()->getScore() == null ){
-            $this->logger->info("processMatch fini, score manquant");
+            $this->logger->info("processMatch fini, score manquant. Score 1 : ".$game->getBelligerant1()->getScore()."score 2 :".$game->getBelligerant2()->getScore());
             return;
         }
 
