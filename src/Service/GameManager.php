@@ -78,7 +78,7 @@ class GameManager
             $game->getBelligerant2()->getCompo()->setNostats(false);
         }
 
-        $game->setNoRanking($data->isNoRanking() == null ? false : $data->isNoRanking());
+        $game->setNoRanking($data->isNoRanking() === null ? false : $data->isNoRanking());
 
         $game->getBelligerant1()->getCompo()->setGuilde($this->entityManager->getRepository(Guilde::class)->find($data->getGuilde1()));
         $game->getBelligerant1()->getCompo()->addPersonnage($this->entityManager->getRepository(Personnage::class)->find($data->getPersonnage1Joueur1()));
@@ -128,7 +128,7 @@ class GameManager
         $this->entityManager->flush();
 
         //C'est un tournoi et il y a un vainqueur
-        if (!$data->isNoRanking() && $data->getGameId() == null && $data->getTournoi() != null && !$data->getTournoi()->isNotRanked()) {
+        if (!$data->isNoRanking() && $data->getGameId() === null && $data->getTournoi() != null && !$data->getTournoi()->isNotRanked()) {
             $this->eloManager->processMatch($game);
         }   
 

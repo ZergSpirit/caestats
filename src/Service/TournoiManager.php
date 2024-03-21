@@ -28,7 +28,7 @@ class TournoiManager
         }
 
         if($ronde == 0){
-            usort($belligerants, fn($a, $b) => ($b->joueur->getZits() == null? 0 : $b->joueur->getZits())-($a->joueur->getZits() == null? 0 : $a->joueur->getZits()));
+            usort($belligerants, fn($a, $b) => ($b->joueur->getZits() === null? 0 : $b->joueur->getZits())-($a->joueur->getZits() === null? 0 : $a->joueur->getZits()));
 
             $i = 1;
             foreach($belligerants as $belligerant){
@@ -51,7 +51,7 @@ class TournoiManager
                 $idx = 0;
                 //Détection du/des joueur(s) avec le moins de ZITS
                 for($i = count($belligerants)-1;$i>-1;$i--){
-                    $currentZits = $belligerants[$i]->joueur->getZits() == null? 0 : $belligerants[$i]->joueur->getZits();
+                    $currentZits = $belligerants[$i]->joueur->getZits() === null? 0 : $belligerants[$i]->joueur->getZits();
                     if($currentZits == $lastZits){
                         $arrayLast[$idx] = $belligerants[$i];
                         $idx++;
@@ -127,7 +127,7 @@ class TournoiManager
             $games = $this->entityManager->getRepository(Game::class)->findAllByCriteria(array("joueur" => $belligerant, "tournoi" => $tournoi));
             $foes =  [];
             foreach($games as $game){
-                if($game->getVainqueur() == null){
+                if($game->getVainqueur() === null){
                     $count = $count+0.1;
                 }
                 else if($game->getVainqueur()->getId() == $belligerant->getId()){

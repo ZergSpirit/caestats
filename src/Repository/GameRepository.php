@@ -442,7 +442,7 @@ class GameRepository extends ServiceEntityRepository
     
 
     public function findAllByJoueurOrderBydate(?Joueur $joueur){
-        if ($joueur == null) {
+        if ($joueur === null) {
             return  $this->createQueryBuilder('g')
                 ->where('g.tournoi IS NOT NULL')
                 ->orderBy('g.date','desc')

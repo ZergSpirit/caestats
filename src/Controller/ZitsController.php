@@ -69,7 +69,7 @@ class ZitsController extends AbstractController
 
         $i = 1;
         foreach ($joueurs as $id) {
-            if($id == null){
+            if($id === null){
                 continue;
             }
             $rank = new Rank();

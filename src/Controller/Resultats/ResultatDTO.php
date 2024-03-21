@@ -42,7 +42,7 @@ class ResultatDTO
 
     public function __construct(?Game $game){
         
-        if($game == null){
+        if($game === null){
             return;
         }
 

@@ -50,7 +50,7 @@ class ResultatController extends AbstractController
         $game = null;
         if ($id != null) {
             $game = $this->entityManager->getRepository(Game::class)->find($id);
-            if ($game == null) {
+            if ($game === null) {
                 throw new \Exception('Game '.$id.' not found');
             }
         }
@@ -64,7 +64,7 @@ class ResultatController extends AbstractController
         $game = null;
         if ($id != null) {
             $game = $this->entityManager->getRepository(Game::class)->find($id);
-            if ($game == null) {
+            if ($game === null) {
                 throw new \Exception('Game '.$id.' not found');
             }
         }

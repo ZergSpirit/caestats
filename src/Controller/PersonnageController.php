@@ -26,7 +26,7 @@ class PersonnageController extends AbstractController
         $guildeEntity =  null;
         if ($guildeId != null) {
             $guildeEntity = $this->entityManager->getRepository(Guilde::class)->find($guildeId);
-            if ($guildeEntity == null) {
+            if ($guildeEntity === null) {
                 throw new \Exception('Guild '.$guildeId.' not found');
             }
         }

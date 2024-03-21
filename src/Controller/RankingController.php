@@ -38,7 +38,7 @@ class RankingController extends AbstractController
         foreach ($joueurs as $joueur) {
             $lastGame = $this->entityManager->getRepository(Game::class)->lastGame($joueur);
             $joueurGames[$joueur->getId()] = $this->entityManager->getRepository(Game::class)->countGames($joueur);
-            $joueurGames[$joueur->getId()]['lastGame'] = $lastGame == null? null : $lastGame->getDate();
+            $joueurGames[$joueur->getId()]['lastGame'] = $lastGame === null? null : $lastGame->getDate();
             $joueurGames[$joueur->getId()]['ties'] = $this->entityManager->getRepository(Game::class)->countTies($joueur);
             $joueurGames[$joueur->getId()][1] = $this->entityManager->getRepository(Rank::class)->findTournamentNamesForPosition($joueur,1);
             $joueurGames[$joueur->getId()][2] = $this->entityManager->getRepository(Rank::class)->findTournamentNamesForPosition($joueur,2);

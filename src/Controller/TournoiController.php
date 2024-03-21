@@ -152,7 +152,7 @@ class TournoiController extends AbstractController
         foreach($games as $game){
             $this->completeBelligerantFromRequest($request, $game->getBelligerant1());
             $this->completeBelligerantFromRequest($request, $game->getBelligerant2());
-            if($game->getBelligerant1()->getScore() == null || $game->getBelligerant2()->getScore() == null){
+            if($game->getBelligerant1()->getScore() === null || $game->getBelligerant2()->getScore() === null){
                 $game->setVainqueur(null);
             }
             if($game->getBelligerant1()->getScore() == $game->getBelligerant2()->getScore()){

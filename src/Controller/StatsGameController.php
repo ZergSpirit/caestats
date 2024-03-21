@@ -176,7 +176,7 @@ class StatsGameController extends AbstractController
 
     private function initForm(?StatsGameDTO $dto = null)
     {
-        if ($dto == null) {
+        if ($dto === null) {
             $dto = new StatsGameDTO();
         }
         return $this->createFormBuilder($dto)

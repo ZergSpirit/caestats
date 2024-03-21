@@ -19,7 +19,7 @@ class TournoiDTO
 
 
     public function __construct(?Tournoi $tournoi = null){
-        if($tournoi == null){
+        if($tournoi === null){
             return;
         }
         $this->setId($tournoi->getId());
